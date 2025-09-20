@@ -19,6 +19,7 @@
   --primary-light: #fff1cc;
   --primary-dark: #ffde8a;
   --gray: #aaaaaa;
+  --blue: #1766cf;
 }
 
 @theme {
@@ -33,6 +34,7 @@
   --color-orange-10: var(--orange-10);
   --color-teal: var(--teal);
   --color-teal-10: var(--teal-10);
+  --color-blue: var(--blue);
   --color-primary: var(--primary);
   --color-primary-10: var(--primary-10);
   --color-primary-light: var(--primary-light);
@@ -44,14 +46,37 @@
   --breakpoint-xs: 30rem;
   --breakpoint-xl: 90rem;
 
-  --text-tiny: 0.625rem;
-  --text-tiny--line-height: 1.5rem;
-  --text-tiny--letter-spacing: 0.125rem;
-  --text-tiny--font-weight: 500;
+  --text-2xs: 0.625rem;
+
+  --spacing-8xl: 90rem;
 }
 
 body {
   background: var(--bg-04);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+.scrollbar-sm::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-06);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--bg-02);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--bg-01);
 }
