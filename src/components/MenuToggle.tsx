@@ -4,7 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { IconMenu } from './icon/IconMenu';
 import { Menu } from './Menu';
 
-type MenuProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+type MenuProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  genres?: { id: string; value: string }[] | [];
+  countries?: { id: string; value: string }[] | [];
+  years?: { id: string; value: string }[] | [];
+};
 
 export const MenuToggle: React.FC<MenuProps> = ({ children, ...props }) => {
   const [open, setOpen] = useState(false);
@@ -67,10 +71,15 @@ export const MenuToggle: React.FC<MenuProps> = ({ children, ...props }) => {
         ref={dropdownRef}
         className={`${
           open ? 'block' : 'hidden'
-        } absolute h-fit min-w-72 w-full max-w-100 xs:w-7/10 overflow-hidden gap-2 flex flex-col top-full left-0 bg-bg-03 xs:translate-x-4 lg:translate-x-5  rounded-lg shadow`}
+        } absolute h-fit min-w-72 w-full max-w-100 xs:w-7/10 overflow-hidden gap-2 flex flex-col top-full left-0 bg-bg-05 xs:translate-x-4 lg:translate-x-5  rounded-lg shadow`}
       >
         <div className="w-full max-h-[80vh] scrollbar-sm overflow-auto  p-5">
-          <Menu type="secondary" />
+          <Menu
+            type="secondary"
+            genres={props.genres}
+            countries={props.countries}
+            years={props.years}
+          />
         </div>
       </div>
     </div>

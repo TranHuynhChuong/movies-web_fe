@@ -1,34 +1,37 @@
 'use client';
 
+import { Server } from '@/types/movies';
 import React from 'react';
 
-type ServerSelectorProps = {
-  servers: string[]; // Danh sách server
-  activeServer: string; // Server đang chọn
+type SelectorServerProps = {
+  servers: Server[];
+  active_server: Server;
+  onClick: (server: Server) => void;
   className?: string;
-  onChange?: (server: string) => void; // Callback khi chọn server
 };
 
-export const ServerSelector: React.FC<ServerSelectorProps> = ({
+export const SelectorServer: React.FC<SelectorServerProps> = ({
   servers,
-  activeServer,
+  active_server,
+  onClick,
   className,
-  onChange,
 }) => {
+  const handleChangeServer = (server: Server) => {
+    onClick(server);
+  };
+
   return (
-    <div
-      className={`${className} flex flex-col gap-2 rounded-lg bg-bg-03 p-3.5 text-xs whitespace-nowrap`}
-    >
+    <div className={`${className} flex flex-col gap-2 bg-bg-03 p-3.5 text-xs`}>
       <p className="text-white">Chọn server khác nếu bị lỗi hoặc mất âm thanh + phụ đề</p>
 
       <div className="flex flex-wrap gap-1 text-center text-gray">
-        {servers.map((server) => {
-          const isActive = activeServer === server;
+        {servers.map((server, index) => {
+          const isActive = active_server.order === server.order;
           return (
             <button
               type="button"
-              key={server}
-              onClick={() => onChange?.(server)}
+              key={server.order + '-' + index}
+              onClick={() => handleChangeServer(server)}
               className={`
                 h-fit w-fit cursor-pointer rounded-sm px-2 py-1.5
                 ${
@@ -38,7 +41,7 @@ export const ServerSelector: React.FC<ServerSelectorProps> = ({
                 }
               `}
             >
-              Server {server}
+              Server {server.order}
             </button>
           );
         })}

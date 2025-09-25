@@ -4,24 +4,30 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from './ui/Button';
 import { IconArrowDownTriangle } from './icon/IconArrowDownTriangle';
 import { useSearchBar } from '@/contexts/SearchBarContext';
+import { useRouter } from 'next/navigation';
+import { getLink } from '@/utils/getLink';
 type MenuItemProps = {
   children: React.ReactNode;
+  onClick: (id: string, name: string) => void;
   type?: 'dropdown' | 'accordion';
   className?: string;
   listClassName?: string;
-  ItemClassName?: string;
-  itemList?: {
-    id: string;
-    value: string;
-  }[];
+  itemClassName?: string;
+  itemList?:
+    | {
+        id: string;
+        value: string;
+      }[]
+    | [];
 };
 
 export const MenuItem: React.FC<MenuItemProps> = ({
   children,
+  onClick,
   type = 'dropdown',
   className = '',
   listClassName = '',
-  ItemClassName = '',
+  itemClassName = '',
   itemList,
 }) => {
   const [open, setOpen] = useState(false);
@@ -81,7 +87,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({
                     variant="ghost"
                     type="button"
                     key={index}
-                    className={`rounded-md w-full font-normal whitespace-nowrap truncate text-left ${ItemClassName}`}
+                    className={`rounded-md w-full font-normal whitespace-nowrap truncate text-left ${itemClassName}`}
+                    onClick={() => onClick(item.id, item.value)}
                   >
                     {item.value}
                   </Button>
@@ -94,8 +101,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     }
     case 'accordion': {
       return (
-        <details className="group space-y-2" open>
-          <summary className="flex cursor-pointer list-none items-center justify-between text-xs font-medium text-white">
+        <details className="space-y-2 group">
+          <summary className="flex items-center justify-between text-xs font-medium text-white list-none cursor-pointer">
             {children}
             {itemList && itemList.length > 0 && (
               <div className="transition-all duration-300 group-open:rotate-180">
@@ -105,13 +112,15 @@ export const MenuItem: React.FC<MenuItemProps> = ({
           </summary>
           <div className={`overflow-auto h-full grid grid-cols-1 gap-2 ${listClassName}`}>
             {itemList &&
-              itemList.map((item, index) => (
+              itemList.length > 0 &&
+              itemList?.map((item, index) => (
                 <Button
                   size="xs"
                   variant="ghost"
                   type="button"
-                  key={index}
-                  className={`rounded-md w-full font-normal whitespace-nowrap truncate text-left ${ItemClassName}`}
+                  key={index.toString() + item.id}
+                  className={`rounded-md w-full font-normal whitespace-nowrap truncate text-left ${itemClassName}`}
+                  onClick={() => onClick(item.id, item.value)}
                 >
                   {item.value}
                 </Button>
@@ -125,122 +134,71 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   }
 };
 
-const genres = [
-  { id: 'Anime', value: 'Anime' },
-  { id: 'Bí Ẩn', value: 'Bí Ẩn' },
-  { id: 'Chiến Tranh', value: 'Chiến Tranh' },
-  { id: 'Chiếu Rạp', value: 'Chiếu Rạp' },
-  { id: 'Chuyển Thể', value: 'Chuyển Thể' },
-  { id: 'Chính Kịch', value: 'Chính Kịch' },
-  { id: 'Chính Luận', value: 'Chính Luận' },
-  { id: 'Chính Trị', value: 'Chính Trị' },
-  { id: 'Chương Trình Truyền Hình', value: 'Chương Trình Truyền Hình' },
-  { id: 'Cung Đấu', value: 'Cung Đấu' },
-  { id: 'Cuối Tuần', value: 'Cuối Tuần' },
-  { id: 'Cách Mạng', value: 'Cách Mạng' },
-  { id: 'Cổ Trang', value: 'Cổ Trang' },
-  { id: 'Cổ Tích', value: 'Cổ Tích' },
-  { id: 'Cổ Điển', value: 'Cổ Điển' },
-  { id: 'DC', value: 'DC' },
-  { id: 'Disney', value: 'Disney' },
-  { id: 'Gay Cấn', value: 'Gay Cấn' },
-  { id: 'Gia Đình', value: 'Gia Đình' },
-  { id: 'Giáng Sinh', value: 'Giáng Sinh' },
-  { id: 'Giả Tưởng', value: 'Giả Tưởng' },
-  { id: 'Hoàng Cung', value: 'Hoàng Cung' },
-  { id: 'Hoạt Hình', value: 'Hoạt Hình' },
-  { id: 'Hài', value: 'Hài' },
-  { id: 'Hành Động', value: 'Hành Động' },
-  { id: 'Hình Sự', value: 'Hình Sự' },
-  { id: 'Học Đường', value: 'Học Đường' },
-  { id: 'Khoa Học', value: 'Khoa Học' },
-  { id: 'Kinh Dị', value: 'Kinh Dị' },
-  { id: 'Kinh Điển', value: 'Kinh Điển' },
-  { id: 'Kịch Nói', value: 'Kịch Nói' },
-  { id: 'Kỳ Ảo', value: 'Kỳ Ảo' },
-  { id: 'LGBT+', value: 'LGBT+' },
-  { id: 'Live Action', value: 'Live Action' },
-  { id: 'Lãng Mạn', value: 'Lãng Mạn' },
-  { id: 'Lịch Sử', value: 'Lịch Sử' },
-  { id: 'Marvel', value: 'Marvel' },
-  { id: 'Miền Viễn Tây', value: 'Miền Viễn Tây' },
-  { id: 'Nghề Nghiệp', value: 'Nghề Nghiệp' },
-  { id: 'Người Mẫu', value: 'Người Mẫu' },
-  { id: 'Nhạc Kịch', value: 'Nhạc Kịch' },
-  { id: 'Phiêu Lưu', value: 'Phiêu Lưu' },
-  { id: 'Phép Thuật', value: 'Phép Thuật' },
-  { id: 'Siêu Anh Hùng', value: 'Siêu Anh Hùng' },
-  { id: 'Thiếu Nhi', value: 'Thiếu Nhi' },
-  { id: 'Thần Thoại', value: 'Thần Thoại' },
-  { id: 'Thể Thao', value: 'Thể Thao' },
-  { id: 'Truyền Hình Thực Tế', value: 'Truyền Hình Thực Tế' },
-  { id: 'Tuổi Trẻ', value: 'Tuổi Trẻ' },
-  { id: 'Tài Liệu', value: 'Tài Liệu' },
-  { id: 'Tâm Lý', value: 'Tâm Lý' },
-  { id: 'Tình Cảm', value: 'Tình Cảm' },
-  { id: 'Tập Luyện', value: 'Tập Luyện' },
-  { id: 'Viễn Tưởng', value: 'Viễn Tưởng' },
-  { id: 'Võ Thuật', value: 'Võ Thuật' },
-  { id: 'Xuyên Không', value: 'Xuyên Không' },
-  { id: 'Đau Thương', value: 'Đau Thương' },
-  { id: 'Đời Thường', value: 'Đời Thường' },
-  { id: 'Ẩm Thực', value: 'Ẩm Thực' },
-];
-
-const years = [
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-  { id: '2020', value: '2020' },
-];
-
 type MenuProps = {
+  genres?: { id: string; value: string }[] | [];
+  countries?: { id: string; value: string }[] | [];
+  years?: { id: string; value: string }[] | [];
   type?: 'main' | 'secondary';
   className?: string;
 };
 
-export const Menu: React.FC<MenuProps> = ({ type = 'main', className = '' }) => {
+export const Menu: React.FC<MenuProps> = ({
+  genres,
+  countries,
+  years,
+  type = 'main',
+  className = '',
+}) => {
   const { open } = useSearchBar();
-  switch (type) {
-    case 'main': {
-      return (
-        <div
-          className={` ${
-            open ? 'hidden' : 'hidden lg:flex'
-          }  font-normal w-fit h-full items-center justify-center gap-2 pr-5 ${className} `}
+  const router = useRouter();
+
+  const items = [
+    { label: 'Phim Bộ', path: '/phim-bo' },
+    { label: 'Phim Lẻ', path: '/phim-le' },
+    {
+      label: 'Thể Loại',
+      path: '/the-loai',
+      list: genres,
+      listClass: 'grid-cols-4',
+      itemClass: 'max-w-24',
+    },
+    { label: 'Quốc Gia', path: '/quoc-gia', list: countries },
+    { label: 'Năm', path: '/nam', list: years },
+  ];
+
+  const Wrapper =
+    type === 'main'
+      ? ({ children }: { children: React.ReactNode }) => (
+          <div
+            className={`${
+              open ? 'hidden' : 'hidden lg:flex'
+            } w-fit h-full items-center gap-2 pr-5 ${className}`}
+          >
+            {children}
+          </div>
+        )
+      : ({ children }: { children: React.ReactNode }) => (
+          <div className={`w-full space-y-2 ${className}`}>{children}</div>
+        );
+
+  return (
+    <Wrapper>
+      {items.map(({ label, path, list, listClass, itemClass }) => (
+        <MenuItem
+          key={label}
+          type={type === 'main' ? 'dropdown' : 'accordion'}
+          itemList={list}
+          listClassName={listClass}
+          itemClassName={itemClass}
+          onClick={(id, name) =>
+            path === '/nam'
+              ? router.push(`${path}/${name}?page=1`)
+              : router.push(`${getLink(path, name, id)}?page=1`)
+          }
         >
-          <MenuItem> Phim Bộ </MenuItem>
-          <MenuItem> Phim Lẻ </MenuItem>
-          <MenuItem>Chủ Đề</MenuItem>
-          <MenuItem itemList={genres} listClassName="grid-cols-4" ItemClassName="max-w-24">
-            Thể Loại
-          </MenuItem>
-          <MenuItem>Quốc Gia</MenuItem>
-          <MenuItem itemList={years}>Năm</MenuItem>
-        </div>
-      );
-    }
-    case 'secondary': {
-      return (
-        <div className="w-full space-y-2">
-          <MenuItem type="accordion"> Phim Bộ </MenuItem>
-          <MenuItem type="accordion"> Phim Lẻ </MenuItem>
-          <MenuItem type="accordion">Chủ Đề</MenuItem>
-          <MenuItem itemList={genres} type="accordion" listClassName="grid-cols-2">
-            Thể Loại
-          </MenuItem>
-          <MenuItem type="accordion">Quốc Gia</MenuItem>
-          <MenuItem itemList={years} type="accordion">
-            Năm
-          </MenuItem>
-        </div>
-      );
-    }
-  }
+          {label}
+        </MenuItem>
+      ))}
+    </Wrapper>
+  );
 };

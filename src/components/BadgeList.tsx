@@ -2,12 +2,12 @@ import React from 'react';
 
 type BadgeListProps = {
   texts: string[];
-  className?: string; // nếu muốn thêm class cho container
+  className?: string;
 };
 
 export const BadgeList: React.FC<BadgeListProps> = ({ texts, className = '' }) => {
   const baseBadgeClass =
-    'rounded-md border border-white bg-white/10 px-2 py-1 text-center text-2xs font-normal whitespace-nowrap text-white sm:text-sm';
+    'rounded-md border border-white bg-white/10 py-1 px-1.5 text-center text-xs font-normal whitespace-nowrap text-white sm:text-sm';
 
   return (
     <div className={`${className} flex flex-wrap gap-1 `}>

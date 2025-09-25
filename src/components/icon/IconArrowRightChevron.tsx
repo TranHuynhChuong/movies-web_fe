@@ -1,7 +1,7 @@
 import React from 'react';
 import type { SVGProps } from 'react';
 
-export function IconArrowRight(props: Readonly<SVGProps<SVGSVGElement>>) {
+export function IconArrowRightChervon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

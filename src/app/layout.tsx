@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Roboto } from 'next/font/google';
+import { Providers } from '@/contexts/Providers';
 
 const roboto = Roboto({
   weight: [
@@ -30,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.variable} font-sans antialiased min-h-screen w-full`}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

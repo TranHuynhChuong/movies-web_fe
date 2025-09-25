@@ -30,7 +30,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={` h-fit w-fit cursor-pointer rounded-full font-medium text-center ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
+      className={`h-fit w-fit cursor-pointer rounded-full font-medium text-center ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       {...props}
     >
       {children}

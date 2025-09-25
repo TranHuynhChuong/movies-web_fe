@@ -1,0 +1,122 @@
+'use client';
+import React, { useEffect, useState } from 'react';
+import { ImageMask } from './ui/ImageMask';
+import { BadgeList } from './BadgeList';
+import { GenresList } from './GenresList';
+import { Button } from './ui/Button';
+import { IconPlay } from './icon/IconPlay';
+import { IconExclamationMark } from './icon/IconExclamationMark';
+import Link from 'next/link';
+import { toKebabWithId } from '@/utils/kebabCase';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Movie } from '@/types/movies';
+
+type Props = { movies: Movie[] };
+
+export const ListSliderMovies: React.FC<Props> = ({ movies }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const router = useRouter();
+  const movie = movies[activeIndex];
+  const link = toKebabWithId(movie.title, movie.id);
+
+  // Chuyển phim sau mỗi 5s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % movies.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [movies.length]);
+
+  return (
+    <div className="relative flex justify-center w-full pb-28 h-fit bg-bg-04 sm:pb-0">
+      <div className="relative w-full max-h-[560px]">
+        <Image
+          src={movie.backdrop_path}
+          alt={movie.title}
+          sizes="100vw"
+          width={1920}
+          height={1080}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+          priority
+        />
+        <ImageMask />
+      </div>
+
+      <div className="absolute bottom-0 left-0 flex flex-col items-center justify-end w-full h-full gap-2 px-8 md:justify-between xs:gap-3 md:items-end md:flex-row">
+        {/* Nội dung */}
+        <div className="flex flex-col space-y-6 md:basis-3/5 h-fit">
+          <div className="w-full space-y-2 h-fit">
+            <Link href={`/phim/${link}`}>
+              <h3 className="text-xl font-extrabold text-center text-white line-clamp-2 md:text-4xl lg:text-6xl md:text-start">
+                {movie.title}
+              </h3>
+            </Link>
+            <Link href={`/phim/${link}`}>
+              <h2 className="text-center line-clamp-2 md:text-lg text-primary md:text-start">
+                {movie.original_title}
+              </h2>
+            </Link>
+          </div>
+
+          <div className="w-full space-y-2 md:space-y-4 h-fit">
+            <BadgeList
+              texts={[
+                movie.release_year ? movie.release_year.toString() : 'N/A',
+                movie.runtime ? movie.runtime.toString() + ' phút' : 'N/A',
+                movie.media_type === 'series' ? 'Tập ' + movie.number_of_episodes : 'Full',
+              ]}
+              className="justify-center md:justify-start"
+            />
+            <GenresList genres={movie.genres ?? []} className="justify-center md:justify-start" />
+          </div>
+
+          <span className="hidden text-sm text-white line-clamp-3 lg:flex">{movie.overview}</span>
+
+          <div className="items-center hidden w-full gap-4 h-fit md:flex">
+            <Button
+              size="xl"
+              className="flex items-center gap-2"
+              onClick={() => router.push(`/xem-phim/${link}`)}
+            >
+              <IconPlay width={24} height={24} /> Xem Ngay
+            </Button>
+            <Button
+              variant="outline"
+              size="md"
+              className="flex items-center gap-2"
+              onClick={() => router.push(`/phim/${link}`)}
+            >
+              <IconExclamationMark width={18} height={18} /> Chi Tiết
+            </Button>
+          </div>
+        </div>
+
+        {/* Preview list */}
+        <div className="relative flex items-center justify-center gap-2 w-fit h-fit flex-nowrap">
+          {movies.map((m, idx) => (
+            <button
+              key={idx + m.id}
+              onClick={() => setActiveIndex(idx)}
+              className={`overflow-hidden relative border-2 rounded-full cursor-pointer w-8 sm:w-10 md:w-14 aspect-square border-white/50 hover:border-white ${
+                activeIndex === idx ? 'border-white/100' : ''
+              }`}
+            >
+              <Image
+                src={m.backdrop_path}
+                alt={m.title}
+                fill
+                className="object-cover w-full h-full"
+                sizes="(max-width: 768px) 2rem, (max-width: 1024px) 2.5rem, 3.5rem"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
