@@ -7,11 +7,14 @@ export function toKebabWithId(name: string, id: string | number): string {
 }
 
 export function extractId(slug: string): string {
+  if (!slug.includes('.')) {
+    return slug;
+  }
   const parts = slug.split('.');
   return parts[parts.length - 1];
 }
 
-export function extractname(slug: string): string {
+export function extractLable(slug: string): string {
   const parts = slug.split('.');
   return parts[0];
 }

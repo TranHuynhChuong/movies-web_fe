@@ -2,20 +2,34 @@
 import React from 'react';
 import { IconArrowLeftFlow } from '../icon/IconArrowLeftFlow';
 import { IconArrowRightFlow } from '../icon/IconArrowRightFlow';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type PaginationProps = {
   currentPage: number;
   totalPage: number;
-  onPageChange?: (page: number) => void;
+  onChange?: (page: number) => void;
 };
 
-export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPage, onPageChange }) => {
+export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPage, onChange }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const handlePrev = () => {
-    if (currentPage > 1 && onPageChange) onPageChange(currentPage - 1);
+    if (onChange) onChange(currentPage - 1);
+    else if (currentPage > 1) {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', String(currentPage - 1));
+      router.push(`?${params.toString()}`, { scroll: true });
+    }
   };
 
   const handleNext = () => {
-    if (currentPage < totalPage && onPageChange) onPageChange(currentPage + 1);
+    if (onChange) onChange(currentPage + 1);
+    else if (currentPage < totalPage) {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', String(currentPage + 1));
+      router.push(`?${params.toString()}`, { scroll: true });
+    }
   };
 
   return (

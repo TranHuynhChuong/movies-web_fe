@@ -1,0 +1,29 @@
+'use client';
+
+import React from 'react';
+import { ListGridMovies } from '@/components/ListGridMovies';
+import { Pagination } from '@/components/ui/Pagination';
+import { IconListSearch } from '@/components/icon/IconListSearch';
+import { Movie } from '@/types/movies';
+
+export const PanelSearchResult: React.FC<{
+  title: string;
+  movies: Movie[];
+  currentPage: number;
+  totalPage: number;
+  isLoading?: boolean;
+  basePath?: string;
+}> = ({ title, movies, currentPage, totalPage, isLoading = false, basePath }) => {
+  return (
+    <div className="p-4 md:p-5 space-y-6">
+      <h2 className="text-base md:text-lg font-semibold flex items-center gap-2">
+        <IconListSearch width={32} height={32} />
+        {title}
+      </h2>
+
+      <ListGridMovies movies={movies || []} basePath={basePath} isLoading={isLoading} />
+
+      <Pagination currentPage={currentPage} totalPage={totalPage} />
+    </div>
+  );
+};

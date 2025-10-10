@@ -12,13 +12,11 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Movie } from '@/types/movies';
 
-type Props = { movies: Movie[] };
+type ListSliderMoviesProps = { movies: Movie[]; isLoading?: boolean };
 
-export const ListSliderMovies: React.FC<Props> = ({ movies }) => {
+export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLoading }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
-  const movie = movies[activeIndex];
-  const link = toKebabWithId(movie.title, movie.id);
 
   // Chuyển phim sau mỗi 5s
   useEffect(() => {
@@ -27,6 +25,30 @@ export const ListSliderMovies: React.FC<Props> = ({ movies }) => {
     }, 5000);
     return () => clearInterval(interval);
   }, [movies.length]);
+
+  if (isLoading || movies.length === 0) {
+    return (
+      <div className="relative flex justify-center w-full pb-28 h-[560px] bg-bg-04 animate-pulse">
+        <div className="absolute inset-0 bg-gray-800/60" />
+        <div className="absolute bottom-10 left-10 flex flex-col gap-4 w-2/3">
+          <div className="h-10 w-3/4 bg-gray-700 rounded-lg" />
+          <div className="h-6 w-1/2 bg-gray-700 rounded-lg" />
+          <div className="flex gap-2">
+            <div className="h-10 w-32 bg-gray-700 rounded-full" />
+            <div className="h-10 w-32 bg-gray-700 rounded-full" />
+          </div>
+        </div>
+        <div className="absolute bottom-10 right-10 flex gap-2">
+          {Array.from({ length: 5 }).map((_, idx) => (
+            <div key={idx} className="w-10 h-10 bg-gray-700 rounded-full border border-gray-600" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const movie = movies[activeIndex];
+  const link = toKebabWithId(movie.title, movie.id);
 
   return (
     <div className="relative flex justify-center w-full pb-28 h-fit bg-bg-04 sm:pb-0">

@@ -74,7 +74,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
           {itemList && itemList.length > 0 && (
             <div
               ref={dropdownRef}
-              className={`absolute w-max top-full mt-1 left-1/2 -translate-x-1/2 z-50 rounded-b-lg bg-bg-06/50 shadow-lg overflow-hidden transition-all duration-200 ease-out pr-1 ${
+              className={`absolute w-max top-full mt-1 left-1/2 -translate-x-1/2 z-50 rounded-b-lg bg-bg-06/90 shadow-lg overflow-hidden transition-all duration-200 ease-out pr-1 ${
                 open ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
               }`}
             >
@@ -190,11 +190,9 @@ export const Menu: React.FC<MenuProps> = ({
           itemList={list}
           listClassName={listClass}
           itemClassName={itemClass}
-          onClick={(id, name) =>
-            path === '/nam'
-              ? router.push(`${path}/${name}?page=1`)
-              : router.push(`${getLink(path, name, id)}?page=1`)
-          }
+          onClick={(id, value) => {
+            router.push(getLink(path, value, id));
+          }}
         >
           {label}
         </MenuItem>

@@ -1,7 +1,8 @@
 import { toKebabWithId } from './kebabCase';
 
-export function getLink(path: string, name?: string, id?: string): string {
-  if (!name || !id) return path;
-  const slug = toKebabWithId(name, id);
+export function getLink(path: string, value?: string, id?: string): string {
+  if (!value || !id) return path;
+  const slug = toKebabWithId(value, id);
+  if (path === '/nam') return path + '/' + value;
   return path + '/' + slug;
 }

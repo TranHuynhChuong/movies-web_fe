@@ -4,14 +4,29 @@ import { Movie } from '@/types/movies';
 
 type ListGridMoviesProps = {
   movies: Movie[];
+  isLoading?: boolean;
+  basePath?: string;
 };
 
-export const ListGridMovies: React.FC<ListGridMoviesProps> = ({ movies }) => {
+export const ListGridMovies: React.FC<ListGridMoviesProps> = ({ movies, isLoading, basePath }) => {
+  const totalSkeleton = 32;
+
+  const renderItems = isLoading
+    ? Array.from({ length: totalSkeleton }).map((_, i) => (
+        <CardMovies key={`skeleton-${i}`} variant="poster" basePath={basePath} />
+      ))
+    : movies.map((movie, index) => (
+        <CardMovies
+          key={movie.id + '' + index}
+          movie={movie}
+          variant="poster"
+          basePath={basePath}
+        />
+      ));
+
   return (
-    <div className="grid w-full grid-cols-2 grid-rows-1 gap-4 overflow-hidden xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-8">
-      {movies.map((movie, index) => (
-        <CardMovies key={index + movie.id} movie={movie} />
-      ))}
+    <div className="grid w-full grid-cols-2 grid-rows-1 gap-4 overflow-hidden xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8">
+      {renderItems}
     </div>
   );
 };
