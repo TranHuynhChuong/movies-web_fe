@@ -6,20 +6,26 @@ type ListGridMoviesProps = {
   movies: Movie[];
   isLoading?: boolean;
   basePath?: string;
+  variant?: 'poster' | 'backdrop' | 'compact';
 };
 
-export const ListGridMovies: React.FC<ListGridMoviesProps> = ({ movies, isLoading, basePath }) => {
+export const ListGridMovies: React.FC<ListGridMoviesProps> = ({
+  movies,
+  isLoading,
+  basePath,
+  variant = 'poster',
+}) => {
   const totalSkeleton = 32;
 
   const renderItems = isLoading
     ? Array.from({ length: totalSkeleton }).map((_, i) => (
-        <CardMovies key={`skeleton-${i}`} variant="poster" basePath={basePath} />
+        <CardMovies key={`skeleton-${i}`} variant={variant} basePath={basePath} />
       ))
     : movies.map((movie, index) => (
         <CardMovies
           key={movie.id + '' + index}
           movie={movie}
-          variant="poster"
+          variant={variant}
           basePath={basePath}
         />
       ));

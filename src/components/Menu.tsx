@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { getLink } from '@/utils/getLink';
 type MenuItemProps = {
   children: React.ReactNode;
-  onClick: (id: string, name: string) => void;
+  onClick: (id?: string, name?: string) => void;
   type?: 'dropdown' | 'accordion';
   className?: string;
   listClassName?: string;
@@ -59,7 +59,11 @@ export const MenuItem: React.FC<MenuItemProps> = ({
             <Button
               variant="ghost"
               size="xs"
-              onClick={toggle}
+              onClick={() => {
+                if (itemList && itemList.length > 0) {
+                  toggle();
+                } else onClick?.(undefined, undefined);
+              }}
               className={` font-normal flex gap-2 items-center hover:bg-transparent!`}
             >
               {children}
@@ -102,7 +106,14 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     case 'accordion': {
       return (
         <details className="space-y-2 group">
-          <summary className="flex items-center justify-between text-xs font-medium text-white list-none cursor-pointer">
+          <summary
+            className="flex items-center justify-between text-xs font-medium text-white list-none cursor-pointer"
+            onClick={() => {
+              if (!itemList) {
+                onClick?.(undefined, undefined);
+              }
+            }}
+          >
             {children}
             {itemList && itemList.length > 0 && (
               <div className="transition-all duration-300 group-open:rotate-180">
@@ -137,18 +148,11 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 type MenuProps = {
   genres?: { id: string; value: string }[] | [];
   countries?: { id: string; value: string }[] | [];
-  years?: { id: string; value: string }[] | [];
   type?: 'main' | 'secondary';
   className?: string;
 };
 
-export const Menu: React.FC<MenuProps> = ({
-  genres,
-  countries,
-  years,
-  type = 'main',
-  className = '',
-}) => {
+export const Menu: React.FC<MenuProps> = ({ genres, countries, type = 'main', className = '' }) => {
   const { open } = useSearchBar();
   const router = useRouter();
 
@@ -163,7 +167,6 @@ export const Menu: React.FC<MenuProps> = ({
       itemClass: 'max-w-24',
     },
     { label: 'Quốc Gia', path: '/quoc-gia', list: countries },
-    { label: 'Năm', path: '/nam', list: years },
   ];
 
   const Wrapper =
