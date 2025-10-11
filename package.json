@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:mock": "ts-node src/mock/index.js",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
@@ -11,15 +12,21 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.2",
+    "clsx": "^2.1.1",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "lodash": "^4.17.21",
     "next": "15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "swiper": "^12.0.2"
+    "swiper": "^12.0.2",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/lodash": "^4.17.20",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -27,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

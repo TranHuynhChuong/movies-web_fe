@@ -18,32 +18,16 @@ export async function getMovieInf(id: string) {
 }
 
 export async function getMovieWatchInf(id: string, version_id: number, episode_number: number) {
-  const res = await fetch(`${API_BASE_URL}/xem-phim/${id}?ver=${version_id}&ep=${episode_number}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    next: { revalidate: 5 },
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch movie');
-  }
-
-  const { data } = await res.json();
-  return data;
-}
-
-export async function getMovieList() {
-  const url = `${API_BASE_URL}/phim/danh-sach`;
-
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${API_BASE_URL}/phim/xem-phim/${id}?ver=${version_id}&ep=${episode_number}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      next: { revalidate: 5 },
+    }
+  );
 
   if (!res.ok) {
     throw new Error('Failed to fetch movie');

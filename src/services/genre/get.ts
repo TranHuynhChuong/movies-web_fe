@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
 export async function getGenresList() {
-  const res = await fetch(`${API_BASE_URL}/danh-sach-the-loai`, {
+  const res = await fetch(`${API_BASE_URL}/the-loai`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

@@ -27,7 +27,16 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/scripts/create-component.js"
+    "src/scripts/create-component.js",
+    "src/mock/index.js",
+    "src/mock/routes/the-loai.js",
+    "src/mock/routes/quoc-gia.js",
+    "src/mock/routes/phim.js",
+    "src/mock/data/movies-watchinf.js",
+    "src/mock/data/movies-list.js",
+    "src/mock/data/movies-detail.js",
+    "src/mock/data/genres.js",
+    "src/mock/data/countries.js"
   ],
   "exclude": ["node_modules"]
 }
