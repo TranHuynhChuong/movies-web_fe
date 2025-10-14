@@ -17,44 +17,44 @@ const getShortLabel = (name: string) => {
     .join('.');
 };
 
+const getBadges = (media_type: string, versions: Version[]) => {
+  const isUpcoming = !versions || versions.length === 0;
+
+  if (isUpcoming) {
+    return [{ label: 'Upcoming', text: '', bg: 'bg-white', color: 'text-black' }];
+  }
+
+  const badges: { label: string; text: string; bg: string; color: string }[] = [];
+
+  if (media_type === 'movies') {
+    versions?.forEach((v) => {
+      badges.push({
+        label: getShortLabel(v.name),
+        text: '',
+        bg: 'bg-bg-01',
+        color: 'text-white',
+      });
+    });
+  } else if (media_type === 'series') {
+    versions?.forEach((v) => {
+      badges.push({
+        label: getShortLabel(v.name),
+        text: v.current_ep.toString(),
+        bg: 'bg-bg-01',
+        color: 'text-white',
+      });
+    });
+  }
+
+  return badges;
+};
+
 export const BadgeVersions: React.FC<BadgeVersionsProps> = ({
   data,
   ignore = false,
   className = '',
 }) => {
-  const isUpcoming = !data.versions || data.versions.length === 0;
-
-  const getBadges = () => {
-    if (isUpcoming) {
-      return [{ label: 'Upcoming', text: '', bg: 'bg-white', color: 'text-black' }];
-    }
-
-    const badges: { label: string; text: string; bg: string; color: string }[] = [];
-
-    if (data.media_type === 'movies') {
-      data.versions?.forEach((v) => {
-        badges.push({
-          label: getShortLabel(v.name),
-          text: '',
-          bg: 'bg-bg-01',
-          color: 'text-white',
-        });
-      });
-    } else if (data.media_type === 'series') {
-      data.versions?.forEach((v) => {
-        badges.push({
-          label: getShortLabel(v.name),
-          text: v.current_ep.toString(),
-          bg: 'bg-bg-01',
-          color: 'text-white',
-        });
-      });
-    }
-
-    return badges;
-  };
-
-  const badges = getBadges();
+  const badges = getBadges(data.media_type, data.versions);
 
   return (
     <>

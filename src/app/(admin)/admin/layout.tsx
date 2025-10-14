@@ -11,7 +11,7 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
   return (
     <div>
       <Sidebar items={sidebarItems} />
-      <div className="p-6 md:ml-64">{children}</div>
+      <div className="md:ml-54">{children}</div>
     </div>
   );
 }

@@ -37,10 +37,10 @@ export default function Sidebar({ items, title = 'Panel' }: Readonly<SidebarProp
             <Link
               href={item.href}
               className={cn(
-                'flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700',
+                'flex items-center p-2 rounded-lg hover:bg-bg-03/90 dark:hover:bg-gray-700',
                 isActive
-                  ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
-                  : 'text-gray-700 dark:text-gray-200'
+                  ? 'bg-bg-03 text-gray-900 dark:bg-gray-700 dark:text-white'
+                  : 'text-gray-700 dark:text-bg-03'
               )}
             >
               {item.icon && <span className="w-5 h-5 me-3">{item.icon}</span>}
@@ -64,7 +64,7 @@ export default function Sidebar({ items, title = 'Panel' }: Readonly<SidebarProp
         onClick={toggleSidebar}
         aria-controls="logo-sidebar"
         type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-white rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="inline-flex items-center p-2  text-sm text-white rounded-lg md:hidden hover:bg-bg-03/90 focus:outline-none focus:ring-2 focus:ring-bg-03 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
         <span className="sr-only">Open sidebar</span>
         <IconMenu width={28} height={28} />
@@ -74,12 +74,12 @@ export default function Sidebar({ items, title = 'Panel' }: Readonly<SidebarProp
       <aside
         id="logo-sidebar"
         className={cn(
-          'fixed top-0 left-0 z-40 w-64 h-screen transition-transform md:translate-x-0',
+          'fixed top-0 left-0 z-40 w-54 h-screen transition-transform md:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-bg-06">
           <div className="flex items-center ps-2.5 mb-5 justify-between">
             <div className="flex">
               <Logo href="/admin" />
@@ -88,7 +88,7 @@ export default function Sidebar({ items, title = 'Panel' }: Readonly<SidebarProp
               onClick={toggleSidebar}
               aria-controls="logo-sidebar"
               type="button"
-              className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-bg-03/90 focus:outline-none focus:ring-2 focus:ring-bg-03 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             >
               <span className="sr-only">Open sidebar</span>
               <IconMenu width={28} height={28} className=" rotate-180" />
