@@ -31,7 +31,7 @@ export const ListGridMovies: React.FC<ListGridMoviesProps> = ({
       ));
 
   return (
-    <div className="grid w-full grid-cols-2 grid-rows-1 gap-4 overflow-hidden xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8">
+    <div className="grid w-full grid-cols-2 grid-rows-1 gap-4 overflow-hidden sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
       {renderItems}
     </div>
   );
