@@ -3,6 +3,8 @@ import cors from 'cors';
 import theLoaiRoutes from './routes/the-loai.js';
 import quocGiaRoutes from './routes/quoc-gia.js';
 import phimRoutes from './routes/phim.js';
+import phienBanRoutes from './routes/phien-ban.js';
+import mayChuRoutes from './routes/may-chu.js';
 
 const app = express();
 app.use(cors());
@@ -12,6 +14,8 @@ app.use(express.json());
 app.use('/phim', phimRoutes);
 app.use('/the-loai', theLoaiRoutes);
 app.use('/quoc-gia', quocGiaRoutes);
+app.use('/phien-ban', phienBanRoutes);
+app.use('/may-chu', mayChuRoutes);
 
 const PORT = 4000;
 app.listen(PORT, () => {

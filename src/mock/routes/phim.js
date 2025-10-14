@@ -9,6 +9,16 @@ router.get('/tim-kiem', (req, res) => {
   res.json(moviesList);
 });
 
+router.get('/tong', (req, res) => {
+  res.json({
+    data: {
+      movies: 16,
+      series: 12,
+      upcoming: 6,
+    },
+  });
+});
+
 router.get('/xem-phim/:id', (req, res) => {
   res.json(moviesWatchInf);
 });
