@@ -5,8 +5,8 @@ import { IconMenu } from './icon/IconMenu';
 import { Menu } from './Menu';
 
 type MenuProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  genres?: { id: string; value: string }[] | [];
-  countries?: { id: string; value: string }[] | [];
+  genres?: { id: string; name: string }[] | [];
+  countries?: { id: string; name: string }[] | [];
 };
 
 export const MenuToggle: React.FC<MenuProps> = ({ children, ...props }) => {

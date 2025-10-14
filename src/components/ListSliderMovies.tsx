@@ -97,7 +97,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
             <GenresList genres={movie.genres ?? []} className="justify-center md:justify-start" />
           </div>
 
-          <span className="hidden text-sm text-white line-clamp-3 lg:flex">{movie.overview}</span>
+          <p className="hidden text-sm text-white !line-clamp-3 lg:block">{movie.overview}</p>
 
           <div className="items-center hidden w-full gap-4 h-fit md:flex">
             <Button
@@ -109,11 +109,11 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
             </Button>
             <Button
               variant="outline"
-              size="md"
-              className="flex items-center gap-2"
+              size="xl"
+              className="flex items-center !px-3"
               onClick={() => router.push(`/phim/${link}`)}
             >
-              <IconExclamationMark width={18} height={18} /> Chi Tiết
+              <IconExclamationMark width={24} height={24} />
             </Button>
           </div>
         </div>
@@ -124,7 +124,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
             <button
               key={idx + m.id}
               onClick={() => setActiveIndex(idx)}
-              className={`overflow-hidden relative border-2 rounded-full cursor-pointer w-8 sm:w-10 md:w-14 aspect-square border-white/50 hover:border-white ${
+              className={`overflow-hidden relative border-2 rounded-full lg:rounded-lg cursor-pointer w-8 sm:w-10 lg:w-18 aspect-square lg:aspect-video border-white/50 hover:border-white ${
                 activeIndex === idx ? 'border-white/100' : ''
               }`}
             >

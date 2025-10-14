@@ -4,8 +4,9 @@ import { IconSearch } from '@/components/icon/IconSearch';
 import { PanelFilterMovies } from '@/components/PanelFiltterMovies';
 
 import { TableMovies } from '@/components/TableMovies';
+import { Button } from '@/components/ui/Button';
 import { Pagination } from '@/components/ui/Pagination';
-import { searchMovies } from '@/services/movie/get';
+import { getTotals, searchMovies } from '@/services/movie/get';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -38,11 +39,21 @@ export default function AdminMoviesPage() {
     gcTime: 0,
   });
 
+  const { data: totals } = useQuery({
+    queryKey: ['movies_list-totals'],
+    queryFn: () => getTotals(),
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
+  });
+
   const [titleInput, setTitleInput] = useState(filters.title);
 
   if (isLoading || !data) return null;
 
   const { results, page, total_pages, total_results } = data;
+  const { movies, series, upcoming } = totals;
 
   const updateURL = (newFilters: Partial<typeof filters>) => {
     const params = new URLSearchParams();
@@ -64,8 +75,24 @@ export default function AdminMoviesPage() {
 
   return (
     <div className="space-y-4 p-2 md:p-4 bg-bg-04 rounded-lg">
-      <div className="bg-bg-03/90 p-4 rounded-lg space-y-6">
-        <h1 className="font-bold text-xl">Danh sách phim</h1>
+      <div className=" space-y-4">
+        <div className="flex justify-between gap-2 items-center">
+          <h1 className="font-bold text-xl">Danh sách phim</h1>
+          <Button
+            size="sm"
+            className="!rounded-md"
+            onClick={() => {
+              router.push('/admin/phim/them-moi');
+            }}
+          >
+            Thêm mới
+          </Button>
+        </div>
+        <div className="flex flex-wrap gap-3 items-center">
+          <h2>Phim bộ ({movies})</h2>
+          <h2>Phim lẻ ({series})</h2>
+          <h2>Sắp chiếu ({upcoming})</h2>
+        </div>
         <div className="relative flex justify-end">
           <input
             type="text"
@@ -74,7 +101,7 @@ export default function AdminMoviesPage() {
             value={titleInput}
             onChange={(e) => setTitleInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            className={`w-full md:max-w-xl h-full text-xs rounded-md bg-white/10 py-2.5 pr-10 pl-3 focus:ring focus:ring-white disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500`}
+            className={`w-full  h-full text-xs rounded-md bg-white/10 py-2.5 pr-10 pl-3 focus:ring focus:ring-white disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500`}
           />
           <button
             className={`absolute top-0 right-0 hover:bg-white/10 flex cursor-pointer items-center rounded-md px-3 py-2 bg-transparent`}

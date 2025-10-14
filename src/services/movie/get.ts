@@ -74,3 +74,22 @@ export async function searchMovies(params: {
   const { data } = await res.json();
   return data;
 }
+
+export async function getTotals() {
+  const url = `${API_BASE_URL}/phim/tong`;
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch movie');
+  }
+
+  const { data } = await res.json();
+  return data;
+}

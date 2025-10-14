@@ -16,7 +16,7 @@ type MenuItemProps = {
   itemList?:
     | {
         id: string;
-        value: string;
+        name: string;
       }[]
     | [];
 };
@@ -92,9 +92,9 @@ export const MenuItem: React.FC<MenuItemProps> = ({
                     type="button"
                     key={index}
                     className={`rounded-md w-full font-normal whitespace-nowrap truncate text-left ${itemClassName}`}
-                    onClick={() => onClick(item.id, item.value)}
+                    onClick={() => onClick(item.id, item.name)}
                   >
-                    {item.value}
+                    {item.name}
                   </Button>
                 ))}
               </div>
@@ -131,9 +131,9 @@ export const MenuItem: React.FC<MenuItemProps> = ({
                   type="button"
                   key={index.toString() + item.id}
                   className={`rounded-md w-full font-normal whitespace-nowrap truncate text-left ${itemClassName}`}
-                  onClick={() => onClick(item.id, item.value)}
+                  onClick={() => onClick(item.id, item.name)}
                 >
-                  {item.value}
+                  {item.name}
                 </Button>
               ))}
           </div>
@@ -146,8 +146,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 };
 
 type MenuProps = {
-  genres?: { id: string; value: string }[] | [];
-  countries?: { id: string; value: string }[] | [];
+  genres?: { id: string; name: string }[] | [];
+  countries?: { id: string; name: string }[] | [];
   type?: 'main' | 'secondary';
   className?: string;
 };
@@ -193,8 +193,8 @@ export const Menu: React.FC<MenuProps> = ({ genres, countries, type = 'main', cl
           itemList={list}
           listClassName={listClass}
           itemClassName={itemClass}
-          onClick={(id, value) => {
-            router.push(getLink(path, value, id));
+          onClick={(id, name) => {
+            router.push(getLink(path, name, id));
           }}
         >
           {label}

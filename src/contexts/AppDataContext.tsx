@@ -3,12 +3,16 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { getCountriesList } from '@/services/country/get';
 import { getGenresList } from '@/services/genre/get';
+import { getVersionList } from '@/services/version/get';
+import { getServerList } from '@/services/server/get';
 
-type Option = { id: string; value: string };
+type Option = { id: string; name: string };
 
 type AppDataContextType = {
   genres: Option[];
   countries: Option[];
+  versions: Option[];
+  servers: Option[];
   loading: boolean;
 };
 
@@ -17,20 +21,24 @@ const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
 export function AppDataProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [genres, setGenres] = useState<Option[]>([]);
   const [countries, setCountries] = useState<Option[]>([]);
+  const [versions, setVersions] = useState<Option[]>([]);
+  const [servers, setServers] = useState<Option[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([getGenresList(), getCountriesList()])
-      .then(([genresRes, countriesRes]) => {
+    Promise.all([getGenresList(), getCountriesList(), getVersionList(), getServerList()])
+      .then(([genresRes, countriesRes, versionsRes, serversRes]) => {
         setGenres(genresRes || []);
         setCountries(countriesRes || []);
+        setVersions(versionsRes || []);
+        setServers(serversRes || []);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <AppDataContext.Provider value={{ genres, countries, loading }}>
+    <AppDataContext.Provider value={{ genres, countries, versions, servers, loading }}>
       {children}
     </AppDataContext.Provider>
   );

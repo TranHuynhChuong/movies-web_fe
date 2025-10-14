@@ -55,7 +55,7 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <h2 className="text-lg md:text-xl font-medium">Phim bộ mới cập nhật</h2>
           <Link
-            href="/tim-kiem?list=num"
+            href="/phim-bo"
             className="group rounded-full w-8 h-8 border gap-1 border-white bg-transparent flex items-center justify-center overflow-hidden transition-all duration-300 hover:w-24 hover:border-primary hover:text-primary cursor-pointer"
           >
             <p className="text-xs text-inherit whitespace-nowrap hidden group-hover:block transition-opacity duration-300">
@@ -76,7 +76,7 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <h2 className="text-lg md:text-xl font-medium">Phim lẻ mới cập nhật</h2>
           <Link
-            href="/tim-kiem?list=nus"
+            href="/phim-le"
             className="group rounded-full w-8 h-8 border gap-1 border-white bg-transparent flex items-center justify-center overflow-hidden transition-all duration-300 hover:w-24 hover:border-primary hover:text-primary cursor-pointer"
           >
             <p className="text-xs text-inherit whitespace-nowrap hidden group-hover:block transition-opacity duration-300">
