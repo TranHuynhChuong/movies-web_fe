@@ -16,6 +16,8 @@ export type Movie = {
   actors: string | undefined;
   directors: string | undefined;
   country: { id: string; name: string } | undefined;
+  created_at: string | undefined;
+  updated_at: string | undefined;
 };
 
 export type Version = {
