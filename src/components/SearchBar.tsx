@@ -63,7 +63,7 @@ export function SearchBar() {
           placeholder="Tìm kiếm phim..."
           defaultValue={searchQuery}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleSearch}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch}
           className={` transition-all duration-200 ease-in-out
             ${open ? 'block' : 'hidden'}
             w-full h-full text-xs rounded-md bg-white/10 py-2 pl-10 pr-3 lg:pr-10 lg:pl-3 focus:ring focus:ring-white disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 lg:block`}
