@@ -6,8 +6,6 @@ import { moviesWatchInf } from '../data/movies-watchinf.js';
 const router = Router();
 
 router.get('/tim-kiem', (req, res) => {
-  console.log('phim/tim-kiem query');
-  console.log(req.query);
   res.json(moviesList);
 });
 
