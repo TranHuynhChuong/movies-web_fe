@@ -60,7 +60,7 @@ export const Modal: React.FC<{
                 if (onConfirm) onConfirm();
                 onClose();
               }}
-              className="rounded-lg bg-blue-600 text-white px-4 py-2 text-sm hover:bg-blue-700 transition"
+              className="rounded-lg bg-primary text-black px-4 py-2 text-sm hover:bg-primary-dark transition"
             >
               {confirmLable}
             </button>
