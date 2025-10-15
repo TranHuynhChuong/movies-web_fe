@@ -53,7 +53,7 @@ export default function AdminMoviesPage() {
   if (isLoading || !data) return null;
 
   const { results, page, total_pages, total_results } = data;
-  const { movies, series, upcoming } = totals;
+  const { movies = 0, series = 0, upcoming = 0 } = totals || {};
 
   const updateURL = (newFilters: Partial<typeof filters>) => {
     const params = new URLSearchParams();
@@ -74,19 +74,10 @@ export default function AdminMoviesPage() {
   };
 
   return (
-    <div className="space-y-4 p-2 md:p-4 bg-bg-04 rounded-lg">
+    <div className="space-y-4 p-2 md:p-4 rounded-lg">
       <div className=" space-y-4">
         <div className="flex justify-between gap-2 items-center">
           <h1 className="font-bold text-xl">Danh sách phim</h1>
-          <Button
-            size="sm"
-            className="!rounded-md"
-            onClick={() => {
-              router.push('/admin/phim/them-moi');
-            }}
-          >
-            Thêm mới
-          </Button>
         </div>
         <div className="flex flex-wrap gap-3 items-center">
           <h2>Phim bộ ({movies})</h2>

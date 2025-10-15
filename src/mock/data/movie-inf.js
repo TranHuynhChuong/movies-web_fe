@@ -1,4 +1,4 @@
-export const movieDetail = {
+export const movieInf = {
   data: {
     id: '12345678',
     title: 'Đi Đêm Lắm Có Ngày Gặp Mèo',
@@ -29,10 +29,10 @@ export const movieDetail = {
       'Yoshiki Nakajima, Hiroki Yasumoto, Ryouta Takeuchi, Subaru Kimura, Yuu Serizawa, Reina Ueda',
     directors: 'Tomohiro Kamitani',
     country: {
-      id: 'jb',
+      id: 'JP',
       name: 'Nhật Bản',
     },
-    create_at: '2015-05-19T16:31:23.000Z',
-    update_at: '2015-05-19T16:31:23.000Z',
+    created_at: '2015-05-19T16:31:23.000Z',
+    updated_at: '2015-05-19T16:31:23.000Z',
   },
 };

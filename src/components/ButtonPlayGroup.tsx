@@ -12,6 +12,7 @@ type ButtonPlayGroupProps = {
   title: string;
   original_title: string;
   trailer_path: string;
+  canWatch: boolean;
 };
 
 export const ButtonPlayGroup: React.FC<ButtonPlayGroupProps> = ({
@@ -19,19 +20,22 @@ export const ButtonPlayGroup: React.FC<ButtonPlayGroupProps> = ({
   title,
   original_title,
   trailer_path,
+  canWatch = false,
 }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   return (
     <>
       <div className="items-center justify-center hidden w-full h-full gap-4 md:flex md:justify-start md:flex-col md:w-fit ">
-        <Button
-          size="lg"
-          className="flex items-center gap-2 whitespace-nowrap"
-          onClick={() => router.push(getLink('/xem-phim', title, id) + '?ver=1&ep=1')}
-        >
-          <IconPlay width={24} height={24} /> Xem Ngay
-        </Button>
+        {canWatch && (
+          <Button
+            size="lg"
+            className="flex items-center gap-2 whitespace-nowrap"
+            onClick={() => router.push(getLink('/xem-phim', title, id) + '?ver=1&ep=1')}
+          >
+            <IconPlay width={24} height={24} /> Xem Ngay
+          </Button>
+        )}
         <Button
           variant="outline"
           size="lg"

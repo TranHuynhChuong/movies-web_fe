@@ -103,6 +103,7 @@ export default async function MovieDetails({
               title={movie.title}
               original_title={movie.original_title}
               trailer_path={movie.trailer_path ?? ''}
+              canWatch={!!(movie.versions && movie.versions.length > 0)}
             />
           </div>
         </div>

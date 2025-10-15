@@ -5,8 +5,7 @@ import { getCountriesList } from '@/services/country/get';
 import { getGenresList } from '@/services/genre/get';
 import { getVersionList } from '@/services/version/get';
 import { getServerList } from '@/services/server/get';
-
-type Option = { id: string; name: string };
+import { Option } from '@/types/utils';
 
 type AppDataContextType = {
   genres: Option[];

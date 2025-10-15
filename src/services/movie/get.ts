@@ -17,6 +17,23 @@ export async function getMovieInf(id: string) {
   return data;
 }
 
+export async function getMovieDetail(id: string) {
+  const res = await fetch(`${API_BASE_URL}/phim/chi-tiet/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch movie');
+  }
+
+  const { data } = await res.json();
+  return data;
+}
+
 export async function getMovieWatchInf(id: string, version_id: number, episode_number: number) {
   const res = await fetch(
     `${API_BASE_URL}/phim/xem-phim/${id}?ver=${version_id}&ep=${episode_number}`,

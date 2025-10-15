@@ -20,15 +20,15 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
   onConfirm,
 }) => {
   const movieTypes = [
-    { id: 'all', value: 'Tất cả' },
-    { id: 'series', value: 'Phim bộ' },
-    { id: 'movies', value: 'Phim lẻ' },
+    { id: 'all', name: 'Tất cả' },
+    { id: 'series', name: 'Phim bộ' },
+    { id: 'movies', name: 'Phim lẻ' },
   ];
 
   let { genres, countries, loading } = useAppData();
 
-  genres = [{ id: 'all', value: 'Tất cả' }, ...genres];
-  countries = [{ id: 'all', value: 'Tất cả' }, ...countries];
+  genres = [{ id: 'all', name: 'Tất cả' }, ...genres];
+  countries = [{ id: 'all', name: 'Tất cả' }, ...countries];
 
   const [openFilter, setOpenFilter] = useState(false);
   const [selectedType, setSelectedType] = useState(initialSelectedType);
@@ -77,7 +77,7 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
                   }`}
                   onClick={() => setSelectedType(movieType.id)}
                 >
-                  {movieType.value}
+                  {movieType.name}
                 </Button>
               ))}
             </div>
@@ -95,7 +95,7 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
                   }`}
                   onClick={() => setSelectedCountry(country.id)}
                 >
-                  {country.value}
+                  {country.name}
                 </Button>
               ))}
             </div>
@@ -113,7 +113,7 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
                   }`}
                   onClick={() => setSelectedGenre(genre.id)}
                 >
-                  {genre.value}
+                  {genre.name}
                 </Button>
               ))}
             </div>

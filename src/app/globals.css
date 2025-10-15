@@ -88,3 +88,9 @@ body {
   background-size: 5px 5px; /* khoảng cách giữa các chấm */
   color: #0000005d; /* màu chấm (dùng currentColor) */
 }
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #1f2937 inset; /* bg-gray-800 */
+  -webkit-text-fill-color: #fff; /* text-white */
+  transition: background-color 5000s ease-in-out 0s;
+}

@@ -37,8 +37,8 @@ export default function Sidebar({ items, title = 'Panel' }: Readonly<SidebarProp
             <Link
               href={item.href}
               className={cn(
-                'flex items-center p-2 rounded-lg hover:bg-bg-03/90',
-                isActive ?? 'bg-bg-03'
+                'flex items-center p-2 rounded-lg hover:bg-bg-03/90 text-sm',
+                isActive ? 'bg-bg-03' : ''
               )}
             >
               {item.icon && <span className="w-5 h-5 me-3">{item.icon}</span>}

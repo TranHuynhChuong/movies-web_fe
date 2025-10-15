@@ -4,10 +4,9 @@ import React from 'react';
 import { Button } from './ui/Button';
 import { toKebabWithId } from '@/utils/kebabCase';
 import { useRouter } from 'next/navigation';
-import { Genre } from '@/types/movies';
 
 type GenresListProps = {
-  genres: Genre[];
+  genres: { id: string; name: string }[];
   className?: string;
 };
 

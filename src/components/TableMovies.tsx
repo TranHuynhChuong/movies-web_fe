@@ -1,5 +1,6 @@
 'use client';
 import { Movie } from '@/types/movies';
+import Link from 'next/link';
 import React from 'react';
 
 const getShortLabel = (name: string) => {
@@ -42,7 +43,7 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
           {movies.map((movie) => (
             <tr
               key={movie.id}
-              className={`rounded-xl align-top shadow transition hover:shadow-md bg-bg-03/60`}
+              className={`rounded-xl align-top shadow transition hover:shadow-md bg-white dark:bg-gray-900`}
             >
               <td className="rounded-l-xl px-6 py-4">{movie.id}</td>
 
@@ -73,8 +74,8 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap ${
                     movie.media_type === 'series'
-                      ? 'bg-purple-100 text-purple-700'
-                      : 'bg-orange-100 text-orange-700'
+                      ? 'bg-purple-200/90 text-purple-700'
+                      : 'bg-orange-200/90 text-orange-700'
                   }`}
                 >
                   {movie.media_type === 'series' ? 'Phim bộ' : 'Phim lẻ'}
@@ -86,15 +87,15 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                   <p
                     className={`rounded-full w-fit px-3 py-1 font-semibold whitespace-nowrap text-xs ${
                       movie.status === 'show'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-red-100 text-red-700'
+                        ? 'bg-blue-200/90 text-blue-700'
+                        : 'bg-red-200/90 text-red-700'
                     }`}
                   >
                     {movie.status === 'show' ? 'Hiện' : 'Ẩn'}
                   </p>
                   {/* Các version */}
                   {!movie.versions || movie.versions.length === 0 ? (
-                    <p className="rounded-full w-fit px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-700">
+                    <p className="rounded-full w-fit px-3 py-1 text-xs font-semibold bg-gray-200/90 text-gray-700">
                       Trailer
                     </p>
                   ) : (
@@ -116,7 +117,7 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                           key={v.name}
                           className={`rounded-full w-fit px-3 py-1 text-xs font-semibold whitespace-nowrap ${
                             isFull
-                              ? 'bg-green-100 text-green-700'
+                              ? 'bg-green-200/90 text-green-700'
                               : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
                           }`}
                         >
@@ -151,7 +152,14 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
               </td>
 
               <td className="rounded-r-xl px-6 py-4 text-sm">
-                <div className="cursor-pointer text-blue-600 hover:underline">Chỉnh sửa</div>
+                <div className="cursor-pointer text-blue-600 hover:underline">
+                  <Link
+                    href={`/admin/phim/${movie.id}`}
+                    className="text-sm font-normal text-blue-600 hover:underline"
+                  >
+                    Chỉnh sửa
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}
@@ -161,16 +169,19 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
       {/* Dạng thẻ cho mobile */}
       <div className="space-y-3 md:hidden mt-3">
         {movies.map((movie) => (
-          <div key={movie.id} className={`rounded-lg p-4 shadow-sm bg-bg-03/60`}>
+          <div key={movie.id} className={`rounded-lg p-4 shadow-sm bg-white dark:bg-gray-900`}>
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-gray-100">{movie.id}</p>
-              <button className="text-sm font-normal text-blue-600 hover:underline">
+              <p className="text-sm font-medium text-gray-200/90">{movie.id}</p>
+              <Link
+                href={`/admin/phim/${movie.id}`}
+                className="text-sm font-normal text-blue-600 hover:underline"
+              >
                 Chỉnh sửa
-              </button>
+              </Link>
             </div>
 
             <div className="mt-2.5 space-y-1.5">
-              <p className="font-semibold text-sm text-gray-100">
+              <p className="font-semibold text-sm text-gray-200/90">
                 {movie.title} ({movie.release_year})
               </p>
               <p className="text-xs italic text-gray-300">{movie.original_title}</p>
@@ -180,8 +191,8 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
               <span
                 className={`rounded-full px-3 py-1 font-medium w-fit text-xs whitespace-nowrap ${
                   movie.media_type === 'series'
-                    ? 'bg-indigo-100 text-indigo-700'
-                    : 'bg-orange-100 text-orange-700'
+                    ? 'bg-indigo-200/90 text-indigo-700'
+                    : 'bg-orange-200/90 text-orange-700'
                 }`}
               >
                 {movie.media_type}
@@ -189,7 +200,9 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
 
               <span
                 className={`rounded-full px-3 py-1 text-xs font-medium w-fit whitespace-nowrap ${
-                  movie.status === 'show' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'
+                  movie.status === 'show'
+                    ? 'bg-blue-200/90 text-blue-700'
+                    : 'bg-red-200/90 text-red-700'
                 }`}
               >
                 {movie.status === 'show' ? 'Hiện' : 'Ẩn'}
@@ -219,7 +232,7 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                       key={v.name}
                       className={`rounded-full w-fit px-3 py-1 text-xs whitespace-nowrap font-semibold ${
                         isFull
-                          ? 'bg-green-100 text-green-700'
+                          ? 'bg-green-200/90 text-green-700'
                           : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
                       }`}
                     >
