@@ -52,7 +52,7 @@ export default function AdminMoviesPage() {
 
   if (isLoading || !data) return null;
 
-  const { results, page, total_pages, total_results } = data;
+  const { results, page, total_pages, total_results } = data.data;
   const { movies = 0, series = 0, upcoming = 0 } = totals || {};
 
   const updateURL = (newFilters: Partial<typeof filters>) => {

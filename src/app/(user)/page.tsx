@@ -46,7 +46,7 @@ export default function Home() {
     <div className="space-y-12 pb-12">
       {/* Slider phim mới nhất */}
       <ListSliderMovies
-        movies={newAddedData?.results.slice(0, 6) || []}
+        movies={newAddedData?.data.results.slice(0, 6) || []}
         isLoading={isNewAddedLoading}
       />
 
@@ -65,7 +65,7 @@ export default function Home() {
           </Link>
         </div>
         <ListCarouselMovie
-          movies={seriesData?.results || []}
+          movies={seriesData?.data.results || []}
           variant="backdrop"
           isLoading={isSeriesLoading}
         />
@@ -86,7 +86,7 @@ export default function Home() {
           </Link>
         </div>
         <ListCarouselMovie
-          movies={moviesData?.results || []}
+          movies={moviesData?.data.results || []}
           variant="backdrop"
           isLoading={isMoviesLoading}
         />
@@ -98,10 +98,13 @@ export default function Home() {
           <h2 className="text-lg md:text-xl font-medium">Danh sách phim</h2>
         </div>
         <div className=" space-y-6">
-          <ListGridMovies movies={newUpdatedData?.results || []} isLoading={isNewUpdatedLoading} />
+          <ListGridMovies
+            movies={newUpdatedData?.data.results || []}
+            isLoading={isNewUpdatedLoading}
+          />
           <Pagination
             currentPage={1}
-            totalPage={newUpdatedData?.total_pages}
+            totalPage={newUpdatedData?.data.total_pages}
             onChange={(page) => {
               router.push(`/tim-kiem/?page=${page}`);
             }}

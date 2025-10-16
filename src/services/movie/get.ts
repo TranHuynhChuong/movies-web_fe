@@ -13,7 +13,7 @@ export async function getMovieInf(id: string) {
     throw new Error('Failed to fetch movie');
   }
 
-  const { data } = await res.json();
+  const data = await res.json();
   return data;
 }
 
@@ -30,7 +30,7 @@ export async function getMovieDetail(id: string) {
     throw new Error('Failed to fetch movie');
   }
 
-  const { data } = await res.json();
+  const data = await res.json();
   return data;
 }
 
@@ -50,7 +50,7 @@ export async function getMovieWatchInf(id: string, version_id: number, episode_n
     throw new Error('Failed to fetch movie');
   }
 
-  const { data } = await res.json();
+  const data = await res.json();
   return data;
 }
 
@@ -88,7 +88,7 @@ export async function searchMovies(params: {
     throw new Error('Failed to fetch movie');
   }
 
-  const { data } = await res.json();
+  const data = await res.json();
   return data;
 }
 
@@ -107,6 +107,6 @@ export async function getTotals() {
     throw new Error('Failed to fetch movie');
   }
 
-  const { data } = await res.json();
+  const data = await res.json();
   return data;
 }

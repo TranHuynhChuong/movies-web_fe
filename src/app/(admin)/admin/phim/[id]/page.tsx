@@ -62,7 +62,7 @@ export default function AdminMoviesDetailPage() {
 
   return (
     <div className="p-2 md:p-4 bg-bg-04 rounded-lg">
-      <FormMovies onSubmit={handleSubmit} onCancel={handleCancel} data={data} />
+      <FormMovies onSubmit={handleSubmit} onCancel={handleCancel} data={data.data} />
     </div>
   );
 }

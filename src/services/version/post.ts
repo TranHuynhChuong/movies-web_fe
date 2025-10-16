@@ -1,14 +1,20 @@
 import { API_BASE_URL } from '@/libs/api';
 
-export async function addNew(payload: any) {
+export async function addNew(payload: any, token?: string) {
   const url = `${API_BASE_URL}/phien-ban/`;
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   const res = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload), // Gửi dữ liệu ở đây
+    headers: headers,
+    body: JSON.stringify(payload),
     cache: 'no-store',
   });
 
@@ -16,6 +22,6 @@ export async function addNew(payload: any) {
     throw new Error('Failed to add new version');
   }
 
-  const { data } = await res.json();
+  const data = await res.json();
   return data;
 }

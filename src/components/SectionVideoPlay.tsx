@@ -1,6 +1,6 @@
 'use client';
 
-import { Episode, Movie, Server } from '@/types/movies';
+import { Movie, Server } from '@/types/movies';
 import { Iframe } from './ui/Iframe';
 import { useEffect, useState } from 'react';
 import { SelectorServer } from './SelectorServer';
@@ -23,11 +23,7 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
   const episode_number = Number(searchParams.get('ep')) || 1;
   const server_order = Number(searchParams.get('ser')) || 1;
 
-  const {
-    data: episode,
-    isLoading,
-    isError,
-  } = useQuery<Episode, Error>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['movie-watch', movie.id, version_id, episode_number],
     queryFn: () => getMovieWatchInf(movie.id, version_id, episode_number),
     staleTime: 1000 * 60 * 5,
@@ -40,10 +36,11 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
     if (isError) router.back();
   }, [isError, router]);
 
+  const episode = data?.data;
   useEffect(() => {
     if (episode?.servers?.length) {
       const defaultServer =
-        episode.servers.find((ser) => ser.order === server_order) ?? episode.servers[0];
+        episode.servers.find((ser: any) => ser.order === server_order) ?? episode.servers[0];
       setActiveServer(defaultServer);
     }
   }, [episode]);

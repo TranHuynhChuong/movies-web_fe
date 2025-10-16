@@ -1,0 +1,53 @@
+import { Router } from 'express';
+import jwt from 'jsonwebtoken';
+const JWT_SECRET = 'super-secure-random-string-1234567890';
+
+const router = Router();
+
+const users = [
+  {
+    id: '1',
+    username: 'admin',
+    password: '123456',
+    role: 'ADMIN',
+  },
+  {
+    id: '2',
+    username: 'user',
+    password: '123456',
+    role: 'USER',
+  },
+];
+
+router.post('/admin', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find((u) => u.username === username && u.password === password);
+  if (!user) {
+    return res.status(401).json({
+      error: 'Invalid username or password',
+    });
+  }
+
+  const expires_in = 3600; // 1 giờ
+  const payload = {
+    sub: user.id,
+    username: user.username,
+    role: user.role,
+  };
+
+  const access_token = jwt.sign(payload, JWT_SECRET, { expiresIn: expires_in });
+  return res.status(200).json({
+    data: {
+      access_token,
+      token_type: 'Bearer',
+      expires_in,
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      },
+    },
+  });
+});
+
+export default router;

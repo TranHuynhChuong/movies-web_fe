@@ -1,13 +1,19 @@
 import { API_BASE_URL } from '@/libs/api';
 
-export async function update(id: string, payload: any) {
+export async function update(id: string, payload: any, token?: string) {
   const url = `${API_BASE_URL}/quoc-gia/${id}`;
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   const res = await fetch(url, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
     body: JSON.stringify(payload),
     cache: 'no-store',
   });
@@ -16,6 +22,6 @@ export async function update(id: string, payload: any) {
     throw new Error('Failed to update country');
   }
 
-  const { data } = await res.json();
+  const data = await res.json();
   return data;
 }

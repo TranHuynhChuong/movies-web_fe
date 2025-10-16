@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
-export async function getGenresList() {
-  const res = await fetch(`${API_BASE_URL}/the-loai`, {
+export async function getStats() {
+  const res = await fetch(`${API_BASE_URL}/thong-ke`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ export async function getGenresList() {
   });
 
   if (!res.ok) {
-    throw new Error('Failed to fetch movie');
+    throw new Error('Failed to fetch stats');
   }
 
   const data = await res.json();

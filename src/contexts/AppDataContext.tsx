@@ -27,10 +27,10 @@ export function AppDataProvider({ children }: Readonly<{ children: ReactNode }>)
   useEffect(() => {
     Promise.all([getGenresList(), getCountriesList(), getVersionList(), getServerList()])
       .then(([genresRes, countriesRes, versionsRes, serversRes]) => {
-        setGenres(genresRes || []);
-        setCountries(countriesRes || []);
-        setVersions(versionsRes || []);
-        setServers(serversRes || []);
+        setGenres(genresRes.data || []);
+        setCountries(countriesRes.data || []);
+        setVersions(versionsRes.data || []);
+        setServers(serversRes.data || []);
       })
       .catch(console.error)
       .finally(() => setLoading(false));

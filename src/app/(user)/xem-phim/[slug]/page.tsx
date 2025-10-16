@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 async function fetchMovieInf(slug: string): Promise<Movie> {
   try {
     const id = extractId(slug);
-    const data = await getMovieInf(id);
+    const { data } = await getMovieInf(id);
     return data;
   } catch (error) {
     console.error(error);
