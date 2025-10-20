@@ -510,7 +510,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                   {ep.streaming_sources.map((srv, sIndex) => (
                     <div key={sIndex} className="flex flex-col md:flex-row items-end gap-2">
                       <SelectSingle
-                        label={`Server #${srv.order}`}
+                        label={`Server #${srv.order_index}`}
                         options={servers}
                         selected={srv.server_id}
                         onChange={(id) => {
@@ -622,7 +622,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                             ...version.episodes,
                             {
                               episode_number: version.episodes.length + 1,
-                              streaming_sources: [{ server_id: '', url: '', order: 1 }],
+                              streaming_sources: [{ server_id: '', url: '', order_index: 1 }],
                             },
                           ],
                         };
@@ -651,7 +651,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                     episodes: [
                       {
                         episode_number: 1,
-                        streaming_sources: [{ server_id: '', url: '', order: 1 }],
+                        streaming_sources: [{ server_id: '', url: '', order_index: 1 }],
                       },
                     ],
                   },

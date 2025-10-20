@@ -41,7 +41,7 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
   useEffect(() => {
     if (episode?.streaming_sources?.length) {
       const defaultServer =
-        episode.streaming_sources.find((ss: any) => ss.order === server_order) ??
+        episode.streaming_sources.find((ss: any) => ss.order_index === server_order) ??
         episode.streaming_sources[0];
       setActiveStreamingSource(defaultServer);
     }
@@ -59,7 +59,7 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
 
   const handleChangeServer = (streaming_source: StreamingSource) => {
     setActiveStreamingSource(streaming_source);
-    updateQuery(streaming_source.order);
+    updateQuery(streaming_source.order_index);
   };
 
   return (

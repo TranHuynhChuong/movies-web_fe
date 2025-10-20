@@ -26,11 +26,11 @@ export const SelectorStreamingSource: React.FC<SelectorStreamingSourceProps> = (
 
       <div className="flex flex-wrap gap-1 text-center text-gray">
         {streaming_sources.map((streaming_source, index) => {
-          const isActive = active_server.order === streaming_source.order;
+          const isActive = active_server.order_index === streaming_source.order_index;
           return (
             <button
               type="button"
-              key={streaming_source.order + '-' + index}
+              key={streaming_source.order_index + '-' + index}
               onClick={() => handleChangeServer(streaming_source)}
               className={`
                 h-fit w-fit cursor-pointer rounded-sm px-2 py-1.5
@@ -41,7 +41,7 @@ export const SelectorStreamingSource: React.FC<SelectorStreamingSourceProps> = (
                 }
               `}
             >
-              Server {streaming_source.order}
+              Server {streaming_source.order_index}
             </button>
           );
         })}

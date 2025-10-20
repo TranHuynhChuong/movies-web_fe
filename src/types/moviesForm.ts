@@ -20,7 +20,7 @@ type MovieFormData = {
 
 type StreamingSource = {
   server_id: string;
-  order: number;
+  order_index: number;
   url: string;
 };
 

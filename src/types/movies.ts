@@ -37,6 +37,6 @@ export type StreamingSource = {
     id: string;
     name: string;
   };
-  order: number;
+  order_index: number;
   url: string;
 };
