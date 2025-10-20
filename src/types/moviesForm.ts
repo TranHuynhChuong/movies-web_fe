@@ -18,7 +18,7 @@ type MovieFormData = {
   versions?: Versions[];
 };
 
-type Server = {
+type StreamingSource = {
   server_id: string;
   order: number;
   url: string;
@@ -26,7 +26,7 @@ type Server = {
 
 type Episode = {
   episode_number: number;
-  servers: Server[];
+  streaming_sources: StreamingSource[];
 };
 
 type Versions = {

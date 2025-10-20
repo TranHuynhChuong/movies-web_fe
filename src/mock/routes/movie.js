@@ -16,15 +16,15 @@ router.patch('/:id', (req, res) => {
   res.status(200).json(req.body);
 });
 
-router.get('/chi-tiet/:id', (req, res) => {
+router.get('/detail/:id', (req, res) => {
   res.json(movieDetail);
 });
 
-router.get('/tim-kiem', (req, res) => {
+router.get('/search', (req, res) => {
   res.json(moviesList);
 });
 
-router.get('/tong', (req, res) => {
+router.get('/total', (req, res) => {
   res.json({
     data: {
       movies: 16,
@@ -34,7 +34,7 @@ router.get('/tong', (req, res) => {
   });
 });
 
-router.get('/xem-phim/:id', (req, res) => {
+router.get('/watch/:id', (req, res) => {
   res.json(moviesWatchInf);
 });
 

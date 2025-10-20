@@ -29,7 +29,7 @@ export const movieDetail = {
         episodes: [
           {
             episode_number: 1,
-            servers: [
+            streaming_sources: [
               {
                 server_id: 1,
                 order: 1,
@@ -51,7 +51,7 @@ export const movieDetail = {
         episodes: [
           {
             episode_number: 1,
-            servers: [
+            streaming_sources: [
               {
                 server_id: 1,
                 order: 1,
@@ -68,7 +68,7 @@ export const movieDetail = {
           },
           {
             episode_number: 1,
-            servers: [
+            streaming_sources: [
               {
                 server_id: 1,
                 order: 1,
@@ -85,7 +85,7 @@ export const movieDetail = {
           },
           {
             episode_number: 2,
-            servers: [
+            streaming_sources: [
               {
                 server_id: 1,
                 order: 1,

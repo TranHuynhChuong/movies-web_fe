@@ -15,7 +15,7 @@ interface FormMoviesProps {
   onCancel?: () => void;
 }
 
-export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps) {
+export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMoviesProps>) {
   const [formData, setFormData] = useState<MovieFormData>({
     title: '',
     original_title: '',
@@ -46,7 +46,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
-      ...(prev as MovieFormData),
+      ...prev,
       [name]: value ?? '', // fallback string
     }));
   };
@@ -79,7 +79,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
 
   const handleSubmit = () => {
     if (!validateForm()) return;
-    onSubmit && onSubmit(formData);
+    onSubmit?.(formData);
   };
 
   return (
@@ -342,7 +342,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                   selected={formData.genres}
                   onChange={(ids) => {
                     setFormData((prev) => ({
-                      ...(prev as MovieFormData),
+                      ...prev,
                       genres: ids ?? '',
                     }));
                   }}
@@ -356,7 +356,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                   selected={formData.country}
                   onChange={(id) => {
                     setFormData((prev) => ({
-                      ...(prev as MovieFormData),
+                      ...prev,
                       country: id ?? '',
                     }));
                   }}
@@ -444,7 +444,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                   selected={version.version_id}
                   onChange={(id) => {
                     setFormData((prev) => {
-                      const newData = { ...(prev as MovieFormData) };
+                      const newData = { ...prev };
                       if (newData.versions) {
                         newData.versions[vIndex].version_id = id;
                       }
@@ -457,7 +457,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                   className="text-red-500 text-sm mb-3"
                   onClick={() => {
                     setFormData((prev) => {
-                      const newData = { ...(prev as MovieFormData) };
+                      const newData = { ...prev };
                       newData.versions?.splice(vIndex, 1);
                       return newData;
                     });
@@ -471,14 +471,15 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
               {version.episodes.map((ep, epIndex) => (
                 <div key={epIndex} className="border border-gray-600 p-2 rounded space-y-2">
                   <div className="flex items-center gap-2">
-                    <label>Tập số:</label>
+                    <label htmlFor="episode_number">Tập số:</label>
                     <input
+                      id="episode_number"
                       type="number"
                       value={ep.episode_number}
                       onChange={(e) => {
                         const value = Number(e.target.value);
                         setFormData((prev) => {
-                          const newData = { ...(prev as MovieFormData) };
+                          const newData = { ...prev };
                           if (newData.versions) {
                             newData.versions[vIndex].episodes[epIndex].episode_number = value;
                           }
@@ -492,7 +493,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                       className="text-red-500 text-sm "
                       onClick={() => {
                         setFormData((prev) => {
-                          const newData = { ...(prev as MovieFormData) };
+                          const newData = { ...prev };
                           if (newData.versions) {
                             newData.versions[vIndex].episodes.splice(epIndex, 1);
                           }
@@ -506,7 +507,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                   </div>
 
                   {/* Danh sách server */}
-                  {ep.servers.map((srv, sIndex) => (
+                  {ep.streaming_sources.map((srv, sIndex) => (
                     <div key={sIndex} className="flex flex-col md:flex-row items-end gap-2">
                       <SelectSingle
                         label={`Server #${srv.order}`}
@@ -514,10 +515,11 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                         selected={srv.server_id}
                         onChange={(id) => {
                           setFormData((prev) => {
-                            const newData = { ...(prev as MovieFormData) };
+                            const newData = { ...prev };
                             if (newData.versions) {
-                              newData.versions[vIndex].episodes[epIndex].servers[sIndex].server_id =
-                                id;
+                              newData.versions[vIndex].episodes[epIndex].streaming_sources[
+                                sIndex
+                              ].server_id = id;
                             }
 
                             return newData;
@@ -531,10 +533,11 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                         onChange={(e) => {
                           const value = e.target.value;
                           setFormData((prev) => {
-                            const newData = { ...(prev as MovieFormData) };
+                            const newData = { ...prev };
                             if (newData.versions) {
-                              newData.versions[vIndex].episodes[epIndex].servers[sIndex].url =
-                                value;
+                              newData.versions[vIndex].episodes[epIndex].streaming_sources[
+                                sIndex
+                              ].url = value;
                             }
                             return newData;
                           });
@@ -547,9 +550,12 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                         className="text-red-500 text-sm mb-3"
                         onClick={() => {
                           setFormData((prev) => {
-                            const newData = { ...(prev as MovieFormData) };
+                            const newData = { ...prev };
                             if (newData.versions) {
-                              newData.versions[vIndex].episodes[epIndex].servers.splice(sIndex, 1);
+                              newData.versions[vIndex].episodes[epIndex].streaming_sources.splice(
+                                sIndex,
+                                1
+                              );
                             }
                             return newData;
                           });
@@ -565,7 +571,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                     className="text-blue-500 text-sm mt-1"
                     onClick={() => {
                       setFormData((prev) => {
-                        const newData = { ...(prev as MovieFormData) };
+                        const newData = { ...prev };
 
                         if (newData.versions) {
                           const version = newData.versions[vIndex];
@@ -573,11 +579,11 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
 
                           // Tạo mảng servers mới
                           const newServers = [
-                            ...episode.servers,
+                            ...episode.streaming_sources,
                             {
                               server_id: '',
                               url: '',
-                              order: episode.servers.length + 1,
+                              order: episode.streaming_sources.length + 1,
                             },
                           ];
 
@@ -606,7 +612,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                 className="text-blue-500 text-sm mt-2"
                 onClick={() => {
                   setFormData((prev) => {
-                    const newData = { ...(prev as MovieFormData) };
+                    const newData = { ...prev };
                     if (newData.versions) {
                       newData.versions = newData.versions.map((version, idx) => {
                         if (idx !== vIndex) return version;
@@ -616,7 +622,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
                             ...version.episodes,
                             {
                               episode_number: version.episodes.length + 1,
-                              servers: [{ server_id: '', url: '', order: 1 }],
+                              streaming_sources: [{ server_id: '', url: '', order: 1 }],
                             },
                           ],
                         };
@@ -637,13 +643,16 @@ export default function FormMovies({ data, onSubmit, onCancel }: FormMoviesProps
             className="text-blue-500 text-sm mt-2"
             onClick={() => {
               setFormData((prev) => {
-                const newData = { ...(prev as MovieFormData) };
+                const newData = { ...prev };
                 newData.versions = [
                   ...(newData.versions || []),
                   {
                     version_id: '',
                     episodes: [
-                      { episode_number: 1, servers: [{ server_id: '', url: '', order: 1 }] },
+                      {
+                        episode_number: 1,
+                        streaming_sources: [{ server_id: '', url: '', order: 1 }],
+                      },
                     ],
                   },
                 ];

@@ -1,23 +1,23 @@
 'use client';
 
-import { Server } from '@/types/movies';
+import { StreamingSource } from '@/types/movies';
 import React from 'react';
 
-type SelectorServerProps = {
-  servers: Server[];
-  active_server: Server;
-  onClick: (server: Server) => void;
+type SelectorStreamingSourceProps = {
+  streaming_sources: StreamingSource[];
+  active_server: StreamingSource;
+  onClick: (streaming_source: StreamingSource) => void;
   className?: string;
 };
 
-export const SelectorServer: React.FC<SelectorServerProps> = ({
-  servers,
+export const SelectorStreamingSource: React.FC<SelectorStreamingSourceProps> = ({
+  streaming_sources,
   active_server,
   onClick,
   className,
 }) => {
-  const handleChangeServer = (server: Server) => {
-    onClick(server);
+  const handleChangeServer = (streaming_source: StreamingSource) => {
+    onClick(streaming_source);
   };
 
   return (
@@ -25,13 +25,13 @@ export const SelectorServer: React.FC<SelectorServerProps> = ({
       <p className="text-white">Chọn server khác nếu bị lỗi hoặc mất âm thanh + phụ đề</p>
 
       <div className="flex flex-wrap gap-1 text-center text-gray">
-        {servers.map((server, index) => {
-          const isActive = active_server.order === server.order;
+        {streaming_sources.map((streaming_source, index) => {
+          const isActive = active_server.order === streaming_source.order;
           return (
             <button
               type="button"
-              key={server.order + '-' + index}
-              onClick={() => handleChangeServer(server)}
+              key={streaming_source.order + '-' + index}
+              onClick={() => handleChangeServer(streaming_source)}
               className={`
                 h-fit w-fit cursor-pointer rounded-sm px-2 py-1.5
                 ${
@@ -41,7 +41,7 @@ export const SelectorServer: React.FC<SelectorServerProps> = ({
                 }
               `}
             >
-              Server {server.order}
+              Server {streaming_source.order}
             </button>
           );
         })}

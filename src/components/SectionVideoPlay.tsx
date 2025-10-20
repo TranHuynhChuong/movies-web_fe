@@ -1,9 +1,9 @@
 'use client';
 
-import { Movie, Server } from '@/types/movies';
+import { Movie, StreamingSource } from '@/types/movies';
 import { Iframe } from './ui/Iframe';
 import { useEffect, useState } from 'react';
-import { SelectorServer } from './SelectorServer';
+import { SelectorStreamingSource } from './SelectorStreamingSource';
 import { SelectorVersionEpisode } from './SelectorVersionEpisode';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -30,24 +30,26 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
     retry: 1,
   });
 
-  const [activeServer, setActiveServer] = useState<Server | undefined>();
+  const [activeStreamingSource, setActiveStreamingSource] = useState<StreamingSource | undefined>();
 
   useEffect(() => {
     if (isError) router.back();
   }, [isError, router]);
 
   const episode = data?.data;
+
   useEffect(() => {
-    if (episode?.servers?.length) {
+    if (episode?.streaming_sources?.length) {
       const defaultServer =
-        episode.servers.find((ser: any) => ser.order === server_order) ?? episode.servers[0];
-      setActiveServer(defaultServer);
+        episode.streaming_sources.find((ss: any) => ss.order === server_order) ??
+        episode.streaming_sources[0];
+      setActiveStreamingSource(defaultServer);
     }
   }, [episode]);
 
   const pathname = usePathname();
 
-  if (isLoading || !episode || !activeServer) return null;
+  if (isLoading || !episode || !activeStreamingSource) return null;
 
   const updateQuery = (ser: number) => {
     const params = new URLSearchParams();
@@ -55,9 +57,9 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  const handleChangeServer = (server: Server) => {
-    setActiveServer(server);
-    updateQuery(server.order);
+  const handleChangeServer = (streaming_source: StreamingSource) => {
+    setActiveStreamingSource(streaming_source);
+    updateQuery(streaming_source.order);
   };
 
   return (
@@ -70,11 +72,11 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
           </h3>
         </span>
         <div className="rounded-none md:rounded-lg overflow-hidden mx-0 md:mx-7 order-1 md:order-2">
-          <Iframe title={movie.title} src={activeServer.url} />
-          <SelectorServer
-            servers={episode.servers}
+          <Iframe title={movie.title} src={activeStreamingSource.url} />
+          <SelectorStreamingSource
+            streaming_sources={episode.streaming_sources}
             onClick={handleChangeServer}
-            active_server={activeServer}
+            active_server={activeStreamingSource}
           />
         </div>
       </div>

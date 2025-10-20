@@ -28,13 +28,15 @@ export type Version = {
 
 export type Episode = {
   episode_number: number;
-  servers: Server[];
+  streaming_source: StreamingSource[];
   version_id: number;
 };
 
-export type Server = {
-  id: number;
+export type StreamingSource = {
+  server: {
+    id: string;
+    name: string;
+  };
   order: number;
-  name: string;
   url: string;
 };

@@ -23,7 +23,7 @@ export default function CountryMoviesPage() {
     placeholderData: (previousData) => previousData,
   });
 
-  const { results = [], total_pages = 1, total_results = 0, page = 1 } = data.data || {};
+  const { results = [], total_pages = 1, total_results = 0, page = 1 } = data?.data || {};
 
   return (
     <PanelSearchResult

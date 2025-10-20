@@ -11,8 +11,8 @@ export const moviesList = {
     results: [
       ...Array.from({ length: 8 }, (_, index) => ({
         id: ('ABC' + index).toString(),
-        title: `Đi Đêm Lắm Có Ngày Gặp Mèo ${index + 1}`,
-        original_title: `Nyaight Of The Living Cat ${index + 1}`,
+        title: `Đi Đêm Lắm Có Ngày Gặp Mèo`,
+        original_title: `Nyaight Of The Living Cat`,
         poster_path:
           'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178939_Portrait_origin.jpg',
         backdrop_path:
@@ -39,8 +39,8 @@ export const moviesList = {
       })),
       ...Array.from({ length: 8 }, (_, index) => ({
         id: (123 + index).toString(),
-        title: `Đi Đêm Lắm Có Ngày Gặp Mèo ${index + 1}`,
-        original_title: `Nyaight Of The Living Cat ${index + 1}`,
+        title: `Đi Đêm Lắm Có Ngày Gặp Mèo`,
+        original_title: `Nyaight Of The Living Cat`,
         poster_path:
           'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178939_Portrait_origin.jpg',
         backdrop_path:
