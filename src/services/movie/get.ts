@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
 export async function getMovieInf(id: string) {
-  const res = await fetch(`${API_BASE_URL}/phim/${id}`, {
+  const res = await fetch(`${API_BASE_URL}/movie/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ export async function getMovieInf(id: string) {
 }
 
 export async function getMovieDetail(id: string) {
-  const res = await fetch(`${API_BASE_URL}/phim/chi-tiet/${id}`, {
+  const res = await fetch(`${API_BASE_URL}/movie/detail/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export async function getMovieDetail(id: string) {
 
 export async function getMovieWatchInf(id: string, version_id: number, episode_number: number) {
   const res = await fetch(
-    `${API_BASE_URL}/phim/xem-phim/${id}?ver=${version_id}&ep=${episode_number}`,
+    `${API_BASE_URL}/movie/watch/${id}?ver=${version_id}&ep=${episode_number}`,
     {
       method: 'GET',
       headers: {
@@ -74,7 +74,7 @@ export async function searchMovies(params: {
   if (params.media_type) query.append('media_type', params.media_type);
   if (params.new) query.append('new', params.new);
 
-  const url = `${API_BASE_URL}/phim/tim-kiem?${query.toString()}`;
+  const url = `${API_BASE_URL}/movie/search?${query.toString()}`;
 
   const res = await fetch(url, {
     method: 'GET',
@@ -93,7 +93,7 @@ export async function searchMovies(params: {
 }
 
 export async function getTotals() {
-  const url = `${API_BASE_URL}/phim/tong`;
+  const url = `${API_BASE_URL}/movie/total`;
 
   const res = await fetch(url, {
     method: 'GET',

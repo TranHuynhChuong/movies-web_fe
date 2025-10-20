@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
 export async function getCountriesList() {
-  const res = await fetch(`${API_BASE_URL}/quoc-gia`, {
+  const res = await fetch(`${API_BASE_URL}/country`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

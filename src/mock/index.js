@@ -1,25 +1,25 @@
 import express from 'express';
 import cors from 'cors';
-import theLoaiRoutes from './routes/the-loai.js';
-import quocGiaRoutes from './routes/quoc-gia.js';
-import phimRoutes from './routes/phim.js';
-import phienBanRoutes from './routes/phien-ban.js';
-import mayChuRoutes from './routes/may-chu.js';
-import xacThucRoutes from './routes/xac-thuc.js';
-import thongKeRoutes from './routes/thong-ke.js';
+import genreRoutes from './routes/genre.js';
+import countryRoutes from './routes/country.js';
+import movieRoutes from './routes/movie.js';
+import versionRoutes from './routes/version.js';
+import serverRoutes from './routes/server.js';
+import authRoutes from './routes/auth.js';
+import statsRoutes from './routes/stats.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // Gắn route
-app.use('/phim', phimRoutes);
-app.use('/the-loai', theLoaiRoutes);
-app.use('/quoc-gia', quocGiaRoutes);
-app.use('/phien-ban', phienBanRoutes);
-app.use('/may-chu', mayChuRoutes);
-app.use('/xac-thuc', xacThucRoutes);
-app.use('/thong-ke', thongKeRoutes);
+app.use('/movie', movieRoutes);
+app.use('/genre', genreRoutes);
+app.use('/country', countryRoutes);
+app.use('/version', versionRoutes);
+app.use('/server', serverRoutes);
+app.use('/auth', authRoutes);
+app.use('/stats', statsRoutes);
 
 const PORT = 4000;
 app.listen(PORT, () => {

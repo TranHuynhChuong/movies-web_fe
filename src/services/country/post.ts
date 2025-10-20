@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
 export async function addNew(payload: any, token?: string) {
-  const url = `${API_BASE_URL}/quoc-gia/`;
+  const url = `${API_BASE_URL}/country/`;
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',

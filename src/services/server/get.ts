@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
 export async function getServerList() {
-  const res = await fetch(`${API_BASE_URL}/may-chu`, {
+  const res = await fetch(`${API_BASE_URL}/server`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

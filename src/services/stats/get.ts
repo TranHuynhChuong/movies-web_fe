@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
 export async function getStats() {
-  const res = await fetch(`${API_BASE_URL}/thong-ke`, {
+  const res = await fetch(`${API_BASE_URL}/stats`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

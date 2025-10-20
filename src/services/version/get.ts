@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
 export async function getVersionList() {
-  const res = await fetch(`${API_BASE_URL}/phien-ban`, {
+  const res = await fetch(`${API_BASE_URL}/version`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/libs/api';
 
 export async function login(payload: any) {
-  const url = `${API_BASE_URL}/xac-thuc/admin`;
+  const url = `${API_BASE_URL}/auth`;
 
   const res = await fetch(url, {
     method: 'POST',
