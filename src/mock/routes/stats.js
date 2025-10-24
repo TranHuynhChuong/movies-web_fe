@@ -8,12 +8,9 @@ const dbStats = {
   versions: 25,
   servers: 4,
   usedStorageMB: 5120,
-  totalStorageMB: 10240,
 };
 
 router.get('/', (req, res) => {
-  const remainingStorageMB = dbStats.totalStorageMB - dbStats.usedStorageMB;
-
   return res.status(200).json({
     data: {
       movies: dbStats.movies,
@@ -22,8 +19,6 @@ router.get('/', (req, res) => {
       versions: dbStats.versions,
       servers: dbStats.servers,
       usedStorageMB: dbStats.usedStorageMB,
-      remainingStorageMB,
-      totalStorageMB: dbStats.totalStorageMB,
     },
   });
 });

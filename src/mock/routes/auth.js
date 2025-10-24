@@ -28,19 +28,19 @@ router.post('/', (req, res) => {
     });
   }
 
-  const expires_in = 3600; // 1 giờ
+  const expiresIn = 3600; // 1 giờ
   const payload = {
     sub: user.id,
     username: user.username,
     role: user.role,
   };
 
-  const access_token = jwt.sign(payload, JWT_SECRET, { expiresIn: expires_in });
+  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: expiresIn });
   return res.status(200).json({
     data: {
-      access_token,
-      token_type: 'Bearer',
-      expires_in,
+      accessToken,
+      tokenType: 'Bearer',
+      expiresIn,
       user: {
         id: user.id,
         username: user.username,
