@@ -3,7 +3,7 @@ import React from 'react';
 
 type BadgeVersionsProps = {
   data: {
-    media_type: string;
+    mediaType: string;
     versions: Version[];
   };
   ignore?: boolean; // nếu true, mobile vẫn giữ kiểu desktop
@@ -17,7 +17,7 @@ const getShortLabel = (name: string) => {
     .join('.');
 };
 
-const getBadges = (media_type: string, versions: Version[]) => {
+const getBadges = (mediaType: string, versions: Version[]) => {
   const isUpcoming = !versions || versions.length === 0;
 
   if (isUpcoming) {
@@ -26,7 +26,7 @@ const getBadges = (media_type: string, versions: Version[]) => {
 
   const badges: { label: string; text: string; bg: string; color: string }[] = [];
 
-  if (media_type === 'movies') {
+  if (mediaType === 'movies') {
     versions?.forEach((v) => {
       badges.push({
         label: getShortLabel(v.name),
@@ -35,11 +35,11 @@ const getBadges = (media_type: string, versions: Version[]) => {
         color: 'text-white',
       });
     });
-  } else if (media_type === 'series') {
+  } else if (mediaType === 'series') {
     versions?.forEach((v) => {
       badges.push({
         label: getShortLabel(v.name),
-        text: v.current_ep.toString(),
+        text: (v.currentEp ?? 0).toString(),
         bg: 'bg-bg-01',
         color: 'text-white',
       });
@@ -54,7 +54,7 @@ export const BadgeVersions: React.FC<BadgeVersionsProps> = ({
   ignore = false,
   className = '',
 }) => {
-  const badges = getBadges(data.media_type, data.versions);
+  const badges = getBadges(data.mediaType, data.versions);
 
   return (
     <>

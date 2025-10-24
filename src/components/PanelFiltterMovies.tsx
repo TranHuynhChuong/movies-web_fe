@@ -4,25 +4,32 @@ import { Button } from '@/components/ui/Button';
 import { useAppData } from '@/contexts/AppDataContext';
 import { IconFilter } from './icon/IconFilter';
 import { IconArrowRightFlow } from './icon/IconArrowRightFlow';
-import { IconSearch } from './icon/IconSearch';
 
 type PanelFilterMoviesProps = {
   initialSelectedType?: string;
   initialSelectedCountry?: string;
   initialSelectedGenre?: string;
-  onConfirm: (media_type?: string, country?: string, genre?: string) => void;
+  initialSelectedStatus?: string;
+  onConfirm: (media_type?: string, country?: string, genre?: string, status?: string) => void;
 };
 
 export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
   initialSelectedType = 'all',
   initialSelectedCountry = 'all',
   initialSelectedGenre = 'all',
+  initialSelectedStatus = 'all',
   onConfirm,
 }) => {
   const movieTypes = [
     { id: 'all', name: 'Tất cả' },
     { id: 'series', name: 'Phim bộ' },
     { id: 'movies', name: 'Phim lẻ' },
+  ];
+
+  const movieStatus = [
+    { id: 'all', name: 'Tất cả' },
+    { id: 'show', name: 'Hiển thị' },
+    { id: 'hide', name: 'Ẩn' },
   ];
 
   let { genres, countries, loading } = useAppData();
@@ -34,13 +41,14 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
   const [selectedType, setSelectedType] = useState(initialSelectedType);
   const [selectedGenre, setSelectedGenre] = useState(initialSelectedGenre);
   const [selectedCountry, setSelectedCountry] = useState(initialSelectedCountry);
+  const [selectedStatus, setSelectedStatus] = useState(initialSelectedStatus);
 
   const handleToggleFilter = () => {
     setOpenFilter((prev) => !prev);
   };
 
   const handleConfirmFilter = () => {
-    onConfirm(selectedType, selectedCountry, selectedGenre);
+    onConfirm(selectedType, selectedCountry, selectedGenre, selectedStatus);
   };
 
   if (loading) return null;
@@ -64,6 +72,24 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
         }`}
       >
         <div className=" divide-y divide-dashed divide-gray-600 ">
+          <div className="grid grid-cols-12 gap-4 p-5">
+            <div className="col-span-3 sm:col-span-2 xl:col-span-1 font-semibold">Trạng thái</div>
+            <div className="flex gap-2 flex-wrap col-span-9 sm:col-span-10 xl:col-span-11">
+              {movieStatus.map((movieStatus, index) => (
+                <Button
+                  key={index}
+                  variant="ghost"
+                  size="xs"
+                  className={`rounded-sm !text-gray-300 font-normal ${
+                    selectedStatus === movieStatus.id ? '!text-primary !border !border-primary' : ''
+                  }`}
+                  onClick={() => setSelectedStatus(movieStatus.id)}
+                >
+                  {movieStatus.name}
+                </Button>
+              ))}
+            </div>
+          </div>
           <div className="grid grid-cols-12 gap-4 p-5">
             <div className="col-span-3 sm:col-span-2 xl:col-span-1 font-semibold">Loại phim</div>
             <div className="flex gap-2 flex-wrap col-span-9 sm:col-span-10 xl:col-span-11">

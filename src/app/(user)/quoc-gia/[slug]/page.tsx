@@ -13,24 +13,25 @@ export default function CountryMoviesPage() {
   const params = useParams();
 
   const slug = params.slug as string;
-  const current_page = Number(searchParams.get('page') ?? 1);
-  const country_id = extractId(slug);
-  const country = useAppDataValue('country', country_id);
+  const currentPage = Number(searchParams.get('page') ?? 1);
+  const countryId = extractId(slug);
+  const country = useAppDataValue('country', countryId);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['search_movies', slug, current_page],
-    queryFn: () => searchMovies({ page: current_page, limit: limit, country_id: country_id }),
+    queryKey: ['search_movies', slug, currentPage],
+    queryFn: () => searchMovies({ page: currentPage, limit: limit, countryId: countryId }),
     placeholderData: (previousData) => previousData,
+    select: (res) => res.data,
   });
 
-  const { results = [], total_pages = 1, total_results = 0, page = 1 } = data?.data || {};
+  const { results = [], totalPages = 1, totalResults = 0, page = 1 } = data || {};
 
   return (
     <PanelSearchResult
       title={`Phim "${country}"`}
       movies={results}
-      currentPage={current_page}
-      totalPage={total_pages}
+      currentPage={currentPage}
+      totalPage={totalPages}
       isLoading={isLoading}
     />
   );

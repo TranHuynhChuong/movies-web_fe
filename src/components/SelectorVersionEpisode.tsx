@@ -1,21 +1,19 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Episode, Version } from '@/types/movies';
+import { Version } from '@/types/movies';
 import { SelectorVersion } from './SelectorVersion';
 import { SelectorEpisode } from './SelectorEpisode';
 import { useRouter, usePathname, useSearchParams, useParams } from 'next/navigation';
 
 type SelectorVersionEpisodeProps = {
-  media_type: string;
+  mediaType: string;
   versions?: Version[];
-  episode?: Episode;
 };
 
 export const SelectorVersionEpisode: React.FC<SelectorVersionEpisodeProps> = ({
-  media_type,
+  mediaType,
   versions,
-  episode,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -24,32 +22,36 @@ export const SelectorVersionEpisode: React.FC<SelectorVersionEpisodeProps> = ({
 
   const slug = params.slug;
 
-  const initialVersion = Number(searchParams.get('ver')) || undefined;
+  const initialVersion = searchParams.get('ver') || '';
   const initialEpisode = Number(searchParams.get('ep')) || undefined;
 
-  const [activeVersion, setActiveVersion] = useState<number>(initialVersion ?? 1);
+  const [activeVersion, setActiveVersion] = useState<string>(initialVersion);
   const [activeEpisode, setActiveEpisode] = useState<number | undefined>(initialEpisode);
 
   useEffect(() => {
-    if (!episode) return;
-    setActiveVersion(episode.version_id);
-    setActiveEpisode(episode.episode_number);
-  }, [episode?.version_id, episode?.episode_number]);
+    if (!versions || versions.length === 0) return;
+    setActiveVersion(versions[0].id);
+  }, [versions]);
 
+  console.log(versions);
   /** Cập nhật URL query */
-  const updateQuery = (ver: number, ep: number) => {
+  const updateQuery = (ver: string, ep: number) => {
     const params = new URLSearchParams();
 
-    params.set('ver', String(ver));
+    params.set('ver', ver);
     params.set('ep', String(ep));
 
-    if (pathname.includes('xem-phim')) router.replace(`${pathname}?${params.toString()}`);
-    else router.push(`/xem-phim/${slug}?${params.toString()}`);
+    const query = params.toString();
+    if (pathname.includes('xem-phim')) {
+      router.replace(query ? `${pathname}?${query}` : pathname);
+    } else {
+      router.push(query ? `/xem-phim/${slug}?${query}` : `/xem-phim/${slug}`);
+    }
   };
 
-  const handleChangeVersion = (version: number) => {
-    setActiveVersion(version);
-    if (version === activeVersion) {
+  const handleChangeVersion = (versionId: string) => {
+    setActiveVersion(versionId);
+    if (versionId === activeVersion) {
       setActiveEpisode(initialEpisode);
     } else {
       setActiveEpisode(undefined);
@@ -66,13 +68,13 @@ export const SelectorVersionEpisode: React.FC<SelectorVersionEpisodeProps> = ({
       <h2 className="text-lg md:text-xl text-white font-medium">Tập phim</h2>
       <SelectorVersion
         versions={versions}
-        active_version={activeVersion}
+        activeVersion={activeVersion}
         onClick={handleChangeVersion}
       />
       <SelectorEpisode
-        total_ep={versions?.find((ver) => ver.id === activeVersion)?.current_ep ?? 0}
-        active_ep={activeEpisode}
-        media_type={media_type}
+        episodes={versions?.find((v) => v.id === activeVersion)?.episodes}
+        activeEp={activeEpisode}
+        mediaType={mediaType}
         onClick={handleChangeEpisode}
       />
     </div>

@@ -1,1 +1,1 @@
-export type Option = { id: string; name: string; created_at?: string; updated_at?: string };
+export type Option = { id: string; name: string; createdAt?: string; updatedAt?: string };

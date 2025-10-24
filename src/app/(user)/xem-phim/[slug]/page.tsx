@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: WatchMoviePageProps): Promise
       type: 'video.movie',
       images: [
         {
-          url: movie.poster_path,
+          url: movie.posterPath,
           width: 400,
           height: 600,
           alt: movie.title,
@@ -65,7 +65,7 @@ export default async function WatchMoviePage({ params }: Readonly<WatchMoviePage
         <div className="flex md:items-end gap-4 flex-col md:flex-row items-center w-full justify-center">
           <div className="relative w-40 overflow-hidden rounded-md shadow-white/10 h-60">
             <Image
-              src={movie.poster_path}
+              src={movie.posterPath}
               alt={movie.title}
               fill
               style={{ objectFit: 'cover' }}

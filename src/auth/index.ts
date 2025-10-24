@@ -40,6 +40,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
+        role: { label: 'Role', type: 'text' },
       },
       async authorize(credentials) {
         try {
@@ -50,8 +51,8 @@ export const authOptions: NextAuthOptions = {
             id: data.user.id,
             username: data.user.username,
             role: data.user.role,
-            accessToken: data.access_token,
-            expiresIn: data.expires_in,
+            accessToken: data.accessToken,
+            expiresIn: data.expiresIn,
           };
         } catch (err) {
           console.error('Login error:', err);

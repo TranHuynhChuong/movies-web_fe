@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Modal } from '@/components/ui/Modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { usePathname } from 'next/navigation';
 import { addNew as addServer } from '@/services/server/post';
 import { addNew as addVersion } from '@/services/version/post';
 import { addNew as addGenre } from '@/services/genre/post';

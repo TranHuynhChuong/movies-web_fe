@@ -1,15 +1,15 @@
 type MovieFormData = {
   id?: string;
   title: string;
-  original_title: string;
-  poster_path: string;
-  backdrop_path: string;
-  media_type: 'movie' | 'series';
+  originalTitle: string;
+  posterPath: string;
+  backdropPath: string;
+  mediaType: 'movie' | 'series';
   status: 'show' | 'hide';
   runtime: number;
-  number_of_episodes: number;
-  release_year: number;
-  trailer_path: string;
+  numberOfEpisodes: number;
+  releaseYear: number;
+  trailerPath: string;
   genres: string[];
   overview: string;
   actors: string;
@@ -19,17 +19,17 @@ type MovieFormData = {
 };
 
 type StreamingSource = {
-  server_id: string;
-  order_index: number;
+  serverId: string;
+  orderIndex: number;
   url: string;
 };
 
 type Episode = {
-  episode_number: number;
-  streaming_sources: StreamingSource[];
+  episodeNumber: number;
+  streamingSources: StreamingSource[];
 };
 
 type Versions = {
-  version_id: string;
+  id: string;
   episodes: Episode[];
 };

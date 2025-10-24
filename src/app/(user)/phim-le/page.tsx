@@ -9,22 +9,23 @@ const limit = 32;
 export default function MoviesPage() {
   const searchParams = useSearchParams();
 
-  const current_page = Number(searchParams.get('page') ?? 1);
+  const currentPage = Number(searchParams.get('page') ?? 1);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['search_movies', 'movies', current_page],
-    queryFn: () => searchMovies({ page: current_page, limit: limit, media_type: 'movies' }),
+    queryKey: ['search_movies', 'movie', currentPage],
+    queryFn: () => searchMovies({ page: currentPage, limit: limit, mediaType: 'movie' }),
     placeholderData: (previousData) => previousData,
+    select: (res) => res.data,
   });
 
-  const { results = [], total_pages = 1, total_results = 0, page = 1 } = data?.data || {};
+  const { results = [], totalPages = 1, totalResults = 0, page = 1 } = data || {};
 
   return (
     <PanelSearchResult
       title={`Phim lẻ`}
       movies={results}
-      currentPage={current_page}
-      totalPage={total_pages}
+      currentPage={currentPage}
+      totalPage={totalPages}
       isLoading={isLoading}
     />
   );

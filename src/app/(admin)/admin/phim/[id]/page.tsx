@@ -3,13 +3,18 @@
 import FormMovies from '@/components/FormMovies';
 import { getMovieDetail } from '@/services/movie/get';
 import { update } from '@/services/movie/patch';
+import { remove } from '@/services/movie/delete';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/Toast';
 
 export default function AdminMoviesDetailPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
+  const { data: session } = useSession();
+  const { show } = useToast();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['movie_detail', id],
@@ -17,20 +22,55 @@ export default function AdminMoviesDetailPage() {
     enabled: !!id,
   });
 
-  const mutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: MovieFormData }) => update(id, payload),
+  const mutationUpdate = useMutation({
+    mutationFn: ({
+      id,
+      payload,
+      accessToken,
+    }: {
+      id: string;
+      payload: MovieFormData;
+      accessToken: string;
+    }) => update(id, payload, accessToken),
     onSuccess: () => {
-      alert('Thêm phim thành công!');
+      show('Cập nhật thành công!', 'success', 'top-center');
       queryClient.invalidateQueries({ queryKey: ['movies_list'] });
+      router.replace('/admin/phim');
     },
     onError: (error: any) => {
-      alert(`Lỗi thêm mới, vui lòng thử lại`);
+      console.error('Lỗi cập nhật phim', error.message);
+      show('Cập nhật thất bại!', 'error', 'top-center');
+    },
+  });
+
+  const mutationDelete = useMutation({
+    mutationFn: ({ id, accessToken }: { id: string; accessToken: string }) =>
+      remove(id, accessToken),
+    onSuccess: () => {
+      show('Xóa thành công!', 'success', 'top-center');
+      queryClient.invalidateQueries({ queryKey: ['movies_list'] });
+      router.replace('/admin/phim');
+    },
+    onError: (error: any) => {
+      console.error('Lỗi xóa phim', error.message);
+      show('Xóa thất bại!', 'error', 'top-center');
     },
   });
 
   const handleSubmit = (payload: MovieFormData) => {
-    mutation.mutate({ id, payload });
-    router.replace('/admin/phim');
+    if (!session?.accessToken) {
+      router.replace('/admin-login');
+      return;
+    }
+    mutationUpdate.mutate({ id, payload, accessToken: session?.accessToken });
+  };
+
+  const handleDelete = () => {
+    if (!session?.accessToken) {
+      router.replace('/admin-login');
+      return;
+    }
+    mutationDelete.mutate({ id, accessToken: session?.accessToken });
   };
 
   const handleCancel = () => {
@@ -62,7 +102,12 @@ export default function AdminMoviesDetailPage() {
 
   return (
     <div className="p-2 md:p-4 bg-bg-04 rounded-lg">
-      <FormMovies onSubmit={handleSubmit} onCancel={handleCancel} data={data.data} />
+      <FormMovies
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        data={data.data}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

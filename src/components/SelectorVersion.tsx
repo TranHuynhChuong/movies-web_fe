@@ -6,14 +6,14 @@ import { Version } from '@/types/movies';
 
 type SelectorVersionProps = {
   versions?: Version[];
-  active_version: number;
+  activeVersion: string;
   className?: string;
-  onClick: (version: number) => void;
+  onClick: (version: string) => void;
 };
 
 export const SelectorVersion: React.FC<SelectorVersionProps> = ({
   versions,
-  active_version = 1,
+  activeVersion = 1,
   className = '',
   onClick,
 }) => {
@@ -21,7 +21,7 @@ export const SelectorVersion: React.FC<SelectorVersionProps> = ({
   return (
     <div className={`${className} flex gap-2`}>
       {versions?.map((version, index) => {
-        const isActive = active_version === version.id;
+        const isActive = activeVersion === version.id;
         return (
           <button
             key={index}

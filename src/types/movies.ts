@@ -1,42 +1,39 @@
 export type Movie = {
   id: string;
   title: string;
-  original_title: string;
-  poster_path: string;
-  backdrop_path: string;
-  media_type: 'movie' | 'series';
+  originalTitle: string;
+  posterPath: string;
+  backdropPath: string;
+  mediaType: 'movie' | 'series';
   status: string;
   versions: Version[] | undefined;
   runtime: number | undefined;
-  number_of_episodes: number | undefined;
-  release_year: number | undefined;
-  trailer_path: string | undefined;
+  numberOfEpisodes: number | undefined;
+  releaseYear: number | undefined;
+  trailerPath: string | undefined;
   genres: { id: string; name: string }[] | undefined;
   overview: string | undefined;
   actors: string | undefined;
   directors: string | undefined;
   country: { id: string; name: string } | undefined;
-  created_at: string | undefined;
-  updated_at: string | undefined;
+  createdAt: string | undefined;
+  updatedAt: string | undefined;
 };
 
 export type Version = {
-  id: number;
+  id: string;
   name: string;
-  current_ep: number;
+  currentEp: number;
+  episodes?: Episode[];
 };
 
 export type Episode = {
-  episode_number: number;
-  streaming_source: StreamingSource[];
-  version_id: number;
+  episodeNumber: number;
+  streamingSources: StreamingSource[];
 };
 
 export type StreamingSource = {
-  server: {
-    id: string;
-    name: string;
-  };
-  order_index: number;
+  serverId: string;
+  orderIndex: number;
   url: string;
 };

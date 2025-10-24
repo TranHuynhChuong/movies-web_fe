@@ -1,5 +1,5 @@
 'use client';
-import { Movie } from '@/types/movies';
+import { Movie, Version } from '@/types/movies';
 import Link from 'next/link';
 import React from 'react';
 
@@ -10,11 +10,11 @@ const getShortLabel = (name: string) => {
     .join('.');
 };
 
-const getVersionStatus = (movie: Movie, version: { name: string; current_ep: number }) => {
-  if (movie.media_type === 'series') {
+const getVersionStatus = (movie: Movie, version: Version) => {
+  if (movie.mediaType === 'series') {
     // Phim bộ: so sánh số tập hiện có với tổng số tập
-    const total = movie.number_of_episodes || 0;
-    return `${getShortLabel(version.name)} ${version.current_ep}/${total}`;
+    const total = movie.numberOfEpisodes || 0;
+    return `${getShortLabel(version.name)} ${version.currentEp}/${total}`;
   } else {
     // Phim lẻ: chỉ có 1 tập, nên coi là Full luôn
     return `${getShortLabel(version.name)} Full`;
@@ -51,7 +51,7 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                 <div className="group relative min-w-32 space-y-1">
                   <p className="line-clamp-2 cursor-default">{movie.title}</p>
                   <p className="line-clamp-1 cursor-default text-sm text-gray-300 italic">
-                    {movie.original_title}
+                    {movie.originalTitle}
                   </p>
 
                   {/* Tooltip */}
@@ -61,24 +61,24 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                   >
                     <p className="line-clamp-2 cursor-default">{movie.title}</p>
                     <p className="line-clamp-1 cursor-default text-xs italic">
-                      {movie.original_title}
+                      {movie.originalTitle}
                     </p>
                   </div>
                 </div>
               </td>
 
-              <td className="px-6 py-4">{movie.release_year}</td>
+              <td className="px-6 py-4">{movie.releaseYear}</td>
 
               {/* Loại */}
               <td className="px-6 py-4 whitespace-nowrap">
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap ${
-                    movie.media_type === 'series'
+                    movie.mediaType === 'series'
                       ? 'bg-purple-200/90 text-purple-700'
                       : 'bg-orange-200/90 text-orange-700'
                   }`}
                 >
-                  {movie.media_type === 'series' ? 'Phim bộ' : 'Phim lẻ'}
+                  {movie.mediaType === 'series' ? 'Phim bộ' : 'Phim lẻ'}
                 </span>
               </td>
 
@@ -132,10 +132,10 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
               <td className="px-6 py-4">
                 <div className="text-sm">
                   <p>
-                    {movie.created_at ? new Date(movie.created_at).toLocaleTimeString('vi-VN') : ''}
+                    {movie.createdAt ? new Date(movie.createdAt).toLocaleTimeString('vi-VN') : ''}
                   </p>
                   <p>
-                    {movie.created_at ? new Date(movie.created_at).toLocaleDateString('vi-VN') : ''}
+                    {movie.createdAt ? new Date(movie.createdAt).toLocaleDateString('vi-VN') : ''}
                   </p>
                 </div>
               </td>
@@ -143,19 +143,19 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
               <td className="px-6 py-4">
                 <div className="text-sm">
                   <p>
-                    {movie.updated_at ? new Date(movie.updated_at).toLocaleTimeString('vi-VN') : ''}
+                    {movie.updatedAt ? new Date(movie.updatedAt).toLocaleTimeString('vi-VN') : ''}
                   </p>
                   <p>
-                    {movie.updated_at ? new Date(movie.updated_at).toLocaleDateString('vi-VN') : ''}
+                    {movie.updatedAt ? new Date(movie.updatedAt).toLocaleDateString('vi-VN') : ''}
                   </p>
                 </div>
               </td>
 
               <td className="rounded-r-xl px-6 py-4 text-sm">
-                <div className="cursor-pointer text-blue-600 hover:underline">
+                <div className="cursor-pointer text-primary hover:underline">
                   <Link
                     href={`/admin/phim/${movie.id}`}
-                    className="text-sm font-normal text-blue-600 hover:underline"
+                    className="text-sm font-normal text-primary hover:underline"
                   >
                     Chỉnh sửa
                   </Link>
@@ -182,20 +182,20 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
 
             <div className="mt-2.5 space-y-1.5">
               <p className="font-semibold text-sm text-gray-200/90">
-                {movie.title} ({movie.release_year})
+                {movie.title} ({movie.releaseYear})
               </p>
-              <p className="text-xs italic text-gray-300">{movie.original_title}</p>
+              <p className="text-xs italic text-gray-300">{movie.originalTitle}</p>
             </div>
 
             <div className="mt-2.5 flex flex-wrap gap-1 text-sm">
               <span
                 className={`rounded-full px-3 py-1 font-medium w-fit text-xs whitespace-nowrap ${
-                  movie.media_type === 'series'
+                  movie.mediaType === 'series'
                     ? 'bg-indigo-200/90 text-indigo-700'
                     : 'bg-orange-200/90 text-orange-700'
                 }`}
               >
-                {movie.media_type}
+                {movie.mediaType}
               </span>
 
               <span
@@ -245,10 +245,10 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
 
             <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-gray-300">
               <div className="space-y-0.5">
-                {movie.created_at ? new Date(movie.created_at).toLocaleString('vi-VN') : ''}
+                {movie.createdAt ? new Date(movie.createdAt).toLocaleString('vi-VN') : ''}
               </div>
               <div className="space-y-0.5">
-                {movie.updated_at ? new Date(movie.updated_at).toLocaleString('vi-VN') : ''}
+                {movie.updatedAt ? new Date(movie.updatedAt).toLocaleString('vi-VN') : ''}
               </div>
             </div>
           </div>

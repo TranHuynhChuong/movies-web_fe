@@ -17,36 +17,40 @@ export default function Home() {
   // Phim lẻ
   const { data: moviesData, isLoading: isMoviesLoading } = useQuery({
     queryKey: ['search_movies', 'movies'],
-    queryFn: () => searchMovies({ page: 1, limit: limit, media_type: 'movies' }),
+    queryFn: () => searchMovies({ page: 1, limit: limit, mediaType: 'movies' }),
     placeholderData: (previousData) => previousData,
+    select: (res) => res.data,
   });
 
   // Phim bộ
   const { data: seriesData, isLoading: isSeriesLoading } = useQuery({
     queryKey: ['search_movies', 'series'],
-    queryFn: () => searchMovies({ page: 1, limit: limit, media_type: 'series' }),
+    queryFn: () => searchMovies({ page: 1, limit: limit, mediaType: 'series' }),
     placeholderData: (previousData) => previousData,
+    select: (res) => res.data,
   });
 
   // Phim mới nhất (thêm)
   const { data: newAddedData, isLoading: isNewAddedLoading } = useQuery({
     queryKey: ['search_movies', 'new_added', 1],
-    queryFn: () => searchMovies({ page: 1, limit: 7, new: 'added' }),
+    queryFn: () => searchMovies({ page: 1, limit: 7, sortBy: 'createAd' }),
     placeholderData: (previousData) => previousData,
+    select: (res) => res.data,
   });
 
   // Phim mới nhất (cập nhật)
   const { data: newUpdatedData, isLoading: isNewUpdatedLoading } = useQuery({
     queryKey: ['search_movies', 'new_updated', 1],
-    queryFn: () => searchMovies({ page: 1, limit: 7, new: 'updated' }),
+    queryFn: () => searchMovies({ page: 1, limit: 7, sortBy: 'updatedAt' }),
     placeholderData: (previousData) => previousData,
+    select: (res) => res.data,
   });
 
   return (
     <div className="space-y-12 pb-12">
       {/* Slider phim mới nhất */}
       <ListSliderMovies
-        movies={newAddedData?.data.results.slice(0, 6) || []}
+        movies={newAddedData?.results.slice(0, 6) || []}
         isLoading={isNewAddedLoading}
       />
 
@@ -65,7 +69,7 @@ export default function Home() {
           </Link>
         </div>
         <ListCarouselMovie
-          movies={seriesData?.data.results || []}
+          movies={seriesData?.results || []}
           variant="backdrop"
           isLoading={isSeriesLoading}
         />
@@ -86,7 +90,7 @@ export default function Home() {
           </Link>
         </div>
         <ListCarouselMovie
-          movies={moviesData?.data.results || []}
+          movies={moviesData?.results || []}
           variant="backdrop"
           isLoading={isMoviesLoading}
         />
@@ -98,13 +102,10 @@ export default function Home() {
           <h2 className="text-lg md:text-xl font-medium">Danh sách phim</h2>
         </div>
         <div className=" space-y-6">
-          <ListGridMovies
-            movies={newUpdatedData?.data.results || []}
-            isLoading={isNewUpdatedLoading}
-          />
+          <ListGridMovies movies={newUpdatedData?.results || []} isLoading={isNewUpdatedLoading} />
           <Pagination
             currentPage={1}
-            totalPage={newUpdatedData?.data.total_pages}
+            totalPage={newUpdatedData?.totalPages}
             onChange={(page) => {
               router.push(`/tim-kiem/?page=${page}`);
             }}

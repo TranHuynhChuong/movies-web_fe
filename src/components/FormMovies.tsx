@@ -12,21 +12,27 @@ import { Modal } from './ui/Modal';
 interface FormMoviesProps {
   data?: MovieFormData;
   onSubmit?: (payload: MovieFormData) => void;
+  onDelete?: () => void;
   onCancel?: () => void;
 }
 
-export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMoviesProps>) {
+export default function FormMovies({
+  data,
+  onSubmit,
+  onDelete,
+  onCancel,
+}: Readonly<FormMoviesProps>) {
   const [formData, setFormData] = useState<MovieFormData>({
     title: '',
-    original_title: '',
-    poster_path: '',
-    backdrop_path: '',
-    media_type: 'movie',
+    originalTitle: '',
+    posterPath: '',
+    backdropPath: '',
+    mediaType: 'movie',
     status: 'show',
-    number_of_episodes: 1,
+    numberOfEpisodes: 1,
     runtime: 0,
-    release_year: new Date().getFullYear(),
-    trailer_path: '',
+    releaseYear: new Date().getFullYear(),
+    trailerPath: '',
     actors: '',
     directors: '',
     overview: '',
@@ -35,9 +41,11 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
     versions: [],
   });
 
+  const [canDelete, setCanDelete] = useState(false);
   useEffect(() => {
     if (data) {
       setFormData(data);
+      if (data.status === 'hide') setCanDelete(true);
     }
   }, [data]);
 
@@ -54,21 +62,22 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
   const { genres, countries, versions, servers, loading } = useAppData();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
     if (!formData?.title.trim()) newErrors.title = 'Tên phim là bắt buộc';
-    if (!formData?.original_title.trim()) newErrors.original_title = 'Tên gốc là bắt buộc';
-    if (!formData?.poster_path.trim()) newErrors.poster_path = 'Poster là bắt buộc';
-    if (!formData?.backdrop_path.trim()) newErrors.backdrop_path = 'Backdrop là bắt buộc';
-    if (!formData?.media_type.trim()) newErrors.media_type = 'Loại phim là bắt buộc';
-    if (!formData?.number_of_episodes) newErrors.number_of_episodes = 'Số tập phim là bắt buộc';
+    if (!formData?.originalTitle.trim()) newErrors.originalTitle = 'Tên gốc là bắt buộc';
+    if (!formData?.posterPath.trim()) newErrors.posterPath = 'Poster là bắt buộc';
+    if (!formData?.backdropPath.trim()) newErrors.backdropPath = 'Backdrop là bắt buộc';
+    if (!formData?.mediaType.trim()) newErrors.mediaType = 'Loại phim là bắt buộc';
+    if (!formData?.numberOfEpisodes) newErrors.numberOfEpisodes = 'Số tập phim là bắt buộc';
     if (!formData?.status.trim()) newErrors.status = 'Trạng thái là bắt buộc';
     if (!formData?.runtime) newErrors.runtime = 'Thời lượng là bắt buộc';
-    if (!formData?.release_year) newErrors.release_year = 'Năm phát hành là bắt buộc';
+    if (!formData?.releaseYear) newErrors.releaseYear = 'Năm phát hành là bắt buộc';
     if (formData?.genres.length <= 0) newErrors.genres = 'Cần chọn ít nhất một thể loại';
     if (!formData?.country) newErrors.country = 'Quốc gia là bắt buộc';
-    if (!formData?.trailer_path.trim()) newErrors.trailer_path = 'Trailer URL là bắt buộc';
+    if (!formData?.trailerPath.trim()) newErrors.trailerPath = 'Trailer URL là bắt buộc';
     if (!formData?.actors.trim()) newErrors.actors = 'Vui lòng nhập diễn viên';
     if (!formData?.directors.trim()) newErrors.directors = 'Vui lòng nhập đạo diễn';
     if (!formData?.overview.trim()) newErrors.overview = 'Mô tả là bắt buộc';
@@ -80,6 +89,10 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
   const handleSubmit = () => {
     if (!validateForm()) return;
     onSubmit?.(formData);
+  };
+
+  const handleDelete = () => {
+    onDelete?.();
   };
 
   return (
@@ -132,11 +145,11 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
               <>
                 {/* Xem trước ảnh */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                  {formData?.poster_path ? (
-                    isValidURL(formData.poster_path) ? (
+                  {formData?.posterPath ? (
+                    isValidURL(formData.posterPath) ? (
                       <div className="relative w-auto h-45 aspect-2/3">
                         <Image
-                          src={formData.poster_path}
+                          src={formData.posterPath}
                           alt="Poster preview"
                           fill
                           className="rounded object-cover border border-gray-700"
@@ -149,11 +162,11 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                     )
                   ) : null}
 
-                  {formData?.backdrop_path ? (
-                    isValidURL(formData.backdrop_path) ? (
+                  {formData?.backdropPath ? (
+                    isValidURL(formData.backdropPath) ? (
                       <div className="relative w-auto h-45 aspect-16/9">
                         <Image
-                          src={formData.backdrop_path}
+                          src={formData.backdropPath}
                           alt="Backdrop preview"
                           fill
                           className="rounded object-cover border border-gray-700"
@@ -173,38 +186,38 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
           {/* Nhập URL ảnh */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="relative">
-              <label htmlFor="poster_path" className="block mb-2 text-sm font-medium">
+              <label htmlFor="posterPath" className="block mb-2 text-sm font-medium">
                 Poster URL
               </label>
               <input
-                id="poster_path"
+                id="posterPath"
                 type="text"
-                name="poster_path"
-                value={formData?.poster_path}
+                name="posterPath"
+                value={formData?.posterPath}
                 onChange={handleChange}
                 placeholder="https://example.com/poster.jpg"
                 className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
               />
-              {errors.poster_path && (
-                <p className="text-red-500 text-xs mt-1">{errors.poster_path}</p>
+              {errors.posterPath && (
+                <p className="text-red-500 text-xs mt-1">{errors.posterPath}</p>
               )}
             </div>
 
             <div className="relative">
-              <label htmlFor="backdrop_path" className="block mb-2 text-sm font-medium">
+              <label htmlFor="backdropPath" className="block mb-2 text-sm font-medium">
                 Backdrop URL
               </label>
               <input
-                id="backdrop_path"
+                id="backdropPath"
                 type="text"
-                name="backdrop_path"
-                value={formData?.backdrop_path}
+                name="backdropPath"
+                value={formData?.backdropPath}
                 onChange={handleChange}
                 placeholder="https://example.com/backdrop.jpg"
                 className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
               />
-              {errors.backdrop_path && (
-                <p className="text-red-500 text-xs mt-1">{errors.backdrop_path}</p>
+              {errors.backdropPath && (
+                <p className="text-red-500 text-xs mt-1">{errors.backdropPath}</p>
               )}
             </div>
           </div>
@@ -229,41 +242,39 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
             </div>
 
             <div>
-              <label htmlFor="original_title" className="block mb-2 text-sm font-medium">
+              <label htmlFor="originalTitle" className="block mb-2 text-sm font-medium">
                 Tên gốc
               </label>
               <input
-                id="original_title"
+                id="originalTitle"
                 type="text"
-                name="original_title"
-                value={formData?.original_title}
+                name="originalTitle"
+                value={formData?.originalTitle}
                 onChange={handleChange}
                 className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
               />
-              {errors.original_title && (
-                <p className="text-red-500 text-xs mt-1">{errors.original_title}</p>
+              {errors.originalTitle && (
+                <p className="text-red-500 text-xs mt-1">{errors.originalTitle}</p>
               )}
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="media_type" className="block mb-2 text-sm font-medium">
+              <label htmlFor="mediaType" className="block mb-2 text-sm font-medium">
                 Loại phim
               </label>
               <select
-                name="media_type"
-                id="media_type"
-                value={formData?.media_type}
+                name="mediaType"
+                id="mediaType"
+                value={formData?.mediaType}
                 onChange={handleChange}
                 className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
               >
                 <option value="movie">Phim lẻ</option>
                 <option value="series">Phim bộ</option>
               </select>
-              {errors.media_type && (
-                <p className="text-red-500 text-xs mt-1">{errors.media_type}</p>
-              )}
+              {errors.mediaType && <p className="text-red-500 text-xs mt-1">{errors.mediaType}</p>}
             </div>
 
             <div>
@@ -300,35 +311,35 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
               {errors.runtime && <p className="text-red-500 text-xs mt-1">{errors.runtime}</p>}
             </div>
             <div>
-              <label htmlFor="number_of_episodes" className="block mb-2 text-sm font-medium">
+              <label htmlFor="numberOfEpisodes" className="block mb-2 text-sm font-medium">
                 Số tập
               </label>
               <input
                 type="number"
-                id="number_of_episodes"
-                name="number_of_episodes"
-                value={formData?.number_of_episodes || ''}
+                id="numberOfEpisodes"
+                name="numberOfEpisodes"
+                value={formData?.numberOfEpisodes || ''}
                 onChange={handleChange}
                 className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
               />
-              {errors.number_of_episodes && (
-                <p className="text-red-500 text-xs mt-1">{errors.number_of_episodes}</p>
+              {errors.numberOfEpisodes && (
+                <p className="text-red-500 text-xs mt-1">{errors.numberOfEpisodes}</p>
               )}
             </div>
             <div>
-              <label htmlFor="release_year" className="block mb-2 text-sm font-medium">
+              <label htmlFor="releaseYear" className="block mb-2 text-sm font-medium">
                 Năm phát hành
               </label>
               <input
                 type="number"
-                id="release_year"
-                name="release_year"
-                value={formData?.release_year || ''}
+                id="releaseYear"
+                name="releaseYear"
+                value={formData?.releaseYear || ''}
                 onChange={handleChange}
                 className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
               />
-              {errors.release_year && (
-                <p className="text-red-500 text-xs mt-1">{errors.release_year}</p>
+              {errors.releaseYear && (
+                <p className="text-red-500 text-xs mt-1">{errors.releaseYear}</p>
               )}
             </div>
           </div>
@@ -366,20 +377,20 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
             </div>
           )}
           <div>
-            <label htmlFor="trailer_path" className="block mb-2 text-sm font-medium">
+            <label htmlFor="trailerPath" className="block mb-2 text-sm font-medium">
               Trailer URL
             </label>
             <input
               type="text"
-              id="trailer_path"
-              name="trailer_path"
+              id="trailerPath"
+              name="trailerPath"
               placeholder="https://example.com/backdrop.jpg"
-              value={formData?.trailer_path}
+              value={formData?.trailerPath}
               onChange={handleChange}
               className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
             />
-            {errors.trailer_path && (
-              <p className="text-red-500 text-xs mt-1">{errors.trailer_path}</p>
+            {errors.trailerPath && (
+              <p className="text-red-500 text-xs mt-1">{errors.trailerPath}</p>
             )}
           </div>
 
@@ -441,12 +452,12 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                 <SelectSingle
                   label={`Version #${vIndex + 1}`}
                   options={versions}
-                  selected={version.version_id}
+                  selected={version.id}
                   onChange={(id) => {
                     setFormData((prev) => {
                       const newData = { ...prev };
                       if (newData.versions) {
-                        newData.versions[vIndex].version_id = id;
+                        newData.versions[vIndex].id = id;
                       }
                       return newData;
                     });
@@ -471,17 +482,17 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
               {version.episodes.map((ep, epIndex) => (
                 <div key={epIndex} className="border border-gray-600 p-2 rounded space-y-2">
                   <div className="flex items-center gap-2">
-                    <label htmlFor="episode_number">Tập số:</label>
+                    <label htmlFor="episodeNumber">Tập số:</label>
                     <input
-                      id="episode_number"
+                      id="episodeNumber"
                       type="number"
-                      value={ep.episode_number}
+                      value={ep.episodeNumber}
                       onChange={(e) => {
                         const value = Number(e.target.value);
                         setFormData((prev) => {
                           const newData = { ...prev };
                           if (newData.versions) {
-                            newData.versions[vIndex].episodes[epIndex].episode_number = value;
+                            newData.versions[vIndex].episodes[epIndex].episodeNumber = value;
                           }
                           return newData;
                         });
@@ -507,19 +518,19 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                   </div>
 
                   {/* Danh sách server */}
-                  {ep.streaming_sources.map((srv, sIndex) => (
+                  {ep.streamingSources.map((srv, sIndex) => (
                     <div key={sIndex} className="flex flex-col md:flex-row items-end gap-2">
                       <SelectSingle
-                        label={`Server #${srv.order_index}`}
+                        label={`Server #${srv.orderIndex}`}
                         options={servers}
-                        selected={srv.server_id}
+                        selected={srv.serverId}
                         onChange={(id) => {
                           setFormData((prev) => {
                             const newData = { ...prev };
                             if (newData.versions) {
-                              newData.versions[vIndex].episodes[epIndex].streaming_sources[
+                              newData.versions[vIndex].episodes[epIndex].streamingSources[
                                 sIndex
-                              ].server_id = id;
+                              ].serverId = id;
                             }
 
                             return newData;
@@ -535,7 +546,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                           setFormData((prev) => {
                             const newData = { ...prev };
                             if (newData.versions) {
-                              newData.versions[vIndex].episodes[epIndex].streaming_sources[
+                              newData.versions[vIndex].episodes[epIndex].streamingSources[
                                 sIndex
                               ].url = value;
                             }
@@ -552,7 +563,7 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                           setFormData((prev) => {
                             const newData = { ...prev };
                             if (newData.versions) {
-                              newData.versions[vIndex].episodes[epIndex].streaming_sources.splice(
+                              newData.versions[vIndex].episodes[epIndex].streamingSources.splice(
                                 sIndex,
                                 1
                               );
@@ -579,11 +590,11 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
 
                           // Tạo mảng servers mới
                           const newServers = [
-                            ...episode.streaming_sources,
+                            ...episode.streamingSources,
                             {
-                              server_id: '',
+                              serverId: '',
                               url: '',
-                              order: episode.streaming_sources.length + 1,
+                              order: episode.streamingSources.length + 1,
                             },
                           ];
 
@@ -621,8 +632,8 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                           episodes: [
                             ...version.episodes,
                             {
-                              episode_number: version.episodes.length + 1,
-                              streaming_sources: [{ server_id: '', url: '', order_index: 1 }],
+                              episodeNumber: version.episodes.length + 1,
+                              streamingSources: [{ serverId: '', url: '', orderIndex: 1 }],
                             },
                           ],
                         };
@@ -647,11 +658,11 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
                 newData.versions = [
                   ...(newData.versions || []),
                   {
-                    version_id: '',
+                    id: '',
                     episodes: [
                       {
-                        episode_number: 1,
-                        streaming_sources: [{ server_id: '', url: '', order_index: 1 }],
+                        episodeNumber: 1,
+                        streamingSources: [{ serverId: '', url: '', orderIndex: 1 }],
                       },
                     ],
                   },
@@ -666,6 +677,15 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
         </section>
 
         <div className="flex justify-end pt-2 gap-4">
+          {canDelete && (
+            <Button
+              type="button"
+              onClick={() => setOpenDelete(true)}
+              className=" rounded-lg bg-red-500 hover:bg-red-400"
+            >
+              Xóa
+            </Button>
+          )}
           <Button type="button" onClick={() => setOpenConfirm(true)} className=" rounded-lg ">
             Lưu
           </Button>
@@ -684,6 +704,18 @@ export default function FormMovies({ data, onSubmit, onCancel }: Readonly<FormMo
           onConfirm={handleSubmit}
         >
           <p className="text-gray-300">Xác nhận lưu, hành động không thể hoàn tác</p>
+        </Modal>
+      )}
+      {openDelete && (
+        <Modal
+          open={openDelete}
+          confirmLable="Xóa"
+          cancelLable="Hủy"
+          onClose={() => setOpenDelete(false)}
+          title="Xác nhận xóa"
+          onConfirm={handleDelete}
+        >
+          <p className="text-gray-300">Xác nhận xóa, hành động không thể hoàn tác</p>
         </Modal>
       )}
     </div>

@@ -16,6 +16,7 @@ export const GenresList: React.FC<GenresListProps> = ({ genres, className = '' }
   const baseBadgeClass =
     'rounded-md bg-white/10 text-center text-xs font-normal whitespace-nowrap text-white sm:text-sm w-fit py-1! px-1.5!';
 
+  if (genres.length === 0) return null;
   return (
     <div className={`${className} flex flex-wrap gap-1 `}>
       {genres.map((genre, index) => {

@@ -5,9 +5,9 @@ import { IconX } from './icon/IconX';
 type TrailerModalProps = {
   open: boolean;
   title: string;
-  original_title: string;
+  originalTitle: string;
   onClose: () => void;
-  trailer_path: string | null;
+  trailerPath: string | null;
   allowFullscreen?: boolean;
 };
 
@@ -31,9 +31,9 @@ const extractYouTubeId = (input?: string | null): string | null => {
 export const TrailerModal: React.FC<TrailerModalProps> = ({
   open,
   title,
-  original_title,
+  originalTitle,
   onClose,
-  trailer_path,
+  trailerPath,
   allowFullscreen = true,
 }) => {
   const [src, setSrc] = useState<string | null>(null);
@@ -41,14 +41,14 @@ export const TrailerModal: React.FC<TrailerModalProps> = ({
 
   // Build embed src only when open (to avoid autoplay when not shown)
   useEffect(() => {
-    const id = extractYouTubeId(trailer_path);
+    const id = extractYouTubeId(trailerPath);
     if (open && id) {
       // autoplay=1, modestbranding=1, rel=0, enablejsapi=1 (enable further control if needed)
       setSrc(`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&showinfo=0`);
     } else {
       setSrc(null);
     }
-  }, [open, trailer_path]);
+  }, [open, trailerPath]);
 
   // Close on Escape
   useEffect(() => {
@@ -89,7 +89,7 @@ export const TrailerModal: React.FC<TrailerModalProps> = ({
             <h2 className="pl-2 text-sm font-extrabold text-white md:text-base">
               {title} - Trailer
             </h2>
-            <h3 className="pl-2 text-xs font-normal text-primary md:text-sm">{original_title}</h3>
+            <h3 className="pl-2 text-xs font-normal text-primary md:text-sm">{originalTitle}</h3>
           </div>
           <button
             onClick={onClose}

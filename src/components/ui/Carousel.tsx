@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { ReactNode } from 'react';
+import { ReactNode, useId } from 'react';
 import { IconArrowRightChervon } from '../icon/IconArrowRightChevron';
 import { IconArrowLeftChevron } from '../icon/IconArrowLeftChevron';
 
@@ -29,14 +29,19 @@ export default function Carousel({
   loop = false,
   className = '',
 }: Readonly<CarouselProps>) {
+  const id = useId();
+
+  const prevBtnId = `slider-button-left-${id}`;
+  const nextBtnId = `slider-button-right-${id}`;
+
   return (
     <div className="w-full relative">
       {/* --- Swiper chính --- */}
       <Swiper
         modules={[Navigation]}
         navigation={{
-          nextEl: '#slider-button-right',
-          prevEl: '#slider-button-left',
+          nextEl: `#${nextBtnId}`,
+          prevEl: `#${prevBtnId}`,
         }}
         loop={loop}
         spaceBetween={spaceBetween}
@@ -51,15 +56,14 @@ export default function Carousel({
         )}
       </Swiper>
 
-      {/* 🟡 Nút điều hướng — chỉ hiện trên laptop (md) trở lên */}
       <button
-        id="slider-button-left"
+        id={prevBtnId}
         className="hidden md:flex absolute top-1/2 left-0 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/70 text-white px-1 py-2 rounded-r-sm"
       >
         <IconArrowLeftChevron />
       </button>
       <button
-        id="slider-button-right"
+        id={nextBtnId}
         className="hidden md:flex absolute top-1/2 right-0 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/70 text-white px-1 py-2 rounded-l-sm"
       >
         <IconArrowRightChervon />

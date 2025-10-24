@@ -6,7 +6,7 @@ import { IconPlay } from './icon/IconPlay';
 
 type EpisodeButtonProps = {
   ep: number;
-  media_type: string;
+  mediaType: string;
   onClick: (ep: number) => void;
   active?: boolean;
 };
@@ -14,10 +14,10 @@ type EpisodeButtonProps = {
 const EpisodeButton: React.FC<EpisodeButtonProps> = ({
   ep,
   active = false,
-  media_type,
+  mediaType,
   onClick,
 }) => {
-  const label = media_type === 'movie' ? 'Full' : `Tập ${ep}`;
+  const label = mediaType === 'movie' ? 'Full' : `Tập ${ep}`;
 
   return (
     <Button
@@ -32,32 +32,30 @@ const EpisodeButton: React.FC<EpisodeButtonProps> = ({
 };
 
 type SelectorEpisodeProps = {
-  total_ep: number;
-  media_type: string;
+  episodes: Episode[] | undefined;
+  mediaType: string;
   onClick: (ep: number) => void;
-  active_ep?: number;
+  activeEp?: number;
 };
 
 export const SelectorEpisode: React.FC<SelectorEpisodeProps> = ({
-  total_ep,
-  media_type,
-  active_ep,
+  episodes,
+  mediaType,
+  activeEp,
   onClick,
 }) => {
+  if (!episodes || episodes.length === 0) return null;
   return (
     <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
-      {Array.from({ length: total_ep }, (_, idx) => {
-        const ep = idx + 1;
-        return (
-          <EpisodeButton
-            key={ep}
-            ep={ep}
-            media_type={media_type}
-            active={ep === active_ep}
-            onClick={() => onClick(ep)}
-          />
-        );
-      })}
+      {episodes.map((episode, index) => (
+        <EpisodeButton
+          key={episode.episodeNumber + '-' + index}
+          ep={episode.episodeNumber}
+          mediaType={mediaType}
+          active={episode.episodeNumber === activeEp}
+          onClick={() => onClick(episode.episodeNumber)}
+        />
+      ))}
     </div>
   );
 };

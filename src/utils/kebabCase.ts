@@ -1,7 +1,7 @@
 import { kebabCase } from 'lodash';
 
 export function toKebabWithId(name: string, id: string | number): string {
-  const noAccent = name.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // loại bỏ dấu
+  const noAccent = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const slug = kebabCase(noAccent);
   return `${slug}.${id}`;
 }

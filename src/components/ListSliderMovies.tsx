@@ -54,7 +54,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
     <div className="relative flex justify-center w-full pb-28 h-fit bg-bg-04 sm:pb-0">
       <div className="relative w-full max-h-[560px]">
         <Image
-          src={movie.backdrop_path}
+          src={movie.backdropPath}
           alt={movie.title}
           sizes="100vw"
           width={1920}
@@ -80,7 +80,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
             </Link>
             <Link href={`/phim/${link}`}>
               <h2 className="text-center line-clamp-2 md:text-lg text-primary md:text-start">
-                {movie.original_title}
+                {movie.originalTitle}
               </h2>
             </Link>
           </div>
@@ -88,9 +88,9 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
           <div className="w-full space-y-2 md:space-y-4 h-fit">
             <BadgeList
               texts={[
-                movie.release_year ? movie.release_year.toString() : 'N/A',
+                movie.releaseYear ? movie.releaseYear.toString() : 'N/A',
                 movie.runtime ? movie.runtime.toString() + ' phút' : 'N/A',
-                movie.media_type === 'series' ? 'Tập ' + movie.number_of_episodes : 'Full',
+                movie.mediaType === 'series' ? 'Tập ' + movie.numberOfEpisodes : 'Full',
               ]}
               className="justify-center md:justify-start"
             />
@@ -129,7 +129,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
               }`}
             >
               <Image
-                src={m.backdrop_path}
+                src={m.backdropPath}
                 alt={m.title}
                 fill
                 className="object-cover w-full h-full"

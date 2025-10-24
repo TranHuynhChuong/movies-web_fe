@@ -10,16 +10,16 @@ import { getLink } from '@/utils/getLink';
 type ButtonPlayGroupProps = {
   id: string;
   title: string;
-  original_title: string;
-  trailer_path: string;
+  originalTitle: string;
+  trailerPath: string;
   canWatch: boolean;
 };
 
 export const ButtonPlayGroup: React.FC<ButtonPlayGroupProps> = ({
   id,
   title,
-  original_title,
-  trailer_path,
+  originalTitle,
+  trailerPath,
   canWatch = false,
 }) => {
   const [open, setOpen] = useState(false);
@@ -66,10 +66,10 @@ export const ButtonPlayGroup: React.FC<ButtonPlayGroupProps> = ({
       </div>
       <TrailerModal
         title={title}
-        original_title={original_title}
+        originalTitle={originalTitle}
         open={open}
         onClose={() => setOpen(false)}
-        trailer_path={trailer_path}
+        trailerPath={trailerPath}
       />
     </>
   );

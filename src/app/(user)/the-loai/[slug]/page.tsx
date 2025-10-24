@@ -13,24 +13,25 @@ export default function GenreMoviesPage() {
   const params = useParams();
 
   const slug = params.slug as string;
-  const current_page = Number(searchParams.get('page') ?? 1);
-  const genre_id = extractId(slug);
-  const genre = useAppDataValue('genre', genre_id);
+  const currentPage = Number(searchParams.get('page') ?? 1);
+  const genreId = extractId(slug);
+  const genre = useAppDataValue('genre', genreId);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['search_movies', slug, current_page],
-    queryFn: () => searchMovies({ page: current_page, limit: limit, genre_id: genre_id }),
+    queryKey: ['search_movies', slug, currentPage],
+    queryFn: () => searchMovies({ page: currentPage, limit: limit, genreId: genreId }),
     placeholderData: (previousData) => previousData,
+    select: (res) => res.data,
   });
 
-  const { results = [], total_pages = 1, total_results = 0, page = 1 } = data?.data || {};
+  const { results = [], totalPages = 1, totalResults = 0, page = 1 } = data || {};
 
   return (
     <PanelSearchResult
       title={`Phim "${genre}"`}
       movies={results}
-      currentPage={current_page}
-      totalPage={total_pages}
+      currentPage={currentPage}
+      totalPage={totalPages}
       isLoading={isLoading}
     />
   );

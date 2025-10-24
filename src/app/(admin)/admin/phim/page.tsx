@@ -2,11 +2,9 @@
 
 import { IconSearch } from '@/components/icon/IconSearch';
 import { PanelFilterMovies } from '@/components/PanelFiltterMovies';
-
 import { TableMovies } from '@/components/TableMovies';
-import { Button } from '@/components/ui/Button';
 import { Pagination } from '@/components/ui/Pagination';
-import { getTotals, searchMovies } from '@/services/movie/get';
+import { searchMovies } from '@/services/movie/get';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -19,7 +17,8 @@ export default function AdminMoviesPage() {
     page: Number(searchParams.get('page') ?? 1),
     genre: searchParams.get('genre') ?? 'all',
     country: searchParams.get('country') ?? 'all',
-    media_type: searchParams.get('media_type') ?? 'all',
+    mediaType: searchParams.get('mediaType') ?? 'all',
+    status: searchParams.get('status') ?? 'all',
     title: searchParams.get('title') ?? '',
   };
 
@@ -29,38 +28,30 @@ export default function AdminMoviesPage() {
       searchMovies({
         page: filters.page ?? 1,
         limit: 32,
-        genre_id: filters.genre === 'all' ? undefined : filters.genre,
-        country_id: filters.country === 'all' ? undefined : filters.country,
-        media_type: filters.media_type === 'all' ? undefined : filters.media_type,
+        genreId: filters.genre === 'all' ? undefined : filters.genre,
+        countryId: filters.country === 'all' ? undefined : filters.country,
+        mediaType: filters.mediaType === 'all' ? undefined : filters.mediaType,
+        status: filters.status === 'all' ? undefined : filters.status,
         title: filters.title?.trim() || undefined,
       }),
     placeholderData: (previousData) => previousData,
+    select: (res) => res.data,
     staleTime: 0,
     gcTime: 0,
-  });
-
-  const { data: totals } = useQuery({
-    queryKey: ['movies_list-totals'],
-    queryFn: () => getTotals(),
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnMount: 'always',
-    refetchOnWindowFocus: true,
   });
 
   const [titleInput, setTitleInput] = useState(filters.title);
 
   if (isLoading || !data) return null;
 
-  const { results, page, total_pages, total_results } = data.data;
-  const { movies = 0, series = 0, upcoming = 0 } = totals || {};
+  const { results, page, totalPages, totalResults } = data;
 
   const updateURL = (newFilters: Partial<typeof filters>) => {
     const params = new URLSearchParams();
 
     const merged = { ...filters, ...newFilters };
 
-    if (merged.media_type !== 'all') params.set('media_type', merged.media_type);
+    if (merged.mediaType !== 'all') params.set('mediaType', merged.mediaType);
     if (merged.country !== 'all') params.set('country', merged.country);
     if (merged.genre !== 'all') params.set('genre', merged.genre);
     if (merged.title) params.set('title', merged.title);
@@ -76,13 +67,9 @@ export default function AdminMoviesPage() {
   return (
     <div className="space-y-4 p-2 md:p-4 rounded-lg">
       <div className=" space-y-4">
-        <div className="flex justify-between gap-2 items-center">
+        <div className="space-y-1">
           <h1 className="font-bold text-xl">Danh sách phim</h1>
-        </div>
-        <div className="flex flex-wrap gap-3 items-center">
-          <h2>Phim bộ ({movies})</h2>
-          <h2>Phim lẻ ({series})</h2>
-          <h2>Sắp chiếu ({upcoming})</h2>
+          <p>Tổng {totalResults} bộ phim</p>
         </div>
         <div className="relative flex justify-end">
           <input
@@ -105,15 +92,15 @@ export default function AdminMoviesPage() {
         <PanelFilterMovies
           initialSelectedCountry={filters.country}
           initialSelectedGenre={filters.genre}
-          initialSelectedType={filters.media_type}
-          onConfirm={(media_type, country, genre) => {
-            updateURL({ media_type, country, genre, page: 1 });
+          initialSelectedType={filters.mediaType}
+          onConfirm={(mediaType, country, genre, status) => {
+            updateURL({ mediaType, country, genre, status, page: 1 });
           }}
         />
       </div>
 
       <TableMovies movies={results} />
-      <Pagination currentPage={filters.page} totalPage={total_pages} />
+      <Pagination currentPage={filters.page} totalPage={totalPages} />
     </div>
   );
 }

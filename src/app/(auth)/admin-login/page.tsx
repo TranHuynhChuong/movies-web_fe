@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
       password,
     }).then((res) => {
       if (res?.error) {
-        setError(res.error);
+        setError('Tên đăng nhập/mật khẩu không đúng');
       } else {
         router.push('/admin');
       }

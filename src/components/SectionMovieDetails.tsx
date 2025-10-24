@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getLink } from '@/utils/getLink';
 import { Movie } from '@/types/movies';
+import { Fragment } from 'react';
 
 interface SectionMovieDetailsProps {
   movie: Movie;
@@ -21,7 +22,7 @@ export const SectionMovieDetails: React.FC<SectionMovieDetailsProps> = ({ movie 
 
       <div className="text-sm text-gray">
         <b className="text-white">Tổng số tập: </b>
-        {movie.number_of_episodes ?? ''} Tập
+        {movie.numberOfEpisodes ?? ''} Tập
       </div>
 
       <div className="text-sm text-gray">
@@ -35,10 +36,23 @@ export const SectionMovieDetails: React.FC<SectionMovieDetailsProps> = ({ movie 
       </div>
 
       <div className="text-sm text-gray">
+        <b className="text-white">Thể loại: </b>
+        {movie.genres?.map((genre, index) => (
+          <Fragment key={genre.id || index}>
+            <Link
+              className="hover:underline hover:text-primary"
+              href={getLink('/the-loai', genre.name, genre.id)}
+            >
+              {genre.name}
+            </Link>
+            {index < (movie.genres?.length ?? 0) - 1 && ', '}
+          </Fragment>
+        ))}
+      </div>
+
+      <div className="text-sm text-gray">
         <b className="text-white">Năm phát hành: </b>
-        <Link className="hover:underline hover:text-primary" href={`/nam/${movie.release_year}`}>
-          {movie.release_year}
-        </Link>
+        {movie.releaseYear}
       </div>
 
       <div className="text-sm text-gray">
