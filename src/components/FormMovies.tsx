@@ -350,11 +350,12 @@ export default function FormMovies({
                 <SelectMultiple
                   label="Thể loại"
                   options={genres}
-                  selected={formData.genres}
+                  selected={formData.genres.map((g) => g.id)}
                   onChange={(ids) => {
+                    const selectedGenres = genres.filter((g) => ids.includes(g.id));
                     setFormData((prev) => ({
                       ...prev,
-                      genres: ids ?? '',
+                      genres: selectedGenres,
                     }));
                   }}
                 />

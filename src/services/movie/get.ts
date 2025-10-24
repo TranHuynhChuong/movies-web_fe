@@ -1,25 +1,7 @@
 import { MOVIE_BASE_URL } from '@/libs/api';
 
-export async function getMovieInf(id: string) {
-  const res = await fetch(`${MOVIE_BASE_URL}/${id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    // next: { revalidate: 5 },
-    cache: 'no-store',
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch movie');
-  }
-
-  const data = await res.json();
-  return data;
-}
-
 export async function getMovieDetail(id: string) {
-  const res = await fetch(`${MOVIE_BASE_URL}/detail/${id}`, {
+  const res = await fetch(`${MOVIE_BASE_URL}/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

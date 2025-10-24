@@ -3,17 +3,17 @@ import { ImageMask } from '@/components/ui/ImageMask';
 import { extractId } from '@/utils/kebabCase';
 import Image from 'next/image';
 import { Movie } from '@/types/movies';
-import { getMovieInf } from '@/services/movie/get';
 import { SelectorVersionEpisode } from '@/components/SelectorVersionEpisode';
 import { SectionMovieSummary } from '@/components/SectionMovieSumary';
 import { SectionMovieDetails } from '@/components/SectionMovieDetails';
 import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
+import { getMovieDetail } from '@/services/movie/get';
 
 async function fetchMovieDetail(slug: string): Promise<Movie> {
   try {
     const id = extractId(slug);
-    const { data } = await getMovieInf(id);
+    const { data } = await getMovieDetail(id);
     return data;
   } catch (error) {
     console.error(error);

@@ -10,7 +10,7 @@ type MovieFormData = {
   numberOfEpisodes: number;
   releaseYear: number;
   trailerPath: string;
-  genres: string[];
+  genres: { id: string; name: string }[];
   overview: string;
   actors: string;
   directors: string;
