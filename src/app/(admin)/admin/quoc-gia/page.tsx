@@ -3,42 +3,99 @@
 import { Modal } from '@/components/ui/Modal';
 import { SimpleTable } from '@/components/ui/SimpleTable';
 import { useAppData } from '@/contexts/AppDataContext';
+import { update } from '@/services/country/patch';
+import { addNew } from '@/services/country/post';
+import { remove } from '@/services/country/delete';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useToast } from '@/components/ui/Toast';
 
-export default function AdminCountryPage() {
-  const { countries } = useAppData();
+export default function AdmincountrysPage() {
+  const { countries, refetchCountries } = useAppData();
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [countryName, setCountryName] = useState('');
-  const [editingCountry, setEditingCountry] = useState<any>(null);
+  const [name, setName] = useState('');
+  const [editing, setEditing] = useState<any>(null);
+  const [deleting, setDeleting] = useState<any>(null);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const { show } = useToast();
 
-  /** Chỉnh sửa country */
   const handleEdit = (item: any) => {
     setIsEdit(true);
-    setEditingCountry(item);
-    setCountryName(item.name);
+    setEditing(item);
+    setName(item.name);
     setOpen(true);
   };
 
-  /** Gửi dữ liệu khi xác nhận */
-  const handleConfirm = () => {
-    if (isEdit) {
-      console.log('Cập nhật country:', { ...editingCountry, name: countryName });
-      // TODO: gọi API cập nhật country
-    } else {
-      console.log('Thêm country mới:', { name: countryName });
-      // TODO: gọi API thêm country
+  const handleDelete = (item: any) => {
+    setDeleting(item);
+    setOpenDelete(true);
+  };
+  const handleConfirm = async () => {
+    if (!session?.accessToken) {
+      router.replace('/admin-login');
+      return;
     }
+    if (isEdit) {
+      try {
+        await update(editing.id, { name: name }, session.accessToken);
+        show('Cập nhật thành công!', 'success', 'top-center');
+        await refetchCountries();
+      } catch (error: any) {
+        console.error('Lỗi khi cập nhật thể loại:', error);
+        show('Cập nhật thất bại!', 'error', 'top-center');
+      } finally {
+        setOpenDelete(false);
+      }
+    } else {
+      try {
+        await addNew({ name: name }, session.accessToken);
+        show('Thêm thành công!', 'success', 'top-center');
+        await refetchCountries();
+      } catch (error: any) {
+        console.error('Lỗi khi thêm mới thể loại:', error);
+        show('Thêm thất bại!', 'error', 'top-center');
+      } finally {
+        setOpenDelete(false);
+      }
+    }
+    await refetchCountries();
     setOpen(false);
   };
+
+  const handleConfirmDelete = async () => {
+    if (!session?.accessToken) {
+      router.replace('/admin-login');
+      return;
+    }
+    try {
+      await remove(deleting.id, session.accessToken);
+      show('Xóa thành công!', 'success', 'top-center');
+      await refetchCountries();
+    } catch (error: any) {
+      console.error('Lỗi khi xóa:', error);
+      show('Xóa thất bại!', 'error', 'top-center');
+    } finally {
+      setOpenDelete(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
-      <SimpleTable title="Danh sách quốc gia" data={countries} onEdit={handleEdit} />
+      <SimpleTable
+        title="Danh sách quốc gia"
+        data={countries}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
       <Modal
         open={open}
         onClose={() => setOpen(false)}
         onConfirm={handleConfirm}
-        title={isEdit ? 'Cập nhật quốc gia' : 'Thêm quốc gia'}
+        title={isEdit ? 'Cập nhật' : 'Thêm mới'}
         confirmLable={isEdit ? 'Cập nhật' : 'Thêm mới'}
       >
         <div className="space-y-3">
@@ -48,12 +105,23 @@ export default function AdminCountryPage() {
           <input
             id="country-name"
             type="text"
-            value={countryName}
-            onChange={(e) => setCountryName(e.target.value)}
-            placeholder="Nhập tên quốc gia..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nhập tên..."
             className="w-full border text-gray-300 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 "
           />
         </div>
+      </Modal>
+      <Modal
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        onConfirm={handleConfirmDelete}
+        title="Xác nhận xóa"
+        confirmLable="Xóa"
+      >
+        <p className="text-gray-300">
+          Bạn có chắc chắn muốn xóa? Hành động này không thể hoàn tác!
+        </p>
       </Modal>
     </div>
   );
