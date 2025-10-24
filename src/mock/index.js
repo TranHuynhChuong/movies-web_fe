@@ -13,11 +13,11 @@ app.use(cors());
 app.use(express.json());
 
 // Gắn route
-app.use('/movie', movieRoutes);
-app.use('/genre', genreRoutes);
-app.use('/country', countryRoutes);
-app.use('/version', versionRoutes);
-app.use('/server', serverRoutes);
+app.use('/movies', movieRoutes);
+app.use('/genres', genreRoutes);
+app.use('/countries', countryRoutes);
+app.use('/versions', versionRoutes);
+app.use('/servers', serverRoutes);
 app.use('/auth', authRoutes);
 app.use('/stats', statsRoutes);
 

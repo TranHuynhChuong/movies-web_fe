@@ -2,22 +2,17 @@ export const movieInf = {
   data: {
     id: '12345678',
     title: 'Đi Đêm Lắm Có Ngày Gặp Mèo',
-    original_title: 'Nyaight Of The Living Cat',
-    poster_path:
+    originalTitle: 'Nyaight Of The Living Cat',
+    posterPath:
       'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178939_Portrait_origin.jpg',
-    backdrop_path:
+    backdropPath:
       'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178942_Landscape.jpg',
-    media_type: 'series',
+    mediaType: 'series',
     status: 'show',
-    versions: [
-      { id: 1, name: 'Phụ đề', current_ep: 9 },
-      { id: 2, name: 'Thuyết Minh', current_ep: 8 },
-      { id: 3, name: 'Lồng Tiếng', current_ep: 10 },
-    ],
     runtime: 23,
-    number_of_episodes: 12,
-    release_year: 2025,
-    trailer_path: 'https://youtu.be/43RsKvVAjWM?si=PtZh8xS2xEcE9pNN',
+    numberOfEpisodes: 12,
+    releaseYear: 2025,
+    trailerPath: 'https://youtu.be/43RsKvVAjWM?si=PtZh8xS2xEcE9pNN',
     genres: [
       { id: 'abcdef1', name: 'Anime' },
       { id: 'abcdef2', name: 'Phim Hài' },
@@ -32,7 +27,24 @@ export const movieInf = {
       id: 'JP',
       name: 'Nhật Bản',
     },
-    created_at: '2015-05-19T16:31:23.000Z',
-    updated_at: '2015-05-19T16:31:23.000Z',
+    versions: [
+      {
+        id: 'phu-de',
+        name: 'Phụ Đề',
+        currentEp: 9,
+        episodes: Array.from({ length: 9 }, (_, i) => ({
+          episodeNumber: i + 1,
+          streamingSources: [
+            {
+              orderIndex: 1,
+              serverId: 'phim-nguonc',
+              url: 'https://embed11.streamc.xyz/embed.php?hash=68408eab03cd03e2cb076b791c280682',
+            },
+          ],
+        })),
+      },
+    ],
+    createdAt: '2015-05-19T16:31:23.000Z',
+    updatedAt: '2015-05-19T16:31:23.000Z',
   },
 };
