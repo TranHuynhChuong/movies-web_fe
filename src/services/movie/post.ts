@@ -1,7 +1,7 @@
-import { API_BASE_URL } from '@/libs/api';
+import { MOVIE_BASE_URL } from '@/libs/api';
 
 export async function addNew(payload: MovieFormData, token?: string) {
-  const url = `${API_BASE_URL}/movie/`;
+  const url = `${MOVIE_BASE_URL}`;
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',

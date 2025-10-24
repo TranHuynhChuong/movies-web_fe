@@ -1,12 +1,13 @@
-import { API_BASE_URL } from '@/libs/api';
+import { MOVIE_BASE_URL } from '@/libs/api';
 
 export async function getMovieInf(id: string) {
-  const res = await fetch(`${API_BASE_URL}/movie/${id}`, {
+  const res = await fetch(`${MOVIE_BASE_URL}/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 5 },
+    // next: { revalidate: 5 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -18,7 +19,7 @@ export async function getMovieInf(id: string) {
 }
 
 export async function getMovieDetail(id: string) {
-  const res = await fetch(`${API_BASE_URL}/movie/detail/${id}`, {
+  const res = await fetch(`${MOVIE_BASE_URL}/detail/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -35,16 +36,13 @@ export async function getMovieDetail(id: string) {
 }
 
 export async function getMovieWatchInf(id: string, version_id: number, episode_number: number) {
-  const res = await fetch(
-    `${API_BASE_URL}/movie/watch/${id}?ver=${version_id}&ep=${episode_number}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      next: { revalidate: 5 },
-    }
-  );
+  const res = await fetch(`${MOVIE_BASE_URL}/watch/${id}?ver=${version_id}&ep=${episode_number}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    next: { revalidate: 5 },
+  });
 
   if (!res.ok) {
     throw new Error('Failed to fetch movie');
@@ -59,22 +57,26 @@ export async function searchMovies(params: {
   limit: number;
   title?: string;
   year?: string;
-  genre_id?: string;
-  country_id?: string;
-  media_type?: string;
-  new?: string;
+  genreId?: string;
+  countryId?: string;
+  mediaType?: string;
+  releaseYear?: number;
+  status?: string;
+  sortBy?: string;
 }) {
   const query = new URLSearchParams();
   query.append('page', params.page.toString());
   query.append('limit', params.limit.toString());
   if (params.title) query.append('title', params.title);
   if (params.year) query.append('year', params.year);
-  if (params.genre_id) query.append('genre_id', params.genre_id);
-  if (params.country_id) query.append('country_id', params.country_id);
-  if (params.media_type) query.append('media_type', params.media_type);
-  if (params.new) query.append('new', params.new);
+  if (params.genreId) query.append('genreId', params.genreId);
+  if (params.countryId) query.append('countryId', params.countryId);
+  if (params.releaseYear) query.append('releaseYear', params.releaseYear.toString());
+  if (params.mediaType) query.append('mediaType', params.mediaType);
+  if (params.status) query.append('status', params.status);
+  if (params.sortBy) query.append('sortBy', params.sortBy);
 
-  const url = `${API_BASE_URL}/movie/search?${query.toString()}`;
+  const url = `${MOVIE_BASE_URL}/search?${query.toString()}`;
 
   const res = await fetch(url, {
     method: 'GET',
@@ -93,7 +95,7 @@ export async function searchMovies(params: {
 }
 
 export async function getTotals() {
-  const url = `${API_BASE_URL}/movie/total`;
+  const url = `${MOVIE_BASE_URL}/total`;
 
   const res = await fetch(url, {
     method: 'GET',

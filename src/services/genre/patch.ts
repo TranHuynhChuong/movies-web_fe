@@ -1,7 +1,7 @@
-import { API_BASE_URL } from '@/libs/api';
+import { GENRE_BASE_URL } from '@/libs/api';
 
 export async function update(id: string, payload: any, token?: string) {
-  const url = `${API_BASE_URL}/genre/${id}`;
+  const url = `${GENRE_BASE_URL}/${id}`;
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',

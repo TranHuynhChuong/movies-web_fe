@@ -1,12 +1,13 @@
-import { API_BASE_URL } from '@/libs/api';
+import { GENRE_BASE_URL } from '@/libs/api';
 
-export async function getGenresList() {
-  const res = await fetch(`${API_BASE_URL}/genre`, {
+export async function getGenresList(force: boolean) {
+  const res = await fetch(`${GENRE_BASE_URL}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
     next: { revalidate: 300 },
+    cache: force ? 'no-store' : 'force-cache',
   });
 
   if (!res.ok) {

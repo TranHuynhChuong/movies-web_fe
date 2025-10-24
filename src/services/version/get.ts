@@ -1,12 +1,13 @@
-import { API_BASE_URL } from '@/libs/api';
+import { VERSION_BASE_URL } from '@/libs/api';
 
-export async function getVersionList() {
-  const res = await fetch(`${API_BASE_URL}/version`, {
+export async function getVersionList(force: boolean) {
+  const res = await fetch(`${VERSION_BASE_URL}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
     next: { revalidate: 300 },
+    cache: force ? 'no-store' : 'force-cache',
   });
 
   if (!res.ok) {

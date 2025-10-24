@@ -1,7 +1,7 @@
-import { API_BASE_URL } from '@/libs/api';
+import { COUNTRY_BASE_URL } from '@/libs/api';
 
 export async function addNew(payload: any, token?: string) {
-  const url = `${API_BASE_URL}/country/`;
+  const url = `${COUNTRY_BASE_URL}`;
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',

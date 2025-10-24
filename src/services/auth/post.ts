@@ -1,7 +1,7 @@
-import { API_BASE_URL } from '@/libs/api';
+import { AUTH_BASE_URL } from '@/libs/api';
 
-export async function login(payload: any) {
-  const url = `${API_BASE_URL}/auth`;
+export async function login(payload: any, role?: string) {
+  const url = role === 'admin' ? `${AUTH_BASE_URL}/admin` : `${AUTH_BASE_URL}`;
 
   const res = await fetch(url, {
     method: 'POST',

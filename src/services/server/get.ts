@@ -1,12 +1,13 @@
-import { API_BASE_URL } from '@/libs/api';
+import { SERVER_BASE_URL } from '@/libs/api';
 
-export async function getServerList() {
-  const res = await fetch(`${API_BASE_URL}/server`, {
+export async function getServerList(force: boolean) {
+  const res = await fetch(`${SERVER_BASE_URL}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
     next: { revalidate: 300 },
+    cache: force ? 'no-store' : 'force-cache',
   });
 
   if (!res.ok) {
