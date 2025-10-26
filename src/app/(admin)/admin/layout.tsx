@@ -22,6 +22,10 @@ const sidebarItems: SidebarItem[] = [
     label: 'Quốc gia',
     href: '/admin/quoc-gia',
   },
+  {
+    label: 'Hồ sơ',
+    href: '/admin/ho-so',
+  },
 ];
 
 export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {

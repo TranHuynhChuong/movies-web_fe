@@ -9,7 +9,7 @@ import { addNew as addVersion } from '@/services/version/post';
 import { addNew as addGenre } from '@/services/genre/post';
 import { addNew as addCountry } from '@/services/country/post';
 import { useToast } from './ui/Toast';
-import { useAuthToken } from '@/hooks/useAuthToken';
+import { useAuthToken } from '@/hooks/useAuth';
 import { useAppData } from '@/contexts/AppDataContext';
 import Loader from './ui/loader';
 
@@ -26,7 +26,7 @@ export default function FabActions() {
   const [genreName, setGenreName] = useState('');
   const [countryName, setCountryName] = useState('');
   const pathname = usePathname();
-  const token = useAuthToken();
+  const { token } = useAuthToken();
   const { show } = useToast();
   const [isSubmiting, setIsSubmiting] = useState(false);
   const isBaseAdminPage = /^\/admin\/[^\/]+$/.test(pathname);

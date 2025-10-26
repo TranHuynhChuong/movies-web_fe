@@ -7,7 +7,7 @@ import { remove } from '@/services/movie/delete';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
-import { useAuthToken } from '@/hooks/useAuthToken';
+import { useAuthToken } from '@/hooks/useAuth';
 import { Suspense, useState } from 'react';
 import Loader from '@/components/ui/loader';
 
@@ -15,7 +15,7 @@ function AdminMoviesDetail() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
-  const token = useAuthToken();
+  const { token } = useAuthToken();
   const { show } = useToast();
   const [isSubmiting, setIsSubmiting] = useState(false);
   const { data, isLoading, isError } = useQuery({

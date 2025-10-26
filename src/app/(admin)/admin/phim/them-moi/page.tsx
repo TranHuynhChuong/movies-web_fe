@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import Loader from '@/components/ui/loader';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
-import { useAuthToken } from '@/hooks/useAuthToken';
+import { useAuthToken } from '@/hooks/useAuth';
 import { addNew, importFromFile } from '@/services/movie/post';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -16,7 +16,7 @@ import { Suspense, useState } from 'react';
 function AdminMoviesAddNew() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const token = useAuthToken();
+  const { token } = useAuthToken();
   const { show } = useToast();
   const searchParams = useSearchParams();
   const [movies, setMovies] = useState<MovieFormData[]>();

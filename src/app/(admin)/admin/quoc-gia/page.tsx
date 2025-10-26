@@ -8,7 +8,7 @@ import { addNew } from '@/services/country/post';
 import { remove } from '@/services/country/delete';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/Toast';
-import { useAuthToken } from '@/hooks/useAuthToken';
+import { useAuthToken } from '@/hooks/useAuth';
 import Loader from '@/components/ui/loader';
 
 export default function AdmincountrysPage() {
@@ -19,7 +19,7 @@ export default function AdmincountrysPage() {
   const [name, setName] = useState('');
   const [editing, setEditing] = useState<any>(null);
   const [deleting, setDeleting] = useState<any>(null);
-  const token = useAuthToken();
+  const { token } = useAuthToken();
   const { show } = useToast();
   const [isSubmiting, setIsSubmiting] = useState(false);
   const handleEdit = (item: any) => {

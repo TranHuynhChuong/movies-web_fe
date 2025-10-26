@@ -8,7 +8,7 @@ import { addNew } from '@/services/server/post';
 import { remove } from '@/services/server/delete';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/Toast';
-import { useAuthToken } from '@/hooks/useAuthToken';
+import { useAuthToken } from '@/hooks/useAuth';
 import Loader from '@/components/ui/loader';
 
 export default function AdminserversPage() {
@@ -19,7 +19,7 @@ export default function AdminserversPage() {
   const [name, setName] = useState('');
   const [editing, setEditing] = useState<any>(null);
   const [deleting, setDeleting] = useState<any>(null);
-  const token = useAuthToken();
+  const { token } = useAuthToken();
   const { show } = useToast();
   const [isSubmiting, setIsSubmiting] = useState(false);
 
