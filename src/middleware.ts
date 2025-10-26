@@ -7,13 +7,15 @@ export default withAuth(
       user?: {
         role?: string;
       };
+      accessTokenExpiresIn?: number;
     };
 
     const token = req.nextauth.token as Token | undefined;
     const userRole = token?.user?.role;
+    const isExpired = Date.now() > (token?.accessTokenExpiresIn ?? 0);
 
-    if (req.nextUrl.pathname.startsWith('/admin') && userRole !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/', req.url));
+    if (req.nextUrl.pathname.startsWith('/admin') && userRole !== 'ADMIN' && isExpired) {
+      return NextResponse.redirect(new URL('/admin-login', req.url));
     }
 
     return NextResponse.next();
