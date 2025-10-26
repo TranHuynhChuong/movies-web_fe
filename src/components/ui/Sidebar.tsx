@@ -7,6 +7,7 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { IconMenu } from '../icon/IconMenu';
 import { Logo } from './Logo';
+import { signOut } from 'next-auth/react';
 
 export type SidebarItem = {
   label: string;
@@ -35,6 +36,7 @@ export default function Sidebar({ items, title = 'Panel' }: Readonly<SidebarProp
         return (
           <li key={i}>
             <Link
+              onClick={toggleSidebar}
               href={item.href}
               className={cn(
                 'flex items-center p-2 rounded-lg hover:bg-bg-03/90 text-sm',
@@ -77,23 +79,33 @@ export default function Sidebar({ items, title = 'Panel' }: Readonly<SidebarProp
         )}
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-900">
-          <div className="flex items-center ps-2.5 mb-5 justify-between">
-            <div className="flex">
-              <Logo href="/admin" />
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-900 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center ps-2.5 mb-5 justify-between">
+              <div className="flex">
+                <Logo href="/admin" />
+              </div>
+              <button
+                onClick={toggleSidebar}
+                aria-controls="logo-sidebar"
+                type="button"
+                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-bg-03/90 focus:outline-none focus:ring-2 focus:ring-bg-03 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              >
+                <span className="sr-only">Mở thanh bên</span>
+                <IconMenu width={28} height={28} className=" rotate-180" />
+              </button>
             </div>
+
+            {renderItems(items)}
+          </div>
+          <div className="mt-4">
             <button
-              onClick={toggleSidebar}
-              aria-controls="logo-sidebar"
-              type="button"
-              className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-bg-03/90 focus:outline-none focus:ring-2 focus:ring-bg-03 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              onClick={() => signOut({ callbackUrl: '/admin-login' })}
+              className="w-full flex items-center p-2 text-sm text-white rounded-lg hover:bg-red-600/80"
             >
-              <span className="sr-only">Mở thanh bên</span>
-              <IconMenu width={28} height={28} className=" rotate-180" />
+              <span>Đăng xuất</span>
             </button>
           </div>
-
-          {renderItems(items)}
         </div>
       </aside>
     </>
