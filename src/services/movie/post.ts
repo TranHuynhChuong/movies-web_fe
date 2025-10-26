@@ -25,3 +25,29 @@ export async function addNew(payload: MovieFormData, token?: string) {
   const data = await res.json();
   return data;
 }
+
+export async function importFromFile(file: File, token?: string) {
+  const url = `${MOVIE_BASE_URL}/import-movies`;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const headers: HeadersInit = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: formData,
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to import movies');
+  }
+
+  const data = await res.json();
+  return data;
+}
