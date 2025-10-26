@@ -7,22 +7,30 @@ export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError('');
     signIn('credentials', {
       redirect: false,
       username,
       password,
       role: 'ADMIN',
-    }).then((res) => {
-      if (res?.error) {
-        setError('Tên đăng nhập/mật khẩu không đúng');
-      } else {
-        console.log('Đăng nhập thành công');
-        router.push('/admin');
-      }
-    });
+    })
+      .then((res) => {
+        if (res?.error) {
+          setError('Tên đăng nhập/mật khẩu không đúng');
+        } else {
+          console.log('Đăng nhập thành công');
+          router.push('/admin');
+        }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -46,6 +54,7 @@ export default function AdminLoginPage() {
 
       <button
         type="submit"
+        disabled={isSubmitting}
         className="w-full bg-primary text-black py-2 rounded-md hover:bg-primary-dark"
       >
         Đăng nhập
