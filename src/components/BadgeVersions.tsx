@@ -1,52 +1,14 @@
-import { Version } from '@/types/movies';
+import { getVersionStatus } from '@/utils/getVersionStatus';
 import React from 'react';
 
 type BadgeVersionsProps = {
   data: {
+    numberOfEpisodes: number;
     mediaType: string;
     versions: Version[];
   };
-  ignore?: boolean; // nếu true, mobile vẫn giữ kiểu desktop
+  ignore?: boolean;
   className?: string;
-};
-
-const getShortLabel = (name: string) => {
-  return name
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase())
-    .join('.');
-};
-
-const getBadges = (mediaType: string, versions: Version[]) => {
-  const isUpcoming = !versions || versions.length === 0;
-
-  if (isUpcoming) {
-    return [{ label: 'Upcoming', text: '', bg: 'bg-white', color: 'text-black' }];
-  }
-
-  const badges: { label: string; text: string; bg: string; color: string }[] = [];
-
-  if (mediaType === 'movies') {
-    versions?.forEach((v) => {
-      badges.push({
-        label: getShortLabel(v.name),
-        text: '',
-        bg: 'bg-bg-01',
-        color: 'text-white',
-      });
-    });
-  } else if (mediaType === 'series') {
-    versions?.forEach((v) => {
-      badges.push({
-        label: getShortLabel(v.name),
-        text: (v.currentEp ?? 0).toString(),
-        bg: 'bg-bg-01',
-        color: 'text-white',
-      });
-    });
-  }
-
-  return badges;
 };
 
 export const BadgeVersions: React.FC<BadgeVersionsProps> = ({
@@ -54,7 +16,11 @@ export const BadgeVersions: React.FC<BadgeVersionsProps> = ({
   ignore = false,
   className = '',
 }) => {
-  const badges = getBadges(data.mediaType, data.versions);
+  const badges =
+    data.versions?.map((v) => getVersionStatus(data.numberOfEpisodes, data.mediaType, v)) || [];
+  if (badges.length === 0) {
+    badges.push({ label: 'Upcoming', isFull: false });
+  }
 
   return (
     <>
@@ -66,9 +32,13 @@ export const BadgeVersions: React.FC<BadgeVersionsProps> = ({
         {badges.map((b, idx) => (
           <span
             key={idx}
-            className={`px-2 py-1 font-normal ${b.color} ${b.bg} text-2xs whitespace-nowrap `}
+            className={`px-2 py-1 font-medium text-2xs whitespace-nowrap ${
+              b.isFull
+                ? 'bg-green-400 text-green-700'
+                : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+            }`}
           >
-            {b.label} {b.text}
+            {b.label}
           </span>
         ))}
       </div>
@@ -82,9 +52,13 @@ export const BadgeVersions: React.FC<BadgeVersionsProps> = ({
         {badges.map((b, idx) => (
           <span
             key={idx}
-            className={`px-2 py-1 font-normal ${b.color} ${b.bg} rounded-md w-fit text-2xs whitespace-nowrap`}
+            className={`px-2 py-1 font-medium text-2xs whitespace-nowrap rounded-sm ${
+              b.isFull
+                ? 'bg-green-400 text-green-700'
+                : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+            }`}
           >
-            {b.label} {b.text}
+            {b.label}
           </span>
         ))}
       </div>

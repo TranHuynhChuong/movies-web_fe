@@ -1,41 +1,23 @@
 'use client';
-import { Movie, Version } from '@/types/movies';
+import { getVersionStatus } from '@/utils/getVersionStatus';
 import Link from 'next/link';
 import React from 'react';
-
-const getShortLabel = (name: string) => {
-  return name
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase())
-    .join('.');
-};
-
-const getVersionStatus = (movie: Movie, version: Version) => {
-  if (movie.mediaType === 'series') {
-    // Phim bộ: so sánh số tập hiện có với tổng số tập
-    const total = movie.numberOfEpisodes || 0;
-    return `${getShortLabel(version.name)} ${version.currentEp}/${total}`;
-  } else {
-    // Phim lẻ: chỉ có 1 tập, nên coi là Full luôn
-    return `${getShortLabel(version.name)} Full`;
-  }
-};
 
 export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
   return (
     <div className="overflow-x-auto">
       {/* Bảng cho màn hình lớn */}
-      <table className="min-w-full border-separate border-spacing-y-3 hidden md:table">
-        <thead>
-          <tr className="text-left align-top text-gray-300">
-            <th className="px-6 py-3 font-semibold">ID</th>
+      <table className="min-w-full border-separate border-spacing-y-2 hidden md:table">
+        <thead className="bg-bg-02 rounded-lg ">
+          <tr className="text-left align-top text-gray-300 ">
+            <th className="px-6 py-3 font-semibold rounded-l-lg">ID</th>
             <th className="px-6 py-3 font-semibold">Tên phim</th>
-            <th className="px-6 py-3 font-semibold">Năm</th>
-            <th className="px-6 py-3 font-semibold">Loại</th>
             <th className="px-6 py-3 font-semibold">Trạng thái</th>
-            <th className="px-6 py-3 font-semibold">Ngày tạo</th>
+            <th className="px-6 py-3 font-semibold">Loại</th>
+            <th className="px-6 py-3 font-semibold">Năm</th>
+            <th className="px-6 py-3 font-semibold">Quốc gia</th>
             <th className="px-6 py-3 font-semibold">Ngày cập nhật</th>
-            <th className="px-6 py-3 font-semibold"></th>
+            <th className="px-6 py-3 font-semibold rounded-r-lg"></th>
           </tr>
         </thead>
 
@@ -43,7 +25,7 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
           {movies.map((movie) => (
             <tr
               key={movie.id}
-              className={`rounded-xl align-top shadow transition hover:shadow-md bg-white dark:bg-gray-900`}
+              className={`rounded-xl align-top shadow transition hover:shadow-md bg-white dark:bg-bg-02`}
             >
               <td className="rounded-l-xl px-6 py-4">{movie.id}</td>
 
@@ -66,22 +48,6 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                   </div>
                 </div>
               </td>
-
-              <td className="px-6 py-4">{movie.releaseYear}</td>
-
-              {/* Loại */}
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap ${
-                    movie.mediaType === 'series'
-                      ? 'bg-purple-200/90 text-purple-700'
-                      : 'bg-orange-200/90 text-orange-700'
-                  }`}
-                >
-                  {movie.mediaType === 'series' ? 'Phim bộ' : 'Phim lẻ'}
-                </span>
-              </td>
-
               <td className="px-6 py-4">
                 <div className="space-y-2">
                   <p
@@ -100,18 +66,11 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                     </p>
                   ) : (
                     movie.versions.map((v) => {
-                      const label = getVersionStatus(movie, v);
-
-                      const isFull =
-                        label.toLowerCase().includes('full') ||
-                        (/\b(\d+)\/(\d+)\b/.test(label) &&
-                          (() => {
-                            const match = /(\d+)\/(\d+)/.exec(label);
-                            if (!match) return false;
-                            const [current, total] = match.slice(1).map(Number);
-                            return current === total;
-                          })());
-
+                      const { label, isFull } = getVersionStatus(
+                        movie.numberOfEpisodes ?? 0,
+                        movie.mediaType,
+                        v
+                      );
                       return (
                         <p
                           key={v.name}
@@ -129,19 +88,25 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                 </div>
               </td>
 
-              <td className="px-6 py-4">
-                <div className="text-sm">
-                  <p>
-                    {movie.createdAt ? new Date(movie.createdAt).toLocaleTimeString('vi-VN') : ''}
-                  </p>
-                  <p>
-                    {movie.createdAt ? new Date(movie.createdAt).toLocaleDateString('vi-VN') : ''}
-                  </p>
-                </div>
+              {/* Loại */}
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap ${
+                    movie.mediaType === 'series'
+                      ? 'bg-purple-200/90 text-purple-700'
+                      : 'bg-orange-200/90 text-orange-700'
+                  }`}
+                >
+                  {movie.mediaType === 'series' ? 'Phim bộ' : 'Phim lẻ'}
+                </span>
               </td>
 
+              <td className="px-6 py-4">{movie.releaseYear}</td>
+
+              <td className="px-6 py-4">{movie.country?.name}</td>
+
               <td className="px-6 py-4">
-                <div className="text-sm">
+                <div className="text-sm text-gray-400">
                   <p>
                     {movie.updatedAt ? new Date(movie.updatedAt).toLocaleTimeString('vi-VN') : ''}
                   </p>
@@ -169,7 +134,7 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
       {/* Dạng thẻ cho mobile */}
       <div className="space-y-3 md:hidden mt-3">
         {movies.map((movie) => (
-          <div key={movie.id} className={`rounded-lg p-4 shadow-sm bg-white dark:bg-gray-900`}>
+          <div key={movie.id} className={`rounded-lg p-4 shadow-sm bg-white dark:bg-bg-02`}>
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-gray-200/90">{movie.id}</p>
               <Link
@@ -215,17 +180,11 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                 </p>
               ) : (
                 movie.versions.map((v) => {
-                  const label = getVersionStatus(movie, v);
-
-                  const isFull =
-                    label.toLowerCase().includes('full') ||
-                    (/\b(\d+)\/(\d+)\b/.test(label) &&
-                      (() => {
-                        const match = /(\d+)\/(\d+)/.exec(label);
-                        if (!match) return false;
-                        const [current, total] = match.slice(1).map(Number);
-                        return current === total;
-                      })());
+                  const { label, isFull } = getVersionStatus(
+                    movie.numberOfEpisodes ?? 0,
+                    movie.mediaType,
+                    v
+                  );
 
                   return (
                     <p
@@ -244,9 +203,6 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
             </div>
 
             <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-gray-300">
-              <div className="space-y-0.5">
-                {movie.createdAt ? new Date(movie.createdAt).toLocaleString('vi-VN') : ''}
-              </div>
               <div className="space-y-0.5">
                 {movie.updatedAt ? new Date(movie.updatedAt).toLocaleString('vi-VN') : ''}
               </div>
