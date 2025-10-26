@@ -6,7 +6,7 @@ export async function getVersionList(force: boolean) {
     headers: {
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 300 },
+    next: { revalidate: false },
     cache: force ? 'no-store' : 'force-cache',
   });
 
