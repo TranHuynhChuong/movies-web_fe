@@ -8,6 +8,8 @@ import SelectMultiple from './ui/SelectMultiple';
 import SelectSingle from './ui/SelectSingle';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
+import CsvMovieUploader from './CsvMovieUploader';
+import CsvEpisodesUploader from './CsvEpisodesUploader';
 
 interface FormMoviesProps {
   data?: MovieFormData;
@@ -37,7 +39,7 @@ export default function FormMovies({
     directors: '',
     overview: '',
     genres: [],
-    country: '',
+    country: { id: '', name: '' },
     versions: [],
   });
 
@@ -63,6 +65,7 @@ export default function FormMovies({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openImportFromFile, setOpenImportFromFile] = useState(false);
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -101,11 +104,37 @@ export default function FormMovies({
         className="max-w-7xl w-full mx-auto p-2 md:p-6  text-white space-y-3"
         onSubmit={(e) => e.preventDefault()}
       >
-        <h2 className="text-2xl font-semibold mb-8">Thêm phim mới</h2>
+        <div className="flex flex-col items-end w-full">
+          <div className="flex flex-wrap justify-between w-full">
+            <h2 className="text-2xl font-semibold mb-8">Thêm phim mới</h2>
+            <Button variant="outline" onClick={() => setOpenImportFromFile((pre) => !pre)}>
+              Nhập từ file CSV
+            </Button>
+          </div>
+          {openImportFromFile && (
+            <div className="flex gap-2 w-full flex-col md:flex-row">
+              <CsvMovieUploader
+                onDataParsed={(movie) => {
+                  setFormData(movie[0]);
+                }}
+              />
+
+              <CsvEpisodesUploader
+                onDataParsed={(parsedVersions) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    versions: parsedVersions,
+                  }));
+                }}
+              />
+            </div>
+          )}
+        </div>
 
         {/* Section: Ảnh phim */}
         <section className="p-4 rounded-lg bg-gray-900 border border-gray-800">
-          <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+          <h2 className="text-lg font-semibold my-4">Thông tin phim</h2>
+          <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
             Ảnh phim
             <div className="relative inline-block group">
               <button type="button" className="cursor-pointer font-bold">
@@ -120,7 +149,7 @@ export default function FormMovies({
                 <br />• <code>https://phim.nguonc.com/**</code>
               </div>
             </div>
-          </h2>
+          </h3>
 
           {/* Hàm kiểm tra nguồn ảnh hợp lệ */}
           {(() => {
@@ -221,227 +250,232 @@ export default function FormMovies({
               )}
             </div>
           </div>
-        </section>
-
-        <section className="p-4 rounded-lg bg-gray-900 border border-gray-800 space-y-5">
-          <h2 className="text-lg font-semibold mb-4">Thông tin phim</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="title" className="block mb-2 text-sm font-medium">
-                Tên phim
-              </label>
-              <input
-                id="title"
-                type="text"
-                name="title"
-                value={formData?.title}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-              />
-              {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="originalTitle" className="block mb-2 text-sm font-medium">
-                Tên gốc
-              </label>
-              <input
-                id="originalTitle"
-                type="text"
-                name="originalTitle"
-                value={formData?.originalTitle}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-              />
-              {errors.originalTitle && (
-                <p className="text-red-500 text-xs mt-1">{errors.originalTitle}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="mediaType" className="block mb-2 text-sm font-medium">
-                Loại phim
-              </label>
-              <select
-                name="mediaType"
-                id="mediaType"
-                value={formData?.mediaType}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-              >
-                <option value="movie">Phim lẻ</option>
-                <option value="series">Phim bộ</option>
-              </select>
-              {errors.mediaType && <p className="text-red-500 text-xs mt-1">{errors.mediaType}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="status" className="block mb-2 text-sm font-medium">
-                Trạng thái
-              </label>
-              <select
-                name="status"
-                id="status"
-                value={formData?.status}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-              >
-                <option value="show">Hiển thị</option>
-                <option value="hidden">Ẩn</option>
-              </select>
-              {errors.status && <p className="text-red-500 text-xs mt-1">{errors.status}</p>}
-            </div>
-          </div>
-
-          <div className={`grid grid-cols-1 gap-4 sm:grid-cols-3`}>
-            <div>
-              <label htmlFor="runtime" className="block mb-2 text-sm font-medium">
-                Thời lượng (phút)
-              </label>
-              <input
-                id="runtime"
-                type="number"
-                name="runtime"
-                value={formData?.runtime || ''}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-              />
-              {errors.runtime && <p className="text-red-500 text-xs mt-1">{errors.runtime}</p>}
-            </div>
-            <div>
-              <label htmlFor="numberOfEpisodes" className="block mb-2 text-sm font-medium">
-                Số tập
-              </label>
-              <input
-                type="number"
-                id="numberOfEpisodes"
-                name="numberOfEpisodes"
-                value={formData?.numberOfEpisodes || ''}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-              />
-              {errors.numberOfEpisodes && (
-                <p className="text-red-500 text-xs mt-1">{errors.numberOfEpisodes}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="releaseYear" className="block mb-2 text-sm font-medium">
-                Năm phát hành
-              </label>
-              <input
-                type="number"
-                id="releaseYear"
-                name="releaseYear"
-                value={formData?.releaseYear || ''}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-              />
-              {errors.releaseYear && (
-                <p className="text-red-500 text-xs mt-1">{errors.releaseYear}</p>
-              )}
-            </div>
-          </div>
-
-          {!loading && (
-            <div className="space-y-4 ">
+          <section className="space-y-4 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <SelectMultiple
-                  label="Thể loại"
-                  options={genres}
-                  selected={formData.genres.map((g) => g.id)}
-                  onChange={(ids) => {
-                    const selectedGenres = genres.filter((g) => ids.includes(g.id));
-                    setFormData((prev) => ({
-                      ...prev,
-                      genres: selectedGenres,
-                    }));
-                  }}
+                <label htmlFor="title" className="block mb-2 text-sm font-medium">
+                  Tên phim
+                </label>
+                <input
+                  id="title"
+                  type="text"
+                  name="title"
+                  value={formData?.title}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
                 />
-                {errors.genres && <p className="text-red-500 text-xs mt-1">{errors.genres}</p>}
+                {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
               </div>
+
               <div>
-                <SelectSingle
-                  label="Quốc gia"
-                  options={countries}
-                  selected={formData.country}
-                  onChange={(id) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      country: id ?? '',
-                    }));
-                  }}
+                <label htmlFor="originalTitle" className="block mb-2 text-sm font-medium">
+                  Tên gốc
+                </label>
+                <input
+                  id="originalTitle"
+                  type="text"
+                  name="originalTitle"
+                  value={formData?.originalTitle}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
                 />
-                {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
+                {errors.originalTitle && (
+                  <p className="text-red-500 text-xs mt-1">{errors.originalTitle}</p>
+                )}
               </div>
             </div>
-          )}
-          <div>
-            <label htmlFor="trailerPath" className="block mb-2 text-sm font-medium">
-              Trailer URL
-            </label>
-            <input
-              type="text"
-              id="trailerPath"
-              name="trailerPath"
-              placeholder="https://example.com/backdrop.jpg"
-              value={formData?.trailerPath}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-            />
-            {errors.trailerPath && (
-              <p className="text-red-500 text-xs mt-1">{errors.trailerPath}</p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="mediaType" className="block mb-2 text-sm font-medium">
+                  Loại phim
+                </label>
+                <select
+                  name="mediaType"
+                  id="mediaType"
+                  value={formData?.mediaType}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                >
+                  <option value="movie">Phim lẻ</option>
+                  <option value="series">Phim bộ</option>
+                </select>
+                {errors.mediaType && (
+                  <p className="text-red-500 text-xs mt-1">{errors.mediaType}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="status" className="block mb-2 text-sm font-medium">
+                  Trạng thái
+                </label>
+                <select
+                  name="status"
+                  id="status"
+                  value={formData?.status}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                >
+                  <option value="show">Hiển thị</option>
+                  <option value="hidden">Ẩn</option>
+                </select>
+                {errors.status && <p className="text-red-500 text-xs mt-1">{errors.status}</p>}
+              </div>
+            </div>
+
+            <div className={`grid grid-cols-1 gap-4 sm:grid-cols-3`}>
+              <div>
+                <label htmlFor="runtime" className="block mb-2 text-sm font-medium">
+                  Thời lượng (phút)
+                </label>
+                <input
+                  id="runtime"
+                  type="number"
+                  name="runtime"
+                  value={formData?.runtime || ''}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                />
+                {errors.runtime && <p className="text-red-500 text-xs mt-1">{errors.runtime}</p>}
+              </div>
+              <div>
+                <label htmlFor="numberOfEpisodes" className="block mb-2 text-sm font-medium">
+                  Số tập
+                </label>
+                <input
+                  type="number"
+                  id="numberOfEpisodes"
+                  name="numberOfEpisodes"
+                  value={formData?.numberOfEpisodes || ''}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                />
+                {errors.numberOfEpisodes && (
+                  <p className="text-red-500 text-xs mt-1">{errors.numberOfEpisodes}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="releaseYear" className="block mb-2 text-sm font-medium">
+                  Năm phát hành
+                </label>
+                <input
+                  type="number"
+                  id="releaseYear"
+                  name="releaseYear"
+                  value={formData?.releaseYear || ''}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                />
+                {errors.releaseYear && (
+                  <p className="text-red-500 text-xs mt-1">{errors.releaseYear}</p>
+                )}
+              </div>
+            </div>
+
+            {!loading && (
+              <div className="space-y-4 ">
+                <div>
+                  <SelectMultiple
+                    label="Thể loại"
+                    options={genres}
+                    selected={formData.genres.map((g) => g.id)}
+                    onChange={(ids) => {
+                      const selectedGenres = genres.filter((g) => ids.includes(g.id));
+                      setFormData((prev) => ({
+                        ...prev,
+                        genres: selectedGenres,
+                      }));
+                    }}
+                  />
+                  {errors.genres && <p className="text-red-500 text-xs mt-1">{errors.genres}</p>}
+                </div>
+                <div>
+                  <SelectSingle
+                    label="Quốc gia"
+                    options={countries}
+                    selected={formData.country.id}
+                    onChange={(id) => {
+                      const selectedCountry = countries.find((c) => c.id === id);
+                      if (selectedCountry) {
+                        setFormData((prev) => ({
+                          ...prev,
+                          country: selectedCountry,
+                        }));
+                      }
+                    }}
+                  />
+                  {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
+                </div>
+              </div>
             )}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="actors" className="block mb-2 text-sm font-medium">
-                Diễn viên
+              <label htmlFor="trailerPath" className="block mb-2 text-sm font-medium">
+                Trailer URL
               </label>
               <input
                 type="text"
-                id="actors"
-                name="actors"
-                value={formData?.actors}
+                id="trailerPath"
+                name="trailerPath"
+                placeholder="https://example.com/backdrop.jpg"
+                value={formData?.trailerPath}
                 onChange={handleChange}
-                placeholder="Cách nhau bằng dấu phẩy"
                 className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
               />
-              {errors.actors && <p className="text-red-500 text-xs mt-1">{errors.actors}</p>}
+              {errors.trailerPath && (
+                <p className="text-red-500 text-xs mt-1">{errors.trailerPath}</p>
+              )}
             </div>
-            <div>
-              <label htmlFor="directors" className="block mb-2 text-sm font-medium">
-                Đạo diễn
-              </label>
-              <input
-                type="text"
-                id="directors"
-                name="directors"
-                value={formData?.directors}
-                onChange={handleChange}
-                placeholder="Cách nhau bằng dấu phẩy"
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
-              />
-              {errors.directors && <p className="text-red-500 text-xs mt-1">{errors.directors}</p>}
-            </div>
-          </div>
 
-          <div>
-            <label htmlFor="overview" className="block mb-2 text-sm font-medium">
-              Mô tả
-            </label>
-            <textarea
-              id="overview"
-              name="overview"
-              value={formData?.overview}
-              onChange={handleChange}
-              rows={3}
-              className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500 resize-none"
-            />
-            {errors.overview && <p className="text-red-500 text-xs mt-1">{errors.overview}</p>}
-          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="actors" className="block mb-2 text-sm font-medium">
+                  Diễn viên
+                </label>
+                <input
+                  type="text"
+                  id="actors"
+                  name="actors"
+                  value={formData?.actors}
+                  onChange={handleChange}
+                  placeholder="Cách nhau bằng dấu phẩy"
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                />
+                {errors.actors && <p className="text-red-500 text-xs mt-1">{errors.actors}</p>}
+              </div>
+              <div>
+                <label htmlFor="directors" className="block mb-2 text-sm font-medium">
+                  Đạo diễn
+                </label>
+                <input
+                  type="text"
+                  id="directors"
+                  name="directors"
+                  value={formData?.directors}
+                  onChange={handleChange}
+                  placeholder="Cách nhau bằng dấu phẩy"
+                  className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                />
+                {errors.directors && (
+                  <p className="text-red-500 text-xs mt-1">{errors.directors}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="overview" className="block mb-2 text-sm font-medium">
+                Mô tả
+              </label>
+              <textarea
+                id="overview"
+                name="overview"
+                value={formData?.overview}
+                onChange={handleChange}
+                rows={5}
+                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500 resize-none"
+              />
+              {errors.overview && <p className="text-red-500 text-xs mt-1">{errors.overview}</p>}
+            </div>
+          </section>
         </section>
 
         <section className="p-4 rounded-lg bg-gray-900 border border-gray-800 space-y-4">

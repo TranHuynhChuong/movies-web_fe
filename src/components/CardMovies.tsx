@@ -3,7 +3,6 @@ import React from 'react';
 import { BadgeVersions } from './BadgeVersions';
 import Link from 'next/link';
 import { toKebabWithId } from '@/utils/kebabCase';
-import { Movie } from '@/types/movies';
 import Image from 'next/image';
 
 type CardMoviesProps = {
@@ -58,7 +57,13 @@ const CardPoster: React.FC<{ movie?: Movie; basePath: string }> = ({ movie, base
           priority
         />
         <div className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-black/20 group-hover:opacity-100" />
-        <BadgeVersions data={{ mediaType: movie.mediaType, versions: movie.versions ?? [] }} />
+        <BadgeVersions
+          data={{
+            numberOfEpisodes: movie.numberOfEpisodes ?? 0,
+            mediaType: movie.mediaType,
+            versions: movie.versions ?? [],
+          }}
+        />
       </Link>
       <div className="flex flex-col items-center gap-1">
         <Link
@@ -102,7 +107,11 @@ const CardBackdrop: React.FC<{ movie?: Movie; basePath: string }> = ({ movie, ba
         />
         <div className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-black/20 group-hover:opacity-100" />
         <BadgeVersions
-          data={{ mediaType: movie.mediaType, versions: movie.versions ?? [] }}
+          data={{
+            numberOfEpisodes: movie.numberOfEpisodes ?? 0,
+            mediaType: movie.mediaType,
+            versions: movie.versions ?? [],
+          }}
           className="xs:translate-x-0 xs:left-2"
         />
       </Link>
