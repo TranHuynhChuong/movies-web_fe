@@ -6,24 +6,7 @@ export async function getMovieDetail(id: string) {
     headers: {
       'Content-Type': 'application/json',
     },
-    cache: 'no-store',
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch movie');
-  }
-
-  const data = await res.json();
-  return data;
-}
-
-export async function getMovieWatchInf(id: string, version_id: number, episode_number: number) {
-  const res = await fetch(`${MOVIE_BASE_URL}/watch/${id}?ver=${version_id}&ep=${episode_number}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    next: { revalidate: 5 },
+    next: { revalidate: 300 },
   });
 
   if (!res.ok) {
@@ -65,7 +48,7 @@ export async function searchMovies(params: {
     headers: {
       'Content-Type': 'application/json',
     },
-    cache: 'no-store',
+    next: { revalidate: 300 },
   });
 
   if (!res.ok) {
