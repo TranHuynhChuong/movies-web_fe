@@ -1,9 +1,3 @@
-/**
- * Chuyển đổi param ep từ URL sang số tập
- * - "full" => 1
- * - "tap-1" => 1
- * - "anything else" => null
- */
 export function parseEp(ep: string): number | null {
   if (!ep) return null;
 

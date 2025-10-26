@@ -1,14 +1,7 @@
 'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getCountriesList } from '@/services/country/get';
 import { getGenresList } from '@/services/genre/get';
 import { getVersionList } from '@/services/version/get';
@@ -20,95 +13,96 @@ type AppDataContextType = {
   countries: Option[];
   versions: Option[];
   servers: Option[];
-  loading: boolean;
 
-  refetchAll: (force?: boolean) => Promise<void>;
-  refetchGenres: (force?: boolean) => Promise<void>;
-  refetchCountries: (force?: boolean) => Promise<void>;
-  refetchVersions: (force?: boolean) => Promise<void>;
-  refetchServers: (force?: boolean) => Promise<void>;
+  refetchAll: () => Promise<void>;
+  refetchGenres: () => Promise<void>;
+  refetchCountries: () => Promise<void>;
+  refetchVersions: () => Promise<void>;
+  refetchServers: () => Promise<void>;
 };
 
 const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
 
 export function AppDataProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const [genres, setGenres] = useState<Option[]>([]);
-  const [countries, setCountries] = useState<Option[]>([]);
-  const [versions, setVersions] = useState<Option[]>([]);
-  const [servers, setServers] = useState<Option[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const fetchGenres = useCallback(async (force = false) => {
-    const res = await getGenresList(force);
-    setGenres(res.data || []);
-  }, []);
+  // ----- Queries -----
+  const { data: genres = [] } = useQuery({
+    queryKey: ['genres'],
+    queryFn: getGenresList,
+    staleTime: Infinity,
+    select: (res) => res.data || [],
+  });
 
-  /** 🔹 Tải danh sách quốc gia */
-  const fetchCountries = useCallback(async (force = false) => {
-    const res = await getCountriesList(force);
-    setCountries(res.data || []);
-  }, []);
+  const { data: countries = [] } = useQuery({
+    queryKey: ['countries'],
+    queryFn: getCountriesList,
+    staleTime: Infinity,
+    select: (res) => res.data || [],
+  });
 
-  /** 🔹 Tải danh sách phiên bản (version) */
-  const fetchVersions = useCallback(async (force = false) => {
-    const res = await getVersionList(force);
-    setVersions(res.data || []);
-  }, []);
+  const { data: versions = [] } = useQuery({
+    queryKey: ['versions'],
+    queryFn: getVersionList,
+    staleTime: Infinity,
+    select: (res) => res.data || [],
+  });
 
-  /** 🔹 Tải danh sách server */
-  const fetchServers = useCallback(async (force = false) => {
-    const res = await getServerList(force);
-    setServers(res.data || []);
-  }, []);
+  const { data: servers = [] } = useQuery({
+    queryKey: ['servers'],
+    queryFn: getServerList,
+    staleTime: Infinity,
+    select: (res) => res.data || [],
+  });
 
-  /** 🔹 Tải lại toàn bộ dữ liệu */
-  const fetchAll = useCallback(
-    async (force = false) => {
-      setLoading(true);
-      try {
-        await Promise.all([
-          fetchGenres(force),
-          fetchCountries(force),
-          fetchVersions(force),
-          fetchServers(force),
-        ]);
-      } catch (error) {
-        console.error('Lỗi khi tải AppData:', error);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [fetchGenres, fetchCountries, fetchVersions, fetchServers]
-  );
+  // ----- Refetch -----
+  const refetchGenres = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['genres'] });
+    return queryClient.fetchQuery({ queryKey: ['genres'], queryFn: getGenresList });
+  }, [queryClient]);
 
-  useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
+  const refetchCountries = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['countries'] });
+    return queryClient.fetchQuery({ queryKey: ['countries'], queryFn: getCountriesList });
+  }, [queryClient]);
 
+  const refetchVersions = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['versions'] });
+    return queryClient.fetchQuery({ queryKey: ['versions'], queryFn: getVersionList });
+  }, [queryClient]);
+
+  const refetchServers = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['servers'] });
+    return queryClient.fetchQuery({ queryKey: ['servers'], queryFn: getServerList });
+  }, [queryClient]);
+
+  const refetchAll = useCallback(async () => {
+    await Promise.all([refetchGenres(), refetchCountries(), refetchVersions(), refetchServers()]);
+  }, [refetchGenres, refetchCountries, refetchVersions, refetchServers]);
+
+  // ----- Context value -----
   const value = useMemo(
     () => ({
-      genres,
-      countries,
-      versions,
-      servers,
-      loading,
-      refetchAll: fetchAll,
-      refetchGenres: fetchGenres,
-      refetchCountries: fetchCountries,
-      refetchVersions: fetchVersions,
-      refetchServers: fetchServers,
+      genres: genres || [],
+      countries: countries || [],
+      versions: versions || [],
+      servers: servers || [],
+      refetchAll,
+      refetchGenres,
+      refetchCountries,
+      refetchVersions,
+      refetchServers,
     }),
     [
       genres,
       countries,
       versions,
       servers,
-      loading,
-      fetchAll,
-      fetchGenres,
-      fetchCountries,
-      fetchVersions,
-      fetchServers,
+      refetchAll,
+      refetchGenres,
+      refetchCountries,
+      refetchVersions,
+      refetchServers,
     ]
   );
 
@@ -117,8 +111,6 @@ export function AppDataProvider({ children }: Readonly<{ children: ReactNode }>)
 
 export function useAppData() {
   const context = useContext(AppDataContext);
-  if (!context) {
-    throw new Error('useAppData must be used within an AppDataProvider');
-  }
+  if (!context) throw new Error('useAppData must be used within an AppDataProvider');
   return context;
 }

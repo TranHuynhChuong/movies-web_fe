@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { ListGridMovies } from '@/components/ListGridMovies';
 import { Pagination } from '@/components/ui/Pagination';
 import { IconListSearch } from '@/components/icon/IconListSearch';
@@ -25,8 +25,9 @@ export const PanelSearchResult: React.FC<{
       ) : (
         <div className="text-center text-gray-400 py-8">Không có kết quả nào</div>
       )}
-
-      <Pagination currentPage={currentPage} totalPage={totalPage} />
+      <Suspense fallback={null}>
+        <Pagination currentPage={currentPage} totalPage={totalPage} />
+      </Suspense>
     </div>
   );
 };

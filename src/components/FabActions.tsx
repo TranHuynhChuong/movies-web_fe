@@ -3,16 +3,19 @@
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Modal } from '@/components/ui/Modal';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { addNew as addServer } from '@/services/server/post';
 import { addNew as addVersion } from '@/services/version/post';
 import { addNew as addGenre } from '@/services/genre/post';
 import { addNew as addCountry } from '@/services/country/post';
 import { useToast } from './ui/Toast';
 import { useAuthToken } from '@/hooks/useAuthToken';
+import { useAppData } from '@/contexts/AppDataContext';
+import Loader from './ui/loader';
 
 export default function FabActions() {
   const router = useRouter();
+  const { refetchCountries, refetchServers, refetchVersions, refetchGenres } = useAppData();
   const [open, setOpen] = useState(false);
   const [openServerModal, setOpenServerModal] = useState(false);
   const [openVersionModal, setOpenVersionModal] = useState(false);
@@ -25,7 +28,7 @@ export default function FabActions() {
   const pathname = usePathname();
   const token = useAuthToken();
   const { show } = useToast();
-
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const isBaseAdminPage = /^\/admin\/[^\/]+$/.test(pathname);
 
   const handleAddMovie = () => {
@@ -53,10 +56,10 @@ export default function FabActions() {
     setOpen(false);
   };
 
-  const queryClient = useQueryClient();
-
   const mutation = useMutation({
     mutationFn: async ({ type, payload }: { type: string; payload: any }) => {
+      setIsSubmiting(true);
+
       switch (type) {
         case 'server':
           return addServer(payload, token);
@@ -70,13 +73,32 @@ export default function FabActions() {
           throw new Error('Loại không hợp lệ');
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries();
+    onSuccess: (_data, variables) => {
+      const { type } = variables;
+
+      switch (type) {
+        case 'server':
+          refetchServers();
+          break;
+        case 'version':
+          refetchVersions();
+          break;
+        case 'genre':
+          refetchGenres();
+          break;
+        case 'country':
+          refetchCountries();
+          break;
+      }
+
       show('Thêm thành công!', 'success', 'top-center');
     },
     onError: (error) => {
       console.error(error);
       show('Lỗi thêm mới!', 'error', 'top-center');
+    },
+    onSettled: () => {
+      setIsSubmiting(false);
     },
   });
 
@@ -85,6 +107,7 @@ export default function FabActions() {
       {/* Nút nổi */}
       {isBaseAdminPage && (
         <div className="fixed bottom-6 right-6 flex flex-col space-y-3  items-end">
+          {isSubmiting && <Loader />}
           {open && (
             <div className="flex flex-col mb-3 space-y-1 transition-all duration-300 bg-gray-700 w-48 py-2 rounded-md overflow-hidden">
               <div className="w-full h-fit " title="Thêm phim mới">

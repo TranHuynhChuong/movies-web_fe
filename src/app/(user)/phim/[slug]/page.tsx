@@ -8,6 +8,7 @@ import { SectionMovieDetails } from '@/components/SectionMovieDetails';
 import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { getMovieDetail } from '@/services/movie/get';
+import { Suspense } from 'react';
 
 async function fetchMovieDetail(slug: string): Promise<Movie> {
   try {
@@ -107,8 +108,9 @@ export default async function MovieDetails({
           </div>
         </div>
         <SectionMovieDetails movie={movie} />
-
-        <SelectorVersionEpisode mediaType={movie.mediaType} versions={movie.versions} />
+        <Suspense fallback={null}>
+          <SelectorVersionEpisode mediaType={movie.mediaType} versions={movie.versions} />
+        </Suspense>
       </div>
     </div>
   );

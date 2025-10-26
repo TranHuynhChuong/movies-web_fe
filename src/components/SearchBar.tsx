@@ -29,7 +29,7 @@ export function SearchBar() {
     return () => {
       mediaQuery.removeEventListener('change', handleChange);
     };
-  }, []);
+  }, [setOpen]);
 
   const handleClick = () => {
     if (window.innerWidth < 1024) {

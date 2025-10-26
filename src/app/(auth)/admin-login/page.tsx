@@ -19,6 +19,7 @@ export default function AdminLoginPage() {
       if (res?.error) {
         setError('Tên đăng nhập/mật khẩu không đúng');
       } else {
+        console.log('Đăng nhập thành công');
         router.push('/admin');
       }
     });

@@ -10,9 +10,9 @@ import { searchMovies } from '@/services/movie/get';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
-export default function AdminMoviesPage() {
+function AdminMovies() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -39,8 +39,7 @@ export default function AdminMoviesPage() {
       }),
     placeholderData: (previousData) => previousData,
     select: (res) => res.data,
-    staleTime: 0,
-    gcTime: 0,
+    staleTime: 5 * 60 * 1000,
   });
 
   const [titleInput, setTitleInput] = useState(filters.title);
@@ -130,7 +129,17 @@ export default function AdminMoviesPage() {
       </div>
 
       <TableMovies movies={results} />
-      <Pagination currentPage={filters.page} totalPage={totalPages} />
+      <Suspense fallback={null}>
+        <Pagination currentPage={filters.page} totalPage={totalPages} />
+      </Suspense>
     </div>
+  );
+}
+
+export default function AdminMoviesPage() {
+  return (
+    <Suspense fallback={null}>
+      <AdminMovies />
+    </Suspense>
   );
 }

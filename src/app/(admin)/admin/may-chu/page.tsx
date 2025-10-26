@@ -9,6 +9,7 @@ import { remove } from '@/services/server/delete';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/Toast';
 import { useAuthToken } from '@/hooks/useAuthToken';
+import Loader from '@/components/ui/loader';
 
 export default function AdminserversPage() {
   const { servers, refetchServers } = useAppData();
@@ -20,6 +21,7 @@ export default function AdminserversPage() {
   const [deleting, setDeleting] = useState<any>(null);
   const token = useAuthToken();
   const { show } = useToast();
+  const [isSubmiting, setIsSubmiting] = useState(false);
 
   const handleEdit = (item: any) => {
     setIsEdit(true);
@@ -36,21 +38,27 @@ export default function AdminserversPage() {
   const handleConfirm = async () => {
     if (isEdit) {
       try {
+        setIsSubmiting(true);
         await update(editing.id, { name: name }, token);
         show('Cập nhật thành công!', 'success', 'top-center');
         await refetchServers();
       } catch (error: any) {
         console.error('Lỗi khi cập nhật thể loại:', error);
         show('Cập nhật thất bại!', 'error', 'top-center');
+      } finally {
+        setIsSubmiting(false);
       }
     } else {
       try {
+        setIsSubmiting(true);
         await addNew({ name: name }, token);
         show('Thêm thành công!', 'success', 'top-center');
         await refetchServers();
       } catch (error: any) {
         console.error('Lỗi khi thêm mới thể loại:', error);
         show('Thêm thất bại!', 'error', 'top-center');
+      } finally {
+        setIsSubmiting(false);
       }
     }
     await refetchServers();
@@ -59,6 +67,7 @@ export default function AdminserversPage() {
 
   const handleConfirmDelete = async () => {
     try {
+      setIsSubmiting(true);
       await remove(deleting.id);
       show('Xóa thành công!', 'success', 'top-center');
       await refetchServers();
@@ -67,11 +76,13 @@ export default function AdminserversPage() {
       show('Xóa thất bại!', 'error', 'top-center');
     } finally {
       setOpenDelete(false);
+      setIsSubmiting(false);
     }
   };
 
   return (
     <div className="space-y-8">
+      {isSubmiting && <Loader />}
       <SimpleTable
         title="Danh sách máy chủ"
         data={servers}

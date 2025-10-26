@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import { getMovieDetail } from '@/services/movie/get';
+import { Suspense } from 'react';
 
 async function fetchMovieInf(slug: string): Promise<Movie> {
   try {
@@ -63,7 +64,9 @@ export default async function WatchMoviePage({ params }: Readonly<WatchMoviePage
 
   return (
     <div className="pb-40 w-full h-fit">
-      <SectionVideoPlay movie={movie} />
+      <Suspense fallback={null}>
+        <SectionVideoPlay movie={movie} />
+      </Suspense>
       <div className="flex flex-col gap-8 items-start w-full px-5 mt-8 md:px-7">
         <div className="flex md:items-end gap-4 flex-col md:flex-row items-center w-full justify-center">
           <div className="relative w-40 overflow-hidden rounded-md shadow-white/10 h-60">

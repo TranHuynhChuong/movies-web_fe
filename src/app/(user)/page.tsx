@@ -9,6 +9,7 @@ import { searchMovies } from '@/services/movie/get';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Suspense } from 'react';
 
 export default function Home() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function Home() {
     queryKey: ['search_movies', 'movies'],
     queryFn: () => searchMovies({ page: 1, limit: limit, mediaType: 'movie' }),
     placeholderData: (previousData) => previousData,
+    staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
   });
 
@@ -27,6 +29,7 @@ export default function Home() {
     queryKey: ['search_movies', 'series'],
     queryFn: () => searchMovies({ page: 1, limit: limit, mediaType: 'series' }),
     placeholderData: (previousData) => previousData,
+    staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
   });
 
@@ -35,6 +38,7 @@ export default function Home() {
     queryKey: ['search_movies', 'new_added', 1],
     queryFn: () => searchMovies({ page: 1, limit: 7, sortBy: 'createdAt' }),
     placeholderData: (previousData) => previousData,
+    staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
   });
 
@@ -43,6 +47,7 @@ export default function Home() {
     queryKey: ['search_movies', 'new_updated', 1],
     queryFn: () => searchMovies({ page: 1, limit: 7, sortBy: 'updatedAt' }),
     placeholderData: (previousData) => previousData,
+    staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
   });
 
@@ -106,13 +111,15 @@ export default function Home() {
             movies={newUpdatedData?.results || []}
             isLoading={isNewUpdatedLoading || newUpdatedData?.results?.length === 0}
           />
-          <Pagination
-            currentPage={1}
-            totalPage={newUpdatedData?.totalPages}
-            onChange={(page) => {
-              router.push(`/tim-kiem/?page=${page}`);
-            }}
-          />
+          <Suspense fallback={null}>
+            <Pagination
+              currentPage={1}
+              totalPage={newUpdatedData?.totalPages}
+              onChange={(page) => {
+                router.push(`/tim-kiem/?page=${page}`);
+              }}
+            />
+          </Suspense>
         </div>
       </div>
     </div>

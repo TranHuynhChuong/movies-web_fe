@@ -1,13 +1,11 @@
 import { COUNTRY_BASE_URL } from '@/libs/api';
 
-export async function getCountriesList(force: boolean) {
+export async function getCountriesList() {
   const res = await fetch(`${COUNTRY_BASE_URL}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-    next: { revalidate: false },
-    cache: force ? 'no-store' : 'force-cache',
   });
 
   if (!res.ok) {

@@ -3,25 +3,27 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { searchMovies } from '@/services/movie/get';
 import { extractId } from '@/utils/kebabCase';
-import { useAppDataValue } from '@/hooks/useAppDataValue';
 import { PanelSearchResult } from '@/components/PanelSearchResult';
+import { useAppData } from '@/contexts/AppDataContext';
+import { Suspense } from 'react';
 
 const limit = 32;
 
-export default function GenreMoviesPage() {
+function GenreMovies() {
   const searchParams = useSearchParams();
   const params = useParams();
-
+  const { genres } = useAppData();
   const slug = params.slug as string;
   const currentPage = Number(searchParams.get('page') ?? 1);
   const genreId = extractId(slug);
-  const genre = useAppDataValue('genre', genreId);
+  const genre = genres.find((g) => g.id === genreId)?.name || 'Unknown';
 
   const { data, isLoading } = useQuery({
     queryKey: ['search_movies', slug, currentPage],
     queryFn: () => searchMovies({ page: currentPage, limit: limit, genreId: genreId }),
     placeholderData: (previousData) => previousData,
     select: (res) => res.data,
+    staleTime: 5 * 60 * 1000,
   });
 
   const { results = [], totalPages = 1, totalResults = 0, page = 1 } = data || {};
@@ -34,5 +36,12 @@ export default function GenreMoviesPage() {
       totalPage={totalPages}
       isLoading={isLoading}
     />
+  );
+}
+export default function GenreMoviesPage() {
+  return (
+    <Suspense fallback={null}>
+      <GenreMovies />
+    </Suspense>
   );
 }

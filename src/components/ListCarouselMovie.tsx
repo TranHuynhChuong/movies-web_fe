@@ -38,7 +38,7 @@ export const ListCarouselMovie: React.FC<ListCarouselMovieProps> = ({
   }
 
   let breakpoints;
-  let spaceBetween = 14;
+  const spaceBetween = 14;
 
   switch (variant) {
     case 'poster':

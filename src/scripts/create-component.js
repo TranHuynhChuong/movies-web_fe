@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import path from 'node:path';
+import fs from 'node:fs';
 
 // Lấy tên component từ args
 const name = process.argv[2];

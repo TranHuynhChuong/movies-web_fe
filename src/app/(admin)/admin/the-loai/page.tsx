@@ -9,6 +9,7 @@ import { remove } from '@/services/genre/delete';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/Toast';
 import { useAuthToken } from '@/hooks/useAuthToken';
+import Loader from '@/components/ui/loader';
 
 export default function AdminGenresPage() {
   const { genres, refetchGenres } = useAppData();
@@ -20,7 +21,7 @@ export default function AdminGenresPage() {
   const [deleting, setDeleting] = useState<any>(null);
   const token = useAuthToken();
   const { show } = useToast();
-
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const handleEdit = (item: any) => {
     setIsEdit(true);
     setEditing(item);
@@ -36,21 +37,27 @@ export default function AdminGenresPage() {
   const handleConfirm = async () => {
     if (isEdit) {
       try {
+        setIsSubmiting(true);
         await update(editing.id, { name: name }, token);
         show('Cập nhật thành công!', 'success', 'top-center');
         await refetchGenres();
       } catch (error: any) {
         console.error('Lỗi khi cập nhật thể loại:', error);
         show('Cập nhật thất bại!', 'error', 'top-center');
+      } finally {
+        setIsSubmiting(false);
       }
     } else {
       try {
+        setIsSubmiting(true);
         await addNew({ name: name }, token);
         show('Thêm thành công!', 'success', 'top-center');
         await refetchGenres();
       } catch (error: any) {
         console.error('Lỗi khi thêm mới thể loại:', error);
         show('Thêm thất bại!', 'error', 'top-center');
+      } finally {
+        setIsSubmiting(false);
       }
     }
     await refetchGenres();
@@ -59,6 +66,7 @@ export default function AdminGenresPage() {
 
   const handleConfirmDelete = async () => {
     try {
+      setIsSubmiting(true);
       await remove(deleting.id, token);
       show('Xóa thành công!', 'success', 'top-center');
       await refetchGenres();
@@ -67,11 +75,13 @@ export default function AdminGenresPage() {
       show('Xóa thất bại!', 'error', 'top-center');
     } finally {
       setOpenDelete(false);
+      setIsSubmiting(false);
     }
   };
 
   return (
     <div className="space-y-8">
+      {isSubmiting && <Loader />}
       <SimpleTable
         title="Danh sách thể loại phim"
         data={genres}

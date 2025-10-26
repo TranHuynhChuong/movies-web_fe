@@ -3,10 +3,11 @@ import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { searchMovies } from '@/services/movie/get';
 import { PanelSearchResult } from '@/components/PanelSearchResult';
+import { Suspense } from 'react';
 
 const limit = 32;
 
-export default function AllMoviesPage() {
+function AllMovies() {
   const searchParams = useSearchParams();
 
   const currentPage = Number(searchParams.get('page') ?? 1);
@@ -28,5 +29,13 @@ export default function AllMoviesPage() {
       totalPage={totalPages}
       isLoading={isLoading}
     />
+  );
+}
+
+export default function AllMoviesPage() {
+  return (
+    <Suspense fallback={null}>
+      <AllMovies />
+    </Suspense>
   );
 }

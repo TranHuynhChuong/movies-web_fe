@@ -1,6 +1,6 @@
 import FabActions from '@/components/FabActions';
 import Sidebar, { SidebarItem } from '@/components/ui/Sidebar';
-
+export const dynamic = 'force-dynamic';
 const sidebarItems: SidebarItem[] = [
   {
     label: 'Phim',
@@ -28,7 +28,7 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
   return (
     <div>
       <Sidebar items={sidebarItems} />
-      <div className="md:ml-54">
+      <div className="md:ml-54 relative">
         {children}
         <FabActions />
       </div>

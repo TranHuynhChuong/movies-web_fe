@@ -8,18 +8,21 @@ import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
 import { useAuthToken } from '@/hooks/useAuthToken';
+import { Suspense, useState } from 'react';
+import Loader from '@/components/ui/loader';
 
-export default function AdminMoviesDetailPage() {
+function AdminMoviesDetail() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
   const token = useAuthToken();
   const { show } = useToast();
-
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const { data, isLoading, isError } = useQuery({
     queryKey: ['movie_detail', id],
     queryFn: () => getMovieDetail(id),
     enabled: !!id,
+    staleTime: 5 * 60 * 1000,
   });
 
   const mutationUpdate = useMutation({
@@ -28,11 +31,15 @@ export default function AdminMoviesDetailPage() {
     onSuccess: () => {
       show('Cập nhật thành công!', 'success', 'top-center');
       queryClient.invalidateQueries({ queryKey: ['movies_list'] });
+      queryClient.invalidateQueries({ queryKey: ['movie_detail', id] });
       router.replace('/admin/phim');
     },
     onError: (error: any) => {
       console.error('Lỗi cập nhật phim', error.message);
       show('Cập nhật thất bại!', 'error', 'top-center');
+    },
+    onSettled: () => {
+      setIsSubmiting(false);
     },
   });
 
@@ -41,19 +48,25 @@ export default function AdminMoviesDetailPage() {
     onSuccess: () => {
       show('Xóa thành công!', 'success', 'top-center');
       queryClient.invalidateQueries({ queryKey: ['movies_list'] });
+      queryClient.invalidateQueries({ queryKey: ['movie_detail', id] });
       router.replace('/admin/phim');
     },
     onError: (error: any) => {
       console.error('Lỗi xóa phim', error.message);
       show('Xóa thất bại!', 'error', 'top-center');
     },
+    onSettled: () => {
+      setIsSubmiting(false);
+    },
   });
 
   const handleSubmit = (payload: MovieFormData) => {
+    setIsSubmiting(true);
     mutationUpdate.mutate({ id, payload });
   };
 
   const handleDelete = () => {
+    setIsSubmiting(true);
     mutationDelete.mutate({ id });
   };
 
@@ -86,6 +99,7 @@ export default function AdminMoviesDetailPage() {
 
   return (
     <div className="p-2 md:p-4 bg-bg-04 rounded-lg">
+      {isSubmiting && <Loader />}
       <FormMovies
         onSubmit={handleSubmit}
         onCancel={handleCancel}
@@ -93,5 +107,12 @@ export default function AdminMoviesDetailPage() {
         onDelete={handleDelete}
       />
     </div>
+  );
+}
+export default function AdminMoviesDetailPage() {
+  return (
+    <Suspense fallback={null}>
+      <AdminMoviesDetail />
+    </Suspense>
   );
 }

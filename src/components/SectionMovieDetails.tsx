@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { getLink } from '@/utils/getLink';
-import { Movie } from '@/types/movies';
 import { Fragment } from 'react';
 
 interface SectionMovieDetailsProps {

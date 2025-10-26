@@ -32,7 +32,7 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
     { id: 'hide', name: 'Ẩn' },
   ];
 
-  let { genres, countries, loading } = useAppData();
+  let { genres, countries } = useAppData();
 
   genres = [{ id: 'all', name: 'Tất cả' }, ...genres];
   countries = [{ id: 'all', name: 'Tất cả' }, ...countries];
@@ -56,8 +56,6 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
     onConfirm();
     handleToggleFilter();
   };
-
-  if (loading) return null;
 
   return (
     <div className="w-fit text-sm rounded-md text-gray-300">

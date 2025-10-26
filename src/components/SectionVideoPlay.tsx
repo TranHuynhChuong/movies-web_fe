@@ -6,7 +6,7 @@ import { SelectorVersionEpisode } from './SelectorVersionEpisode';
 import { useSearchParams } from 'next/navigation';
 import { ButtonGoBack } from './ButtonGoBack';
 import { getLink } from '@/utils/getLink';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 type SectionVideoPlayProps = {
   movie: Movie;
@@ -67,7 +67,9 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
         </div>
       </div>
       <div className="px-5 md:px-7">
-        <SelectorVersionEpisode mediaType={movie.mediaType} versions={movie.versions} />
+        <Suspense fallback={null}>
+          <SelectorVersionEpisode mediaType={movie.mediaType} versions={movie.versions} />
+        </Suspense>
       </div>
     </div>
   );

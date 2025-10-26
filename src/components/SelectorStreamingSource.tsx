@@ -1,6 +1,5 @@
 'use client';
 
-import { StreamingSource } from '@/types/movies';
 import React from 'react';
 
 type SelectorStreamingSourceProps = {

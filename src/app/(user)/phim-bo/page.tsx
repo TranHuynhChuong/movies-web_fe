@@ -3,10 +3,11 @@ import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { searchMovies } from '@/services/movie/get';
 import { PanelSearchResult } from '@/components/PanelSearchResult';
+import { Suspense } from 'react';
 
 const limit = 32;
 
-export default function SeriesMoviesPage() {
+function SeriesMovies() {
   const searchParams = useSearchParams();
 
   const currentPage = Number(searchParams.get('page') ?? 1);
@@ -16,6 +17,7 @@ export default function SeriesMoviesPage() {
     queryFn: () => searchMovies({ page: currentPage, limit: limit, mediaType: 'series' }),
     placeholderData: (previousData) => previousData,
     select: (res) => res.data,
+    staleTime: 5 * 60 * 1000,
   });
 
   const { results = [], totalPages = 1, totalResults = 0, page = 1 } = data || {};
@@ -28,5 +30,12 @@ export default function SeriesMoviesPage() {
       totalPage={totalPages}
       isLoading={isLoading}
     />
+  );
+}
+export default function SeriesMoviesPage() {
+  return (
+    <Suspense fallback={null}>
+      <SeriesMovies />
+    </Suspense>
   );
 }

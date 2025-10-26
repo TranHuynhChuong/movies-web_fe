@@ -4,15 +4,16 @@ import CsvMovieUploader from '@/components/CsvMovieUploader';
 import FormMovies from '@/components/FormMovies';
 import MovieList from '@/components/ListMovieCsv';
 import { Button } from '@/components/ui/Button';
+import Loader from '@/components/ui/loader';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
 import { useAuthToken } from '@/hooks/useAuthToken';
 import { addNew, importFromFile } from '@/services/movie/post';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
-export default function AdminMoviesAddNewPage() {
+function AdminMoviesAddNew() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const token = useAuthToken();
@@ -21,7 +22,7 @@ export default function AdminMoviesAddNewPage() {
   const [movies, setMovies] = useState<MovieFormData[]>();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const isMultiple = searchParams.get('multiple') === 'true';
 
   const mutation = useMutation({
@@ -35,9 +36,13 @@ export default function AdminMoviesAddNewPage() {
       console.error('Lỗi thêm mới phim', error.message);
       show('Thêm thất bại!', 'error', 'top-center');
     },
+    onSettled: () => {
+      setIsSubmiting(false);
+    },
   });
 
   const handleSubmit = (payload: MovieFormData) => {
+    setIsSubmiting(true);
     mutation.mutate({ payload });
   };
 
@@ -52,10 +57,14 @@ export default function AdminMoviesAddNewPage() {
       console.error('Lỗi thêm mới phim', error.message);
       show('Thêm thất bại!', 'error', 'top-center');
     },
+    onSettled: () => {
+      setIsSubmiting(false);
+    },
   });
 
   const handleSubmitFile = () => {
     if (file) {
+      setIsSubmiting(true);
       mutationFile.mutate({ file });
     }
   };
@@ -66,6 +75,7 @@ export default function AdminMoviesAddNewPage() {
 
   return (
     <div className="p-2 md:p-4 bg-bg-04 rounded-lg">
+      {isSubmiting && <Loader />}
       {!isMultiple ? (
         <FormMovies onSubmit={handleSubmit} onCancel={handleCancel} />
       ) : (
@@ -80,7 +90,9 @@ export default function AdminMoviesAddNewPage() {
             <Button
               type="button"
               onClick={() => {
-                file && setOpenConfirm(true);
+                if (file) {
+                  setOpenConfirm(true);
+                }
               }}
               className=" rounded-lg "
             >
@@ -106,5 +118,13 @@ export default function AdminMoviesAddNewPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminMoviesAddNewPage() {
+  return (
+    <Suspense fallback={null}>
+      <AdminMoviesAddNew />
+    </Suspense>
   );
 }

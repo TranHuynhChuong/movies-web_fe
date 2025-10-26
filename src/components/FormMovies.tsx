@@ -61,7 +61,7 @@ export default function FormMovies({
     }));
   };
 
-  const { genres, countries, versions, servers, loading } = useAppData();
+  const { genres, countries, versions, servers } = useAppData();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -372,42 +372,40 @@ export default function FormMovies({
               </div>
             </div>
 
-            {!loading && (
-              <div className="space-y-4 ">
-                <div>
-                  <SelectMultiple
-                    label="Thể loại"
-                    options={genres}
-                    selected={formData.genres.map((g) => g.id)}
-                    onChange={(ids) => {
-                      const selectedGenres = genres.filter((g) => ids.includes(g.id));
+            <div className="space-y-4 ">
+              <div>
+                <SelectMultiple
+                  label="Thể loại"
+                  options={genres}
+                  selected={formData.genres.map((g) => g.id)}
+                  onChange={(ids) => {
+                    const selectedGenres = genres.filter((g) => ids.includes(g.id));
+                    setFormData((prev) => ({
+                      ...prev,
+                      genres: selectedGenres,
+                    }));
+                  }}
+                />
+                {errors.genres && <p className="text-red-500 text-xs mt-1">{errors.genres}</p>}
+              </div>
+              <div>
+                <SelectSingle
+                  label="Quốc gia"
+                  options={countries}
+                  selected={formData.country.id}
+                  onChange={(id) => {
+                    const selectedCountry = countries.find((c) => c.id === id);
+                    if (selectedCountry) {
                       setFormData((prev) => ({
                         ...prev,
-                        genres: selectedGenres,
+                        country: selectedCountry,
                       }));
-                    }}
-                  />
-                  {errors.genres && <p className="text-red-500 text-xs mt-1">{errors.genres}</p>}
-                </div>
-                <div>
-                  <SelectSingle
-                    label="Quốc gia"
-                    options={countries}
-                    selected={formData.country.id}
-                    onChange={(id) => {
-                      const selectedCountry = countries.find((c) => c.id === id);
-                      if (selectedCountry) {
-                        setFormData((prev) => ({
-                          ...prev,
-                          country: selectedCountry,
-                        }));
-                      }
-                    }}
-                  />
-                  {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
-                </div>
+                    }
+                  }}
+                />
+                {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
               </div>
-            )}
+            </div>
             <div>
               <label htmlFor="trailerPath" className="block mb-2 text-sm font-medium">
                 Trailer URL

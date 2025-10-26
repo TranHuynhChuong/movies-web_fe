@@ -1,10 +1,11 @@
 import { login } from '@/services/auth/post';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { type NextAuthOptions } from 'next-auth';
+import { DefaultSession, DefaultUser, type NextAuthOptions } from 'next-auth';
 import { NEXTAUTH_SECRET } from '@/libs/secret';
+import { DefaultJWT } from 'next-auth/jwt';
 
 declare module 'next-auth' {
-  interface User {
+  interface User extends DefaultUser {
     id: string;
     username: string;
     role: string;
@@ -12,7 +13,7 @@ declare module 'next-auth' {
     expiresIn: number;
   }
 
-  interface Session {
+  interface Session extends DefaultSession {
     accessToken?: string;
     expiresIn: number;
     user: {
@@ -22,9 +23,9 @@ declare module 'next-auth' {
     };
   }
 
-  interface JWT {
+  interface JWT extends DefaultJWT {
     accessToken?: string;
-    accessTokenExpiresIn?: number;
+    expiresIn?: number;
     user?: {
       id: string;
       username: string;
@@ -46,6 +47,7 @@ export const authOptions: NextAuthOptions = {
         try {
           const { data } = await login(credentials);
           if (!data) return null;
+
           return {
             id: data.user.id,
             username: data.user.username,
@@ -72,12 +74,14 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.user = { id: user.id, username: user.username, role: user.role };
         token.accessToken = user.accessToken;
-        token.accessTokenExpiresIn = Date.now() + user.expiresIn * 1000;
+        token.expiresIn = Date.now() + user.expiresIn;
       }
 
-      if (Date.now() > token.accessTokenExpiresIn) {
+      if (token.expiresIn && typeof token.expiresIn === 'number' && Date.now() > token.expiresIn) {
+        console.log('Token hết hạn');
         return {};
       }
+
       return token;
     },
 
@@ -85,6 +89,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.accessToken = token.accessToken as string;
         session.user = token.user as { id: string; username: string; role: string };
+        session.expiresIn = token.expiresIn as number;
       }
       return session;
     },

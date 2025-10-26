@@ -1,10 +1,6 @@
 import React from 'react';
 
-const Mask1 = () => {};
-
-type ImageMaskProps = {};
-
-export const ImageMask: React.FC<ImageMaskProps> = () => {
+export const ImageMask: React.FC = () => {
   const baseClassName = `absolute top-0 left-0 w-full h-full`;
   return (
     <>
