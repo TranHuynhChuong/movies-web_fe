@@ -8,6 +8,8 @@ import { addNew as addServer } from '@/services/server/post';
 import { addNew as addVersion } from '@/services/version/post';
 import { addNew as addGenre } from '@/services/genre/post';
 import { addNew as addCountry } from '@/services/country/post';
+import { useToast } from './ui/Toast';
+import { useAuthToken } from '@/hooks/useAuthToken';
 
 export default function FabActions() {
   const router = useRouter();
@@ -21,6 +23,8 @@ export default function FabActions() {
   const [genreName, setGenreName] = useState('');
   const [countryName, setCountryName] = useState('');
   const pathname = usePathname();
+  const token = useAuthToken();
+  const { show } = useToast();
 
   const isBaseAdminPage = /^\/admin\/[^\/]+$/.test(pathname);
 
@@ -55,24 +59,24 @@ export default function FabActions() {
     mutationFn: async ({ type, payload }: { type: string; payload: any }) => {
       switch (type) {
         case 'server':
-          return addServer(payload);
+          return addServer(payload, token);
         case 'version':
-          return addVersion(payload);
+          return addVersion(payload, token);
         case 'genre':
-          return addGenre(payload);
+          return addGenre(payload, token);
         case 'country':
-          return addCountry(payload);
+          return addCountry(payload, token);
         default:
           throw new Error('Loại không hợp lệ');
       }
     },
     onSuccess: () => {
-      alert('Thêm thành công!');
       queryClient.invalidateQueries();
+      show('Thêm thành công!', 'success', 'top-center');
     },
     onError: (error) => {
       console.error(error);
-      alert('Lỗi thêm mới, vui lòng thử lại!');
+      show('Lỗi thêm mới!', 'error', 'top-center');
     },
   });
 
@@ -99,12 +103,12 @@ export default function FabActions() {
                   Thêm thể loại
                 </button>
               </div>
-              <div className="w-full h-fit" title="Thêm version">
+              <div className="w-full h-fit" title="Thêm server">
                 <button
                   onClick={handleAddServer}
                   className="w-full px-8 py-2 hover:bg-gray-600 text-left"
                 >
-                  Thêm version
+                  Thêm server
                 </button>
               </div>
               <div className="w-full h-fit" title="Thêm quốc gia">
@@ -115,12 +119,12 @@ export default function FabActions() {
                   Thêm quốc gia
                 </button>
               </div>
-              <div className="w-full h-fit" title="Thêm server">
+              <div className="w-full h-fit" title="Thêm version">
                 <button
                   onClick={handleAddVersion}
                   className="w-full px-8 py-2 hover:bg-gray-600 text-left"
                 >
-                  Thêm server
+                  Thêm version
                 </button>
               </div>
             </div>
@@ -155,9 +159,12 @@ export default function FabActions() {
       <Modal
         open={openGenreModal}
         onClose={() => setOpenGenreModal(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (!genreName.trim()) return alert('Vui lòng nhập tên thể loại');
-          mutation.mutate({ type: 'genre', payload: { name: genreName } });
+          mutation.mutate({
+            type: 'genre',
+            payload: { name: genreName },
+          });
           setGenreName('');
           setOpenGenreModal(false);
         }}
@@ -177,9 +184,12 @@ export default function FabActions() {
       <Modal
         open={openVersionModal}
         onClose={() => setOpenVersionModal(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (!versionName.trim()) return alert('Vui lòng nhập tên version');
-          mutation.mutate({ type: 'version', payload: { name: versionName } });
+          mutation.mutate({
+            type: 'version',
+            payload: { name: versionName },
+          });
           setVersionName('');
           setOpenVersionModal(false);
         }}
@@ -199,9 +209,12 @@ export default function FabActions() {
       <Modal
         open={openServerModal}
         onClose={() => setOpenServerModal(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (!serverName.trim()) return alert('Vui lòng nhập tên máy chủ');
-          mutation.mutate({ type: 'server', payload: { name: serverName } });
+          mutation.mutate({
+            type: 'server',
+            payload: { name: serverName },
+          });
           setServerName('');
           setOpenServerModal(false);
         }}
@@ -221,9 +234,12 @@ export default function FabActions() {
       <Modal
         open={openCountryModal}
         onClose={() => setOpenCountryModal(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (!countryName.trim()) return alert('Vui lòng nhập tên quốc gia');
-          mutation.mutate({ type: 'country', payload: { name: countryName } });
+          mutation.mutate({
+            type: 'country',
+            payload: { name: countryName },
+          });
           setCountryName('');
           setOpenCountryModal(false);
         }}

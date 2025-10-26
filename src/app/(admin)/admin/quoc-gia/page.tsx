@@ -6,10 +6,9 @@ import { useAppData } from '@/contexts/AppDataContext';
 import { update } from '@/services/country/patch';
 import { addNew } from '@/services/country/post';
 import { remove } from '@/services/country/delete';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/Toast';
+import { useAuthToken } from '@/hooks/useAuthToken';
 
 export default function AdmincountrysPage() {
   const { countries, refetchCountries } = useAppData();
@@ -19,8 +18,7 @@ export default function AdmincountrysPage() {
   const [name, setName] = useState('');
   const [editing, setEditing] = useState<any>(null);
   const [deleting, setDeleting] = useState<any>(null);
-  const router = useRouter();
-  const { data: session } = useSession();
+  const token = useAuthToken();
   const { show } = useToast();
 
   const handleEdit = (item: any) => {
@@ -35,31 +33,23 @@ export default function AdmincountrysPage() {
     setOpenDelete(true);
   };
   const handleConfirm = async () => {
-    if (!session?.accessToken) {
-      router.replace('/admin-login');
-      return;
-    }
     if (isEdit) {
       try {
-        await update(editing.id, { name: name }, session.accessToken);
+        await update(editing.id, { name: name }, token);
         show('Cập nhật thành công!', 'success', 'top-center');
         await refetchCountries();
       } catch (error: any) {
         console.error('Lỗi khi cập nhật thể loại:', error);
         show('Cập nhật thất bại!', 'error', 'top-center');
-      } finally {
-        setOpenDelete(false);
       }
     } else {
       try {
-        await addNew({ name: name }, session.accessToken);
+        await addNew({ name: name }, token);
         show('Thêm thành công!', 'success', 'top-center');
         await refetchCountries();
       } catch (error: any) {
         console.error('Lỗi khi thêm mới thể loại:', error);
         show('Thêm thất bại!', 'error', 'top-center');
-      } finally {
-        setOpenDelete(false);
       }
     }
     await refetchCountries();
@@ -67,12 +57,8 @@ export default function AdmincountrysPage() {
   };
 
   const handleConfirmDelete = async () => {
-    if (!session?.accessToken) {
-      router.replace('/admin-login');
-      return;
-    }
     try {
-      await remove(deleting.id, session.accessToken);
+      await remove(deleting.id, token);
       show('Xóa thành công!', 'success', 'top-center');
       await refetchCountries();
     } catch (error: any) {

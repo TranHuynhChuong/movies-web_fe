@@ -5,15 +5,15 @@ import { getMovieDetail } from '@/services/movie/get';
 import { update } from '@/services/movie/patch';
 import { remove } from '@/services/movie/delete';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
+import { useAuthToken } from '@/hooks/useAuthToken';
 
 export default function AdminMoviesDetailPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
-  const { data: session } = useSession();
+  const token = useAuthToken();
   const { show } = useToast();
 
   const { data, isLoading, isError } = useQuery({
@@ -23,15 +23,8 @@ export default function AdminMoviesDetailPage() {
   });
 
   const mutationUpdate = useMutation({
-    mutationFn: ({
-      id,
-      payload,
-      accessToken,
-    }: {
-      id: string;
-      payload: MovieFormData;
-      accessToken: string;
-    }) => update(id, payload, accessToken),
+    mutationFn: ({ id, payload }: { id: string; payload: MovieFormData }) =>
+      update(id, payload, token),
     onSuccess: () => {
       show('Cập nhật thành công!', 'success', 'top-center');
       queryClient.invalidateQueries({ queryKey: ['movies_list'] });
@@ -44,8 +37,7 @@ export default function AdminMoviesDetailPage() {
   });
 
   const mutationDelete = useMutation({
-    mutationFn: ({ id, accessToken }: { id: string; accessToken: string }) =>
-      remove(id, accessToken),
+    mutationFn: ({ id }: { id: string }) => remove(id, token),
     onSuccess: () => {
       show('Xóa thành công!', 'success', 'top-center');
       queryClient.invalidateQueries({ queryKey: ['movies_list'] });
@@ -58,19 +50,11 @@ export default function AdminMoviesDetailPage() {
   });
 
   const handleSubmit = (payload: MovieFormData) => {
-    if (!session?.accessToken) {
-      router.replace('/admin-login');
-      return;
-    }
-    mutationUpdate.mutate({ id, payload, accessToken: session?.accessToken });
+    mutationUpdate.mutate({ id, payload });
   };
 
   const handleDelete = () => {
-    if (!session?.accessToken) {
-      router.replace('/admin-login');
-      return;
-    }
-    mutationDelete.mutate({ id, accessToken: session?.accessToken });
+    mutationDelete.mutate({ id });
   };
 
   const handleCancel = () => {
