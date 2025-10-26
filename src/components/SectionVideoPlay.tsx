@@ -1,6 +1,5 @@
 'use client';
 
-import { Movie, StreamingSource } from '@/types/movies';
 import { Iframe } from './ui/Iframe';
 import { SelectorStreamingSource } from './SelectorStreamingSource';
 import { SelectorVersionEpisode } from './SelectorVersionEpisode';
@@ -41,7 +40,6 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
     setActiveStreamingSource(streamingSource);
   };
 
-  console.log(movie);
   return (
     <div className="w-full h-fit bg-bg-04 space-y-8">
       <div className="flex flex-col gap-4 mt-0 md:mt-5">

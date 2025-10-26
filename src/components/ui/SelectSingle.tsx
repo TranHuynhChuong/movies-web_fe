@@ -2,15 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-type Option = {
-  id: string;
-  name: string;
-};
-
 type SelectSingleProps = {
   label?: string;
-  options: Option[];
-  selected: string; // chỉ 1 giá trị
+  options: { id: string; name: string }[];
+  selected: string;
   onChange: (id: string) => void;
 };
 

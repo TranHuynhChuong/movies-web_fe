@@ -1,6 +1,5 @@
 import React from 'react';
 import { CardMovies } from './CardMovies';
-import { Movie } from '@/types/movies';
 
 type ListGridMoviesProps = {
   movies: Movie[];

@@ -46,7 +46,6 @@ export const authOptions: NextAuthOptions = {
         try {
           const { data } = await login(credentials);
           if (!data) return null;
-
           return {
             id: data.user.id,
             username: data.user.username,

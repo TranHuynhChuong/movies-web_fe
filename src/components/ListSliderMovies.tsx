@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { toKebabWithId } from '@/utils/kebabCase';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Movie } from '@/types/movies';
 
 type ListSliderMoviesProps = { movies: Movie[]; isLoading?: boolean };
 
@@ -97,7 +96,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
             <GenresList genres={movie.genres ?? []} className="justify-center md:justify-start" />
           </div>
 
-          <p className="hidden text-sm text-white !line-clamp-3 lg:block">{movie.overview}</p>
+          <p className="hidden text-sm text-white line-clamp-3 lg:flex">{movie.overview}</p>
 
           <div className="items-center hidden w-full gap-4 h-fit md:flex">
             <Button

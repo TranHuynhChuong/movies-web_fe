@@ -4,7 +4,6 @@ import React from 'react';
 import { ListGridMovies } from '@/components/ListGridMovies';
 import { Pagination } from '@/components/ui/Pagination';
 import { IconListSearch } from '@/components/icon/IconListSearch';
-import { Movie } from '@/types/movies';
 
 export const PanelSearchResult: React.FC<{
   title: string;
@@ -21,7 +20,11 @@ export const PanelSearchResult: React.FC<{
         {title}
       </h2>
 
-      <ListGridMovies movies={movies || []} basePath={basePath} isLoading={isLoading} />
+      {movies && movies.length > 0 ? (
+        <ListGridMovies movies={movies} basePath={basePath} isLoading={isLoading} />
+      ) : (
+        <div className="text-center text-gray-400 py-8">Không có kết quả nào</div>
+      )}
 
       <Pagination currentPage={currentPage} totalPage={totalPage} />
     </div>

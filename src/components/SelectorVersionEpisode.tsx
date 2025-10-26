@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Version } from '@/types/movies';
 import { SelectorVersion } from './SelectorVersion';
 import { SelectorEpisode } from './SelectorEpisode';
 import { useRouter, usePathname, useSearchParams, useParams } from 'next/navigation';
@@ -62,6 +61,16 @@ export const SelectorVersionEpisode: React.FC<SelectorVersionEpisodeProps> = ({
     setActiveEpisode(episode);
     updateQuery(activeVersion, episode);
   };
+
+  if (!versions || versions.length === 0)
+    return (
+      <div className="flex flex-col items-center justify-center ">
+        <div className="flex items-center gap-4 text-gray-300">
+          <span className="w-3 h-3 bg-primary rounded-full animate-ping"></span>
+          <h2 className="text-lg md:text-xl font-medium">Phim sẽ được cập nhật sớm...</h2>
+        </div>
+      </div>
+    );
 
   return (
     <div className="w-full h-fit space-y-4">

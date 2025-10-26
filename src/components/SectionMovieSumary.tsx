@@ -1,7 +1,6 @@
 import { BadgeList } from './BadgeList';
 import { GenresList } from './GenresList';
 import { SeriesStatus } from './SeriesStatus';
-import { Movie, Version } from '@/types/movies';
 
 interface SectionMovieSummaryProps {
   movie: Movie;

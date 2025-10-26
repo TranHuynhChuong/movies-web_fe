@@ -4,14 +4,13 @@ import { getStats } from '@/services/stats/get';
 import { useQuery } from '@tanstack/react-query';
 
 export default function AdminDashboard() {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['stats'],
     queryFn: () => getStats(),
     select: (res) => res.data,
   });
 
-  if (isLoading) return <div className="text-center py-10">Loading...</div>;
-  if (error) return <div className="text-center py-10 text-red-500">Lỗi tải dữ liệu</div>;
+  if (isLoading || !data) return null;
 
   const { movies, genres, countries, versions, servers, usedStorageMB } = data;
 

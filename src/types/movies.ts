@@ -1,4 +1,4 @@
-export type Movie = {
+type Movie = {
   id: string;
   title: string;
   originalTitle: string;
@@ -20,19 +20,19 @@ export type Movie = {
   updatedAt: string | undefined;
 };
 
-export type Version = {
+type Version = {
   id: string;
   name: string;
   currentEp: number;
   episodes?: Episode[];
 };
 
-export type Episode = {
+type Episode = {
   episodeNumber: number;
   streamingSources: StreamingSource[];
 };
 
-export type StreamingSource = {
+type StreamingSource = {
   serverId: string;
   orderIndex: number;
   url: string;

@@ -2,7 +2,6 @@ import { ButtonPlayGroup } from '@/components/ButtonPlayGroup';
 import { ImageMask } from '@/components/ui/ImageMask';
 import { extractId } from '@/utils/kebabCase';
 import Image from 'next/image';
-import { Movie } from '@/types/movies';
 import { SelectorVersionEpisode } from '@/components/SelectorVersionEpisode';
 import { SectionMovieSummary } from '@/components/SectionMovieSumary';
 import { SectionMovieDetails } from '@/components/SectionMovieDetails';

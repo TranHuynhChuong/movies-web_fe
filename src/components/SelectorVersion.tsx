@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { IconSubtitles } from './icon/IconSubtitles';
-import { Version } from '@/types/movies';
 
 type SelectorVersionProps = {
   versions?: Version[];

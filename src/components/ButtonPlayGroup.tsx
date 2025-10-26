@@ -47,13 +47,15 @@ export const ButtonPlayGroup: React.FC<ButtonPlayGroupProps> = ({
         </Button>
       </div>
       <div className="flex justify-center w-full h-full gap-3 md:hidden md:justify-start md:flex-col md:w-fit ">
-        <Button
-          size="md"
-          className="flex items-center gap-2 whitespace-nowrap"
-          onClick={() => router.push(getLink('/xem-phim', title, id) + '?ver=1&ep=1')}
-        >
-          <IconPlay width={22} height={22} /> Xem Ngay
-        </Button>
+        {canWatch && (
+          <Button
+            size="md"
+            className="flex items-center gap-2 whitespace-nowrap"
+            onClick={() => router.push(getLink('/xem-phim', title, id) + '?ver=1&ep=1')}
+          >
+            <IconPlay width={22} height={22} /> Xem Ngay
+          </Button>
+        )}
         <Button
           variant="outline"
           size="md"

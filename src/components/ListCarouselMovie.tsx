@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Carousel from './ui/Carousel';
-import { Movie } from '@/types/movies';
 import { CardMovies } from './CardMovies';
 
 type ListCarouselMovieProps = {

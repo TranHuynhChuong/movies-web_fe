@@ -31,6 +31,7 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPage, 
       router.push(`?${params.toString()}`, { scroll: true });
     }
   };
+  if (totalPage < 1) return null;
 
   return (
     <div className="flex justify-center">
@@ -40,7 +41,7 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPage, 
           <li>
             <button
               onClick={handlePrev}
-              disabled={currentPage === 1}
+              disabled={currentPage === 1 || totalPage === 0}
               className="inline-flex items-center px-2 py-2 space-x-2 font-medium rounded-full cursor-pointer text-gray bg-bg-03 hover:text-white disabled:opacity-50"
             >
               <IconArrowLeftFlow width={20} height={20} />
@@ -58,7 +59,7 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPage, 
           <li>
             <button
               onClick={handleNext}
-              disabled={currentPage === totalPage}
+              disabled={currentPage === totalPage || totalPage === 0}
               className="inline-flex items-center px-2 py-2 space-x-2 font-medium rounded-full cursor-pointer text-gray bg-bg-03 hover:text-white disabled:opacity-50"
             >
               <IconArrowRightFlow width={20} height={20} />

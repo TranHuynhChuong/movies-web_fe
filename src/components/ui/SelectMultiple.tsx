@@ -2,14 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-type Option = {
-  id: string;
-  name: string;
-};
-
 type SelectMultipleProps = {
   label?: string;
-  options: Option[];
+  options: { id: string; name: string }[];
   selected: string[];
   onChange: (selected: string[]) => void;
 };

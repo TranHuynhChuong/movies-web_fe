@@ -14,6 +14,7 @@ export default function AdminLoginPage() {
       redirect: false,
       username,
       password,
+      role: 'ADMIN',
     }).then((res) => {
       if (res?.error) {
         setError('Tên đăng nhập/mật khẩu không đúng');

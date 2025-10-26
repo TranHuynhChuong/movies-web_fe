@@ -1,17 +1,20 @@
 import { SectionMovieDetails } from '@/components/SectionMovieDetails';
 import { SectionMovieSummary } from '@/components/SectionMovieSumary';
 import { SectionVideoPlay } from '@/components/SectionVideoPlay';
-import { getMovieInf } from '@/services/movie/get';
-import { Movie } from '@/types/movies';
 import { extractId } from '@/utils/kebabCase';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { Metadata } from 'next';
+import { getMovieDetail } from '@/services/movie/get';
 
 async function fetchMovieInf(slug: string): Promise<Movie> {
   try {
     const id = extractId(slug);
-    const { data } = await getMovieInf(id);
+    const { data } = await getMovieDetail(id);
+    if (!data?.versions || data?.versions.length === 0) {
+      redirect(`/phim/${slug}`);
+    }
+
     return data;
   } catch (error) {
     console.error(error);

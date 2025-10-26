@@ -14,22 +14,22 @@ type MovieFormData = {
   overview: string;
   actors: string;
   directors: string;
-  country: string;
-  versions?: Versions[];
+  country: { id: string; name: string };
+  versions?: VersionsFormData[];
 };
 
-type StreamingSource = {
+type StreamingSourceFormData = {
   serverId: string;
   orderIndex: number;
   url: string;
 };
 
-type Episode = {
+type EpisodeFormData = {
   episodeNumber: number;
-  streamingSources: StreamingSource[];
+  streamingSources: StreamingSourceFormData[];
 };
 
-type Versions = {
+type VersionsFormData = {
   id: string;
-  episodes: Episode[];
+  episodes: EpisodeFormData[];
 };
