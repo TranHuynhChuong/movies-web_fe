@@ -49,6 +49,12 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
 
   const handleConfirmFilter = () => {
     onConfirm(selectedType, selectedCountry, selectedGenre, selectedStatus);
+    handleToggleFilter();
+  };
+
+  const handleClearFilter = () => {
+    onConfirm();
+    handleToggleFilter();
   };
 
   if (loading) return null;
@@ -154,6 +160,14 @@ export const PanelFilterMovies: React.FC<PanelFilterMoviesProps> = ({
               >
                 <p>Lọc kết quả</p>
                 <IconArrowRightFlow width={18} height={18} />
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="font-normal text-sm !px-5 !py-2 !rounded-lg"
+                onClick={handleClearFilter}
+              >
+                Xóa bộ lọc
               </Button>
               <Button
                 size="sm"
