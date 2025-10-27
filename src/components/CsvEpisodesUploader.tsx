@@ -6,6 +6,7 @@ import { Button } from './ui/Button';
 import { useToast } from './ui/Toast';
 import { useAppData } from '@/contexts/AppDataContext';
 import { slugify } from '@/utils/slugify';
+import ButtonDownloadCsvEpisodeListTemplate from './ButtonDownloadCsvEpisodeListTemplate copy';
 
 interface CsvEpisodesUploaderProps {
   onDataParsed: (versions: VersionsFormData[]) => void;
@@ -120,14 +121,16 @@ export default function CsvEpisodesUploader({ onDataParsed }: Readonly<CsvEpisod
   return (
     <div className="flex flex-col items-center justify-center bg-gray-900 p-6 rounded-lg space-y-6 w-full mx-auto border border-gray-800">
       <h3 className="text-lg font-semibold text-white mb-2">Thông tin tập phim</h3>
-
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".csv"
-        onChange={handleFileChange}
-        className="w-full text-gray-200 file:bg-gray-800 file:border file:border-gray-700 file:text-gray-300 file:py-2 file:px-4 file:rounded hover:file:bg-gray-700"
-      />
+      <div className="flex flex-wrap gap-2 items-center">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+          className="w-fit text-gray-200 file:bg-gray-800 file:border file:border-gray-700 file:text-gray-300 file:py-2 file:px-4 file:rounded hover:file:bg-gray-700"
+        />
+        <ButtonDownloadCsvEpisodeListTemplate />
+      </div>
 
       {file && (
         <div className="flex gap-4 w-full">
