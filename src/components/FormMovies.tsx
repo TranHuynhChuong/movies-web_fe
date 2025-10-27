@@ -315,7 +315,7 @@ export default function FormMovies({
                   className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
                 >
                   <option value="show">Hiển thị</option>
-                  <option value="hidden">Ẩn</option>
+                  <option value="hide">Ẩn</option>
                 </select>
                 {errors.status && <p className="text-red-500 text-xs mt-1">{errors.status}</p>}
               </div>

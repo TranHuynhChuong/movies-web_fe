@@ -38,7 +38,7 @@ export async function searchMovies(params: {
   if (params.countryId) query.append('countryId', params.countryId);
   if (params.releaseYear) query.append('releaseYear', params.releaseYear.toString());
   if (params.mediaType) query.append('mediaType', params.mediaType);
-  if (params.status) query.append('status', params.status);
+  query.append('status', params.status ?? 'show');
   if (params.sortBy) query.append('sortBy', params.sortBy);
 
   const url = `${MOVIE_BASE_URL}/search?${query.toString()}`;

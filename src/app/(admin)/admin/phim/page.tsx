@@ -31,10 +31,10 @@ function AdminMovies() {
       searchMovies({
         page: filters.page ?? 1,
         limit: 32,
-        genreId: filters.genre === 'all' ? undefined : filters.genre,
-        countryId: filters.country === 'all' ? undefined : filters.country,
-        mediaType: filters.mediaType === 'all' ? undefined : filters.mediaType,
-        status: filters.status === 'all' ? undefined : filters.status,
+        genreId: filters.genre,
+        countryId: filters.country,
+        mediaType: filters.mediaType,
+        status: filters.status,
         title: filters.title?.trim() || undefined,
       }),
     placeholderData: (previousData) => previousData,
@@ -56,6 +56,7 @@ function AdminMovies() {
     if (merged.mediaType && merged.mediaType !== 'all') params.set('mediaType', merged.mediaType);
     if (merged.country && merged.country !== 'all') params.set('country', merged.country);
     if (merged.genre && merged.genre !== 'all') params.set('genre', merged.genre);
+    if (merged.status) params.set('status', merged.status);
     if (merged.title) params.set('title', merged.title);
     params.set('page', String(merged.page ?? 1));
 
