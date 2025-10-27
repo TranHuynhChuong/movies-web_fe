@@ -70,12 +70,14 @@ export default function CsvMovieUploader({
               return;
             }
 
+            const mediaType = record.mediaType.toUpperCase() === 'PHIM BỘ' ? 'series' : 'movie';
+
             movies.push({
               title: record.title || '',
               originalTitle: record.originalTitle || '',
               posterPath: record.posterPath || '',
               backdropPath: record.backdropPath || '',
-              mediaType: record.mediaType || 'movie',
+              mediaType: mediaType,
               status: record.status || 'show',
               numberOfEpisodes: isNaN(Number(record.numberOfEpisodes))
                 ? 1
