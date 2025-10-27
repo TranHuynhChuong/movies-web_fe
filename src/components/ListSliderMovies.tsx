@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { ImageMask } from './ui/ImageMask';
 import { BadgeList } from './BadgeList';
-import { GenresList } from './GenresList';
+import { LinkList } from './LinkList';
 import { Button } from './ui/Button';
 import { IconPlay } from './icon/IconPlay';
 import { IconExclamationMark } from './icon/IconExclamationMark';
@@ -93,7 +93,11 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
               ]}
               className="justify-center md:justify-start"
             />
-            <GenresList genres={movie.genres ?? []} className="justify-center md:justify-start" />
+            <LinkList
+              baseLink="the-loai"
+              items={movie.genres ?? []}
+              className="justify-center md:justify-start"
+            />
           </div>
 
           <p className="hidden text-sm text-white line-clamp-3 lg:flex">{movie.overview}</p>

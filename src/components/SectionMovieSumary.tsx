@@ -1,5 +1,5 @@
 import { BadgeList } from './BadgeList';
-import { GenresList } from './GenresList';
+import { LinkList } from './LinkList';
 import { SeriesStatus } from './SeriesStatus';
 
 interface SectionMovieSummaryProps {
@@ -25,17 +25,25 @@ export const SectionMovieSummary: React.FC<SectionMovieSummaryProps> = ({ movie 
         </h3>
       </div>
 
-      <div className="w-full space-y-2 md:space-y-4 h-fit">
+      <div className="w-full space-y-2  h-fit">
         <BadgeList
           texts={[
             movie.releaseYear ? movie.releaseYear.toString() : 'N/A',
-            movie.country?.name ?? 'N/A',
             movie.runtime ? movie.runtime.toString() + ' Phút' : 'N/A',
             movie.mediaType === 'series' ? 'Tập ' + currentEp : 'Full',
           ]}
           className="justify-center md:justify-start"
         />
-        <GenresList genres={movie.genres ?? []} className="justify-center md:justify-start" />
+        <LinkList
+          baseLink="quoc-gia"
+          items={movie.countries ?? []}
+          className="justify-center md:justify-start"
+        />
+        <LinkList
+          baseLink="the-loai"
+          items={movie.genres ?? []}
+          className="justify-center md:justify-start"
+        />
         {movie.mediaType === 'series' && (
           <SeriesStatus currentEp={currentEp} totalEp={movie.numberOfEpisodes ?? 0} />
         )}

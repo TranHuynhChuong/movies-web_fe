@@ -36,7 +36,7 @@ export function MovieItem({ movie, index }: Readonly<MovieItemProps>) {
           <p className="truncate w-full">Giới thiệu: {movie.overview || 'Chưa có'}</p>
           <p className="truncate w-full">Diễn viên: {movie.actors || 'Chưa có'}</p>
           <p className="truncate w-full">Đạo diễn: {movie.directors || 'Chưa có'}</p>
-          <p>Quốc gia: {movie.country?.name || 'Chưa có'}</p>
+          <p>Quốc gia: {movie.countries?.map((c) => c.name).join(', ') || 'Chưa có'}</p>
           <p className="truncate w-full">Poster: {movie.posterPath || 'Chưa có'}</p>
           <p className="truncate w-full">Backdrop: {movie.backdropPath || 'Chưa có'}</p>
         </>

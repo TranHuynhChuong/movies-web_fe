@@ -49,7 +49,7 @@ export default function CsvMovieUploader({
           for (let i = 0; i < data.length; i++) {
             const record = data[i];
 
-            const inputGenreNames = (record.genres || record.genreNames || '')
+            const inputGenreNames = (record.genres || '')
               .split(/[,;]/)
               .map((g: string) => g.trim())
               .filter(Boolean);
@@ -60,12 +60,23 @@ export default function CsvMovieUploader({
             const inputCountryName = slugify(record.country || record.countryName || '');
             const matchedCountry = countries.find((c) => slugify(c.name) === inputCountryName);
 
+            const inputCountriesNames = (record.countries || '')
+              .split(/[,;]/)
+              .map((g: string) => g.trim())
+              .filter(Boolean);
+
+            const countriesSlugs = inputCountriesNames.map((c: string) => slugify(c));
+            const matchedCountries = countries.filter((c) =>
+              countriesSlugs.includes(slugify(c.name))
+            );
+
             // Nếu có lỗi => dừng
             if (matchedGenres.length !== inputGenreNames.length || !matchedCountry) {
               let msg = `Dòng ${i + 1}: `;
               if (matchedGenres.length !== inputGenreNames.length)
                 msg += 'Không tìm thấy thể loại. ';
-              if (!matchedCountry) msg += 'Không tìm thấy quốc gia.';
+              if (matchedCountries.length !== inputCountriesNames.length)
+                msg += 'Không tìm thấy quốc gia. ';
               show(msg.trim(), 'error', 'top-right');
               return;
             }
@@ -91,7 +102,7 @@ export default function CsvMovieUploader({
               directors: record.directors || '',
               overview: record.overview || '',
               genres: matchedGenres,
-              country: matchedCountry,
+              countries: matchedCountries,
             });
           }
 

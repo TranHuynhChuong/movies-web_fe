@@ -15,7 +15,7 @@ type Movie = {
   overview: string | undefined;
   actors: string | undefined;
   directors: string | undefined;
-  country: { id: string; name: string } | undefined;
+  countries: { id: string; name: string }[] | undefined;
   createdAt: string | undefined;
   updatedAt: string | undefined;
 };

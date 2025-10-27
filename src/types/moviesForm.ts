@@ -14,7 +14,7 @@ type MovieFormData = {
   overview: string;
   actors: string;
   directors: string;
-  country: { id: string; name: string };
+  countries: { id: string; name: string }[];
   versions?: VersionsFormData[];
 };
 

@@ -39,7 +39,7 @@ export default function FormMovies({
     directors: '',
     overview: '',
     genres: [],
-    country: { id: '', name: '' },
+    countries: [],
     versions: [],
   });
 
@@ -78,7 +78,7 @@ export default function FormMovies({
     if (!formData?.runtime) newErrors.runtime = 'Thời lượng là bắt buộc';
     if (!formData?.releaseYear) newErrors.releaseYear = 'Năm phát hành là bắt buộc';
     if (formData?.genres.length <= 0) newErrors.genres = 'Cần chọn ít nhất một thể loại';
-    if (!formData?.country) newErrors.country = 'Quốc gia là bắt buộc';
+    if (formData?.countries.length <= 0) newErrors.country = 'Cần chọn ít nhất một quốc gia';
     if (!formData?.actors.trim()) newErrors.actors = 'Vui lòng nhập diễn viên';
     if (!formData?.directors.trim()) newErrors.directors = 'Vui lòng nhập đạo diễn';
     if (!formData?.overview.trim()) newErrors.overview = 'Mô tả là bắt buộc';
@@ -387,18 +387,16 @@ export default function FormMovies({
                 {errors.genres && <p className="text-red-500 text-xs mt-1">{errors.genres}</p>}
               </div>
               <div>
-                <SelectSingle
+                <SelectMultiple
                   label="Quốc gia"
                   options={countries}
-                  selected={formData.country.id}
-                  onChange={(id) => {
-                    const selectedCountry = countries.find((c) => c.id === id);
-                    if (selectedCountry) {
-                      setFormData((prev) => ({
-                        ...prev,
-                        country: selectedCountry,
-                      }));
-                    }
+                  selected={formData.countries.map((c) => c.id)}
+                  onChange={(ids) => {
+                    const selectedCountries = countries.filter((c) => ids.includes(c.id));
+                    setFormData((prev) => ({
+                      ...prev,
+                      countries: selectedCountries,
+                    }));
                   }}
                 />
                 {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}

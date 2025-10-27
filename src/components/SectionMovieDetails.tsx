@@ -26,12 +26,17 @@ export const SectionMovieDetails: React.FC<SectionMovieDetailsProps> = ({ movie 
 
       <div className="text-sm text-gray">
         <b className="text-white">Quốc gia: </b>
-        <Link
-          className="hover:underline hover:text-primary"
-          href={getLink('/quoc-gia', movie.country?.name, movie.country?.id)}
-        >
-          {movie.country?.name}
-        </Link>
+        {movie.countries?.map((country, index) => (
+          <Fragment key={country.id || index}>
+            <Link
+              className="hover:underline hover:text-primary"
+              href={getLink('/quoc-gia', country.name, country.id)}
+            >
+              {country.name}
+            </Link>
+            {index < (movie.countries?.length ?? 0) - 1 && ', '}
+          </Fragment>
+        ))}
       </div>
 
       <div className="text-sm text-gray">

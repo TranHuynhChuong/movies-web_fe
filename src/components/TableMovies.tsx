@@ -103,7 +103,11 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
 
               <td className="px-6 py-4">{movie.releaseYear}</td>
 
-              <td className="px-6 py-4">{movie.country?.name}</td>
+              <td className="px-6 py-4">
+                {movie.countries?.map((c: { id: string; name: string }) => (
+                  <div key={c.id}>{c.name}</div>
+                ))}
+              </td>
 
               <td className="px-6 py-4">
                 <div className="text-sm text-gray-400">
