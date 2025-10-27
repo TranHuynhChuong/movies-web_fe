@@ -7,7 +7,7 @@ type TrailerModalProps = {
   title: string;
   originalTitle: string;
   onClose: () => void;
-  trailerPath: string | null;
+  trailerPath: string | undefined;
   allowFullscreen?: boolean;
 };
 

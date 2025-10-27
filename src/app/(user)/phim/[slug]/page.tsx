@@ -64,7 +64,7 @@ export default async function MovieDetails({
       {/* Ảnh BackDrop */}
       <div className="relative w-full max-h-[420px] overflow-hidden">
         <Image
-          src={movie.backdropPath}
+          src={movie.backdropPath ?? movie.posterPath}
           alt={movie.title}
           width={1920}
           height={1080}

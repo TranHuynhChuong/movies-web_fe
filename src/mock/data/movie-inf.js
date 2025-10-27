@@ -5,14 +5,14 @@ export const movieInf = {
     originalTitle: 'Nyaight Of The Living Cat',
     posterPath:
       'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178939_Portrait_origin.jpg',
-    backdropPath:
-      'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178942_Landscape.jpg',
+    // backdropPath:
+    //   'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178942_Landscape.jpg',
     mediaType: 'series',
     status: 'show',
     runtime: 23,
     numberOfEpisodes: 12,
     releaseYear: 2025,
-    trailerPath: 'https://youtu.be/43RsKvVAjWM?si=PtZh8xS2xEcE9pNN',
+    // trailerPath: 'https://youtu.be/43RsKvVAjWM?si=PtZh8xS2xEcE9pNN',
     genres: [
       { id: 'abcdef1', name: 'Anime' },
       { id: 'abcdef2', name: 'Phim Hài' },

@@ -3,13 +3,13 @@ type MovieFormData = {
   title: string;
   originalTitle: string;
   posterPath: string;
-  backdropPath: string;
+  backdropPath?: string;
   mediaType: 'movie' | 'series';
   status: 'show' | 'hide';
   runtime: number;
   numberOfEpisodes: number;
   releaseYear: number;
-  trailerPath: string;
+  trailerPath?: string;
   genres: { id: string; name: string }[];
   overview: string;
   actors: string;

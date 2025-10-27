@@ -15,8 +15,8 @@ export const moviesList = {
         originalTitle: `Nyaight Of The Living Cat`,
         posterPath:
           'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178939_Portrait_origin.jpg',
-        backdropPath:
-          'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178942_Landscape.jpg',
+        // backdropPath:
+        //   'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178942_Landscape.jpg',
         mediaType: 'series',
         status: 'show',
         versions: [

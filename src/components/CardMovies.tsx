@@ -98,7 +98,7 @@ const CardBackdrop: React.FC<{ movie?: Movie; basePath: string }> = ({ movie, ba
         className="relative w-full overflow-hidden rounded-md aspect-[16/9] group"
       >
         <Image
-          src={movie.backdropPath}
+          src={movie.backdropPath ?? movie.posterPath}
           alt={movie.title}
           fill
           className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"

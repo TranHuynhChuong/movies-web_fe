@@ -32,7 +32,6 @@ export const SelectorVersionEpisode: React.FC<SelectorVersionEpisodeProps> = ({
     setActiveVersion(versions[0].id);
   }, [versions]);
 
-  console.log(versions);
   /** Cập nhật URL query */
   const updateQuery = (ver: string, ep: number) => {
     const params = new URLSearchParams();

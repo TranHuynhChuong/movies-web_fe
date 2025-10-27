@@ -72,7 +72,6 @@ export default function FormMovies({
     if (!formData?.title.trim()) newErrors.title = 'Tên phim là bắt buộc';
     if (!formData?.originalTitle.trim()) newErrors.originalTitle = 'Tên gốc là bắt buộc';
     if (!formData?.posterPath.trim()) newErrors.posterPath = 'Poster là bắt buộc';
-    if (!formData?.backdropPath.trim()) newErrors.backdropPath = 'Backdrop là bắt buộc';
     if (!formData?.mediaType.trim()) newErrors.mediaType = 'Loại phim là bắt buộc';
     if (!formData?.numberOfEpisodes) newErrors.numberOfEpisodes = 'Số tập phim là bắt buộc';
     if (!formData?.status.trim()) newErrors.status = 'Trạng thái là bắt buộc';
@@ -80,7 +79,6 @@ export default function FormMovies({
     if (!formData?.releaseYear) newErrors.releaseYear = 'Năm phát hành là bắt buộc';
     if (formData?.genres.length <= 0) newErrors.genres = 'Cần chọn ít nhất một thể loại';
     if (!formData?.country) newErrors.country = 'Quốc gia là bắt buộc';
-    if (!formData?.trailerPath.trim()) newErrors.trailerPath = 'Trailer URL là bắt buộc';
     if (!formData?.actors.trim()) newErrors.actors = 'Vui lòng nhập diễn viên';
     if (!formData?.directors.trim()) newErrors.directors = 'Vui lòng nhập đạo diễn';
     if (!formData?.overview.trim()) newErrors.overview = 'Mô tả là bắt buộc';

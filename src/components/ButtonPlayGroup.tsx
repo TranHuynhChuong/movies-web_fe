@@ -11,7 +11,7 @@ type ButtonPlayGroupProps = {
   id: string;
   title: string;
   originalTitle: string;
-  trailerPath: string;
+  trailerPath?: string;
   canWatch: boolean;
 };
 
@@ -36,15 +36,17 @@ export const ButtonPlayGroup: React.FC<ButtonPlayGroupProps> = ({
             <IconPlay width={24} height={24} /> Xem Ngay
           </Button>
         )}
-        <Button
-          variant="outline"
-          size="lg"
-          className="flex items-center gap-2 whitespace-nowrap"
-          onClick={() => setOpen(true)}
-        >
-          <IconPlay width={24} height={24} />
-          Trailer
-        </Button>
+        {trailerPath && (
+          <Button
+            variant="outline"
+            size="lg"
+            className="flex items-center gap-2 whitespace-nowrap"
+            onClick={() => setOpen(true)}
+          >
+            <IconPlay width={24} height={24} />
+            Trailer
+          </Button>
+        )}
       </div>
       <div className="flex justify-center w-full h-full gap-3 md:hidden md:justify-start md:flex-col md:w-fit ">
         {canWatch && (
@@ -56,16 +58,19 @@ export const ButtonPlayGroup: React.FC<ButtonPlayGroupProps> = ({
             <IconPlay width={22} height={22} /> Xem Ngay
           </Button>
         )}
-        <Button
-          variant="outline"
-          size="md"
-          className="flex items-center gap-2 whitespace-nowrap"
-          onClick={() => setOpen(true)}
-        >
-          <IconPlay width={24} height={24} />
-          Trailer
-        </Button>
+        {trailerPath && (
+          <Button
+            variant="outline"
+            size="md"
+            className="flex items-center gap-2 whitespace-nowrap"
+            onClick={() => setOpen(true)}
+          >
+            <IconPlay width={24} height={24} />
+            Trailer
+          </Button>
+        )}
       </div>
+
       <TrailerModal
         title={title}
         originalTitle={originalTitle}

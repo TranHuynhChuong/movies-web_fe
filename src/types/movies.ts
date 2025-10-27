@@ -3,7 +3,7 @@ type Movie = {
   title: string;
   originalTitle: string;
   posterPath: string;
-  backdropPath: string;
+  backdropPath: string | undefined;
   mediaType: 'movie' | 'series';
   status: string;
   versions: Version[] | undefined;

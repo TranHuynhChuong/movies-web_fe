@@ -53,7 +53,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
     <div className="relative flex justify-center w-full pb-28 h-fit bg-bg-04 sm:pb-0">
       <div className="relative w-full max-h-[560px]">
         <Image
-          src={movie.backdropPath}
+          src={movie.backdropPath ?? movie.posterPath}
           alt={movie.title}
           sizes="100vw"
           width={1920}
@@ -128,7 +128,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
               }`}
             >
               <Image
-                src={m.backdropPath}
+                src={movie.backdropPath ?? movie.posterPath}
                 alt={m.title}
                 fill
                 className="object-cover w-full h-full"
