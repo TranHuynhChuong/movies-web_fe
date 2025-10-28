@@ -51,7 +51,7 @@ function AdminMoviesAddNew() {
     onSuccess: () => {
       show('Thêm thành công!', 'success', 'top-center');
       queryClient.invalidateQueries({ queryKey: ['movies_list'] });
-      router.replace('/admin/phim');
+      router.back();
     },
     onError: (error: any) => {
       console.error('Lỗi thêm mới phim', error.message);
@@ -70,7 +70,7 @@ function AdminMoviesAddNew() {
   };
 
   const handleCancel = () => {
-    router.replace('/admin/phim');
+    router.back();
   };
 
   return (
