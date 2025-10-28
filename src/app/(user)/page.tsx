@@ -36,7 +36,7 @@ export default function Home() {
   // Phim mới nhất (thêm)
   const { data: newAddedData, isLoading: isNewAddedLoading } = useQuery({
     queryKey: ['search_movies', 'new_added', 1],
-    queryFn: () => getMoviesList('sort', 'createAt', 6),
+    queryFn: () => getMoviesList('sort', 'createdAt', 6),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
@@ -45,7 +45,7 @@ export default function Home() {
   // Phim mới nhất (cập nhật)
   const { data: newUpdatedData, isLoading: isNewUpdatedLoading } = useQuery({
     queryKey: ['search_movies', 'new_updated', 1],
-    queryFn: () => getMoviesList('sort', 'updateAt', 32),
+    queryFn: () => getMoviesList('sort', 'updatedAt', 32),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
@@ -55,7 +55,7 @@ export default function Home() {
     <div className="space-y-12 pb-12">
       {/* Slider phim mới nhất */}
       <ListSliderMovies
-        movies={newAddedData?.results || []}
+        movies={(newAddedData?.results || []).slice(0, 6)}
         isLoading={isNewAddedLoading || newAddedData?.results?.length === 0}
       />
 
