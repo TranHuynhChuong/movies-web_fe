@@ -1,5 +1,4 @@
 'use client';
-import { getVersionStatus } from '@/utils/getVersionStatus';
 import Link from 'next/link';
 import React from 'react';
 
@@ -166,33 +165,15 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                 {movie.status === 'show' ? 'Hiện' : 'Ẩn'}
               </span>
 
-              {/* Các version */}
-              {!movie.versions || movie.versions.length === 0 ? (
-                <p className="rounded-full w-fit px-3 py-1 text-xs font-semibold whitespace-nowrap bg-gray-200 text-gray-700 flex gap-2 ">
-                  Trailer
-                </p>
-              ) : (
-                movie.versions.map((v) => {
-                  const { label, isFull } = getVersionStatus(
-                    movie.numberOfEpisodes ?? 0,
-                    movie.mediaType,
-                    v
-                  );
-
-                  return (
-                    <p
-                      key={v.name}
-                      className={`rounded-full w-fit px-3 py-1 text-xs whitespace-nowrap font-semibold ${
-                        isFull
-                          ? 'bg-green-200/90 text-green-700'
-                          : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
-                      }`}
-                    >
-                      {label}
-                    </p>
-                  );
-                })
-              )}
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-medium w-fit whitespace-nowrap ${
+                  movie.currentEpisode === 0
+                    ? 'bg-gray-200/90 text-gray-700'
+                    : movie.currentEpisode >= movie.numberOfEpisodes
+                    ? 'bg-green-200/90 text-gray-300'
+                    : 'bg-orange-200-200/90 text-gray-300'
+                }`}
+              ></span>
             </div>
 
             <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-gray-300">

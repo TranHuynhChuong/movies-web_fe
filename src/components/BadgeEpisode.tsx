@@ -15,7 +15,7 @@ export const BadgeEpisode: React.FC<BadgeEpisodeProps> = ({
   ignore = false,
   className = '',
 }) => {
-  let badge = {
+  const badge = {
     label: '',
   };
 
