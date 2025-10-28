@@ -32,7 +32,7 @@ function AdminMoviesDetail() {
       show('Cập nhật thành công!', 'success', 'top-center');
       queryClient.invalidateQueries({ queryKey: ['movies_list'] });
       queryClient.invalidateQueries({ queryKey: ['movie_detail', id] });
-      router.replace('/admin/phim');
+      router.back();
     },
     onError: (error: any) => {
       console.error('Lỗi cập nhật phim', error.message);
@@ -49,7 +49,7 @@ function AdminMoviesDetail() {
       show('Xóa thành công!', 'success', 'top-center');
       queryClient.invalidateQueries({ queryKey: ['movies_list'] });
       queryClient.invalidateQueries({ queryKey: ['movie_detail', id] });
-      router.replace('/admin/phim');
+      router.back();
     },
     onError: (error: any) => {
       console.error('Lỗi xóa phim', error.message);
