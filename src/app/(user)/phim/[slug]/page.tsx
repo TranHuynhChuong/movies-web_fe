@@ -62,13 +62,16 @@ export default async function MovieDetails({
   return (
     <div className="w-full pb-40 h-fit">
       {/* Ảnh BackDrop */}
-      <div className="relative w-full max-h-[420px] overflow-hidden">
+      <div className="relative w-full aspect-[16/9] max-h-[420px] overflow-hidden">
         <Image
           src={movie.backdropPath ?? movie.posterPath}
           alt={movie.title}
-          width={1920}
-          height={1080}
-          className="object-cover w-full h-auto max-h-[420px]"
+          sizes="100vw"
+          fill
+          style={{
+            objectFit: 'cover',
+          }}
+          priority
         />
         <ImageMask />
       </div>
