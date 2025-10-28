@@ -27,7 +27,6 @@ export async function searchMovies(params: {
   mediaType?: string;
   releaseYear?: number;
   status?: string;
-  sortBy?: string;
 }) {
   const query = new URLSearchParams();
   query.append('page', params.page.toString());
@@ -39,9 +38,33 @@ export async function searchMovies(params: {
   if (params.releaseYear) query.append('releaseYear', params.releaseYear.toString());
   if (params.mediaType) query.append('mediaType', params.mediaType);
   query.append('status', params.status ?? 'show');
-  if (params.sortBy) query.append('sortBy', params.sortBy);
 
   const url = `${MOVIE_BASE_URL}/search?${query.toString()}`;
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    next: { revalidate: 300 },
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch movie');
+  }
+
+  const data = await res.json();
+  return data;
+}
+
+export async function getMoviesList(type: string, value: string, limit?: number) {
+  const query = new URLSearchParams();
+
+  query.append('limit', (limit ?? 32).toString());
+  query.append('type', type);
+  query.append('value', value);
+
+  const url = `${MOVIE_BASE_URL}/list?${query.toString()}`;
 
   const res = await fetch(url, {
     method: 'GET',

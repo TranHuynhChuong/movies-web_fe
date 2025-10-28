@@ -5,7 +5,6 @@ import Papa from 'papaparse';
 import { Button } from './ui/Button';
 import { useToast } from './ui/Toast';
 import { useAppData } from '@/contexts/AppDataContext';
-import { slugify } from '@/utils/slugify';
 import ButtonDownloadCsvMovieListTemplate from './ButtonDownloadCsvMovieListTemplate';
 
 interface CsvMovieUploaderProps {
@@ -55,25 +54,24 @@ export default function CsvMovieUploader({
               .map((g: string) => g.trim())
               .filter(Boolean);
 
-            const genreSlugs = inputGenreNames.map((g: string) => slugify(g));
-            const matchedGenres = genres.filter((g) => genreSlugs.includes(slugify(g.name)));
-
-            const inputCountryName = slugify(record.country || record.countryName || '');
-            const matchedCountry = countries.find((c) => slugify(c.name) === inputCountryName);
+            const genreSlugs = inputGenreNames.map((g: string) => g);
+            const matchedGenres = genres.filter((g) => genreSlugs.includes(g.name));
 
             const inputCountriesNames = (record.countries || '')
               .split(/[,;]/)
               .map((g: string) => g.trim())
               .filter(Boolean);
 
-            const countriesSlugs = inputCountriesNames.map((c: string) => slugify(c));
-            const matchedCountries = countries.filter((c) =>
-              countriesSlugs.includes(slugify(c.name))
-            );
+            const countriesSlugs = inputCountriesNames.map((c: string) => c);
+            const matchedCountries = countries.filter((c) => countriesSlugs.includes(c.name));
 
+            console.log(matchedGenres, matchedCountries);
             // Nếu có lỗi => dừng
-            if (matchedGenres.length !== inputGenreNames.length || !matchedCountry) {
-              let msg = `Dòng ${i + 1}: `;
+            if (
+              matchedGenres.length !== inputGenreNames.length ||
+              matchedCountries.length !== inputCountriesNames.length
+            ) {
+              let msg = `Lỗi tại dòng ${i + 1}: `;
               if (matchedGenres.length !== inputGenreNames.length)
                 msg += 'Không tìm thấy thể loại. ';
               if (matchedCountries.length !== inputCountriesNames.length)

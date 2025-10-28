@@ -5,7 +5,7 @@ import { ListCarouselMovie } from '@/components/ListCarouselMovie';
 import { ListGridMovies } from '@/components/ListGridMovies';
 import { ListSliderMovies } from '@/components/ListSliderMovies';
 import { Pagination } from '@/components/ui/Pagination';
-import { searchMovies } from '@/services/movie/get';
+import { getMoviesList } from '@/services/movie/get';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -18,7 +18,7 @@ export default function Home() {
   // Phim lẻ
   const { data: moviesData, isLoading: isMoviesLoading } = useQuery({
     queryKey: ['search_movies', 'movies'],
-    queryFn: () => searchMovies({ page: 1, limit: limit, mediaType: 'movie' }),
+    queryFn: () => getMoviesList('mediaType', 'movie', 12),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
@@ -27,7 +27,7 @@ export default function Home() {
   // Phim bộ
   const { data: seriesData, isLoading: isSeriesLoading } = useQuery({
     queryKey: ['search_movies', 'series'],
-    queryFn: () => searchMovies({ page: 1, limit: limit, mediaType: 'series' }),
+    queryFn: () => getMoviesList('mediaType', 'series', 12),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
@@ -36,7 +36,7 @@ export default function Home() {
   // Phim mới nhất (thêm)
   const { data: newAddedData, isLoading: isNewAddedLoading } = useQuery({
     queryKey: ['search_movies', 'new_added', 1],
-    queryFn: () => searchMovies({ page: 1, limit: 7, sortBy: 'createdAt' }),
+    queryFn: () => getMoviesList('sort', 'createAt', 6),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
@@ -45,7 +45,7 @@ export default function Home() {
   // Phim mới nhất (cập nhật)
   const { data: newUpdatedData, isLoading: isNewUpdatedLoading } = useQuery({
     queryKey: ['search_movies', 'new_updated', 1],
-    queryFn: () => searchMovies({ page: 1, limit: 7, sortBy: 'updatedAt' }),
+    queryFn: () => getMoviesList('sort', 'updateAt', 32),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
     select: (res) => res.data,
@@ -55,7 +55,7 @@ export default function Home() {
     <div className="space-y-12 pb-12">
       {/* Slider phim mới nhất */}
       <ListSliderMovies
-        movies={newAddedData?.results.slice(0, 6) || []}
+        movies={newAddedData?.results || []}
         isLoading={isNewAddedLoading || newAddedData?.results?.length === 0}
       />
 

@@ -14,7 +14,7 @@ function AllMovies() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['search_movies', 'new_updated', currentPage],
-    queryFn: () => searchMovies({ page: currentPage, limit: limit, sortBy: 'updated' }),
+    queryFn: () => searchMovies({ page: currentPage, limit: limit }),
     placeholderData: (previousData) => previousData,
     select: (res) => res.data,
   });

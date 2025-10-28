@@ -132,7 +132,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
               }`}
             >
               <Image
-                src={movie.backdropPath ?? movie.posterPath}
+                src={m.backdropPath ?? m.posterPath}
                 alt={m.title}
                 fill
                 className="object-cover w-full h-full"

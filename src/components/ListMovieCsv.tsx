@@ -25,20 +25,20 @@ export function MovieItem({ movie, index }: Readonly<MovieItemProps>) {
               ? 'Phim lẻ'
               : ''}
           </p>
+          <p className="truncate w-full">Poster: {movie.posterPath || 'Chưa có'}</p>
+          <p className="truncate w-full">Backdrop: {movie.backdropPath || 'Chưa có'}</p>
+          <p className="truncate w-full">Trailer: {movie.trailerPath || 'Chưa có'}</p>
           <p>
             Trạng thái: {movie.status === 'show' ? 'Hiển thị' : movie.status === 'hide' ? 'Ẩn' : ''}
           </p>
           <p>Thời lượng: {movie.runtime ?? 'Chưa có'} phút</p>
           <p>Số tập: {movie.numberOfEpisodes ?? 'Chưa có'}</p>
           <p>Năm phát hành: {movie.releaseYear ?? 'Chưa có'}</p>
-          <p className="truncate w-full">Trailer: {movie.trailerPath || 'Chưa có'}</p>
-          <p>Thể loại: {movie.genres?.map((g) => g.name).join(', ') || 'Chưa có'}</p>
-          <p className="truncate w-full">Giới thiệu: {movie.overview || 'Chưa có'}</p>
           <p className="truncate w-full">Diễn viên: {movie.actors || 'Chưa có'}</p>
           <p className="truncate w-full">Đạo diễn: {movie.directors || 'Chưa có'}</p>
+          <p>Thể loại: {movie.genres?.map((g) => g.name).join(', ') || 'Chưa có'}</p>
           <p>Quốc gia: {movie.countries?.map((c) => c.name).join(', ') || 'Chưa có'}</p>
-          <p className="truncate w-full">Poster: {movie.posterPath || 'Chưa có'}</p>
-          <p className="truncate w-full">Backdrop: {movie.backdropPath || 'Chưa có'}</p>
+          <p className="truncate w-full">Giới thiệu: {movie.overview || 'Chưa có'}</p>
         </>
       )}
 
