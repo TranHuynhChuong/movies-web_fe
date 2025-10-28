@@ -51,16 +51,13 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
 
   return (
     <div className="relative flex justify-center w-full pb-28 h-fit bg-bg-04 sm:pb-0">
-      <div className="relative w-full max-h-[560px]">
+      <div className="relative w-full aspect-[16/9] max-h-[560px]">
         <Image
           src={movie.backdropPath ?? movie.posterPath}
           alt={movie.title}
           sizes="100vw"
-          width={1920}
-          height={1080}
+          fill
           style={{
-            width: '100%',
-            height: '100%',
             objectFit: 'cover',
           }}
           priority
@@ -78,7 +75,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
               </h3>
             </Link>
             <Link href={`/phim/${link}`}>
-              <h2 className="text-center line-clamp-2 md:text-lg text-primary md:text-start">
+              <h2 className="text-center line-clamp-1 md:line-clamp-2 md:text-lg text-primary md:text-start">
                 {movie.originalTitle}
               </h2>
             </Link>

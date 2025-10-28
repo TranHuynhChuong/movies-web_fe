@@ -80,7 +80,7 @@ export default function CsvMovieUploader({
               return;
             }
 
-            const mediaType = record.mediaType.toUpperCase() === 'PHIM BỘ' ? 'series' : 'movie';
+            const mediaType = record.mediaType.toUpperCase() === 'series' ? 'series' : 'movie';
 
             movies.push({
               title: record.title || '',
@@ -131,6 +131,7 @@ export default function CsvMovieUploader({
     <div className="flex flex-col items-center justify-center bg-gray-900 p-6 rounded-lg space-y-6 w-full mx-auto border border-gray-800">
       <h3 className="text-lg font-semibold text-white mb-2">Thông tin phim</h3>
       <div className="flex flex-wrap gap-2 items-center">
+        <ButtonDownloadCsvMovieListTemplate />
         <input
           ref={fileInputRef}
           type="file"
@@ -138,7 +139,6 @@ export default function CsvMovieUploader({
           onChange={handleFileChange}
           className="w-fit text-gray-200 file:bg-gray-800 file:border file:border-gray-700 file:text-gray-300 file:py-2 file:px-4 file:rounded hover:file:bg-gray-700"
         />
-        <ButtonDownloadCsvMovieListTemplate />
       </div>
       {file && (
         <div className="flex gap-4 w-full">

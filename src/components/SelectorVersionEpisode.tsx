@@ -22,10 +22,10 @@ export const SelectorVersionEpisode: React.FC<SelectorVersionEpisodeProps> = ({
   const slug = params.slug;
 
   const initialVersion = searchParams.get('ver') || '';
-  const initialEpisode = Number(searchParams.get('ep')) || undefined;
+  const initialEpisode = searchParams.get('ep') || undefined;
 
   const [activeVersion, setActiveVersion] = useState<string>(initialVersion);
-  const [activeEpisode, setActiveEpisode] = useState<number | undefined>(initialEpisode);
+  const [activeEpisode, setActiveEpisode] = useState<string | undefined>(initialEpisode);
 
   useEffect(() => {
     if (!versions || versions.length === 0) return;
@@ -33,7 +33,7 @@ export const SelectorVersionEpisode: React.FC<SelectorVersionEpisodeProps> = ({
   }, [versions]);
 
   /** Cập nhật URL query */
-  const updateQuery = (ver: string, ep: number) => {
+  const updateQuery = (ver: string, ep: string) => {
     const params = new URLSearchParams();
 
     params.set('ver', ver);
@@ -55,7 +55,7 @@ export const SelectorVersionEpisode: React.FC<SelectorVersionEpisodeProps> = ({
       setActiveEpisode(undefined);
     }
   };
-  const handleChangeEpisode = (episode: number) => {
+  const handleChangeEpisode = (episode: string) => {
     if (episode === activeEpisode) return;
     setActiveEpisode(episode);
     updateQuery(activeVersion, episode);

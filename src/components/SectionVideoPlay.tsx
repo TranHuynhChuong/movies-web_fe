@@ -50,7 +50,7 @@ export const SectionVideoPlay: React.FC<SectionVideoPlayProps> = ({ movie }) => 
             {movie.mediaType === 'series' &&
               ` - Tập${
                 movie.versions?.find((v) => v.id === activeVersion)?.episodes?.[episodeNumber - 1]
-                  ?.episodeNumber
+                  ?.episodeName
               } `}
           </h3>
         </span>

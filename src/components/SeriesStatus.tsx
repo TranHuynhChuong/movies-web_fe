@@ -9,7 +9,7 @@ type SeriesStatusProps = {
 export const SeriesStatus: React.FC<SeriesStatusProps> = ({ currentEp, totalEp }) => {
   return (
     <div className="w-full h-fit text-xs flex md:text-xs font-light justify-center md:justify-start">
-      {currentEp == totalEp ? (
+      {currentEp >= totalEp ? (
         <div className="text-teal bg-teal-10 flex gap-2  w-fit h-fit px-4 py-2 items-center rounded-full">
           <IconCheck width={18} height={18} />
           <span>

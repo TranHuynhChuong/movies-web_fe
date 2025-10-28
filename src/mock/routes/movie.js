@@ -18,6 +18,10 @@ router.get('/search', (req, res) => {
   res.json(moviesList);
 });
 
+router.get('/list', (req, res) => {
+  res.json(moviesList);
+});
+
 router.get('/total', (req, res) => {
   res.json({
     data: {

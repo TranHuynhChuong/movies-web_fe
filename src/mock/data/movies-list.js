@@ -23,10 +23,10 @@ export const moviesList = {
           {
             id: 'phu-de',
             name: 'Phụ Đề',
-            currentEp: 9,
           },
         ],
         runtime: 23,
+        currentEpisode: 2,
         numberOfEpisodes: 12,
         releaseYear: 2025,
         genres: [
@@ -47,16 +47,16 @@ export const moviesList = {
           'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178939_Portrait_origin.jpg',
         backdropPath:
           'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178942_Landscape.jpg',
-        mediaType: 'movies',
+        mediaType: 'movie',
         status: 'show',
         versions: [
           {
             id: 'phu-de',
             name: 'Phụ Đề',
-            currentEp: 9,
           },
         ],
         runtime: 23,
+        currentEpisode: 1,
         numberOfEpisodes: 1,
         releaseYear: 2025,
         genres: [
@@ -77,10 +77,11 @@ export const moviesList = {
           'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178939_Portrait_origin.jpg',
         backdropPath:
           'https://phim.nguonc.com/public/images/Post/2/di-dem-lam-co-ngay-gap-meo-fpt-play-1751612178942_Landscape.jpg',
-        mediaType: 'movies',
+        mediaType: 'movie',
         status: 'hidden',
         versions: [],
         runtime: 23,
+        currentEpisode: 0,
         numberOfEpisodes: 1,
         releaseYear: 2025,
         genres: [

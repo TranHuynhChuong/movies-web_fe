@@ -476,7 +476,7 @@ export default function FormMovies({
           <h2 className="text-lg font-semibold mb-4">Tập phim</h2>
 
           {formData?.versions?.map((version, vIndex) => (
-            <div key={vIndex} className="border border-gray-700 p-3 rounded space-y-3">
+            <div key={vIndex + version.id} className="border border-gray-700 p-3 rounded space-y-3">
               <div className="flex items-end justify-between gap-2">
                 <SelectSingle
                   label={`Version #${vIndex + 1}`}
@@ -498,7 +498,7 @@ export default function FormMovies({
                   onClick={() => {
                     setFormData((prev) => {
                       const newData = { ...prev };
-                      newData.versions?.splice(vIndex, 1);
+                      newData.versions = newData.versions?.filter((_, i) => i !== vIndex);
                       return newData;
                     });
                   }}
@@ -509,19 +509,22 @@ export default function FormMovies({
 
               {/* Danh sách tập phim */}
               {version.episodes.map((ep, epIndex) => (
-                <div key={epIndex} className="border border-gray-600 p-2 rounded space-y-2">
+                <div
+                  key={ep.episodeName + '-' + epIndex}
+                  className="border border-gray-600 p-2 rounded space-y-2"
+                >
                   <div className="flex items-center gap-2">
-                    <label htmlFor="episodeNumber">Tập số:</label>
+                    <label htmlFor="episodeName">Tập:</label>
                     <input
-                      id="episodeNumber"
-                      type="number"
-                      value={ep.episodeNumber}
+                      id="episodeName"
+                      type="text"
+                      value={ep.episodeName}
                       onChange={(e) => {
-                        const value = Number(e.target.value);
+                        const value = e.target.value;
                         setFormData((prev) => {
                           const newData = { ...prev };
                           if (newData.versions) {
-                            newData.versions[vIndex].episodes[epIndex].episodeNumber = value;
+                            newData.versions[vIndex].episodes[epIndex].episodeName = value;
                           }
                           return newData;
                         });
@@ -535,7 +538,11 @@ export default function FormMovies({
                         setFormData((prev) => {
                           const newData = { ...prev };
                           if (newData.versions) {
-                            newData.versions[vIndex].episodes.splice(epIndex, 1);
+                            newData.versions[vIndex].episodes = newData.versions[
+                              vIndex
+                            ].episodes.filter(
+                              (_, i) => !(i === epIndex && _.episodeName === ep.episodeName)
+                            );
                           }
 
                           return newData;
@@ -547,18 +554,21 @@ export default function FormMovies({
                   </div>
 
                   {/* Danh sách server */}
-                  {ep.streamingSources.map((srv, sIndex) => (
-                    <div key={sIndex} className="flex flex-col md:flex-row items-end gap-2">
+                  {ep.streamingSources.map((ss, ssIndex) => (
+                    <div
+                      key={ss.orderIndex + ss.serverId}
+                      className="flex flex-col md:flex-row items-end gap-2"
+                    >
                       <SelectSingle
-                        label={`Server #${srv.orderIndex}`}
+                        label={`Server #${ss.orderIndex}`}
                         options={servers}
-                        selected={srv.serverId}
+                        selected={ss.serverId}
                         onChange={(id) => {
                           setFormData((prev) => {
                             const newData = { ...prev };
                             if (newData.versions) {
                               newData.versions[vIndex].episodes[epIndex].streamingSources[
-                                sIndex
+                                ssIndex
                               ].serverId = id;
                             }
 
@@ -569,14 +579,14 @@ export default function FormMovies({
                       <input
                         type="text"
                         placeholder="URL"
-                        value={srv.url}
+                        value={ss.url}
                         onChange={(e) => {
                           const value = e.target.value;
                           setFormData((prev) => {
                             const newData = { ...prev };
                             if (newData.versions) {
                               newData.versions[vIndex].episodes[epIndex].streamingSources[
-                                sIndex
+                                ssIndex
                               ].url = value;
                             }
                             return newData;
@@ -592,10 +602,10 @@ export default function FormMovies({
                           setFormData((prev) => {
                             const newData = { ...prev };
                             if (newData.versions) {
-                              newData.versions[vIndex].episodes[epIndex].streamingSources.splice(
-                                sIndex,
-                                1
-                              );
+                              newData.versions[vIndex].episodes[epIndex].streamingSources =
+                                newData.versions[vIndex].episodes[epIndex].streamingSources.filter(
+                                  (_, i) => !(i === ssIndex && _.serverId === ss.serverId)
+                                );
                             }
                             return newData;
                           });
@@ -618,18 +628,18 @@ export default function FormMovies({
                           const episode = version.episodes[epIndex];
 
                           // Tạo mảng servers mới
-                          const newServers = [
+                          const newStreamingSources = [
                             ...episode.streamingSources,
                             {
-                              serverId: '',
+                              serverId: servers[0].id,
                               url: '',
-                              order: episode.streamingSources.length + 1,
+                              orderIndex: (episode.streamingSources?.length || 0) + 1,
                             },
                           ];
 
                           // Tạo mảng episodes mới
                           const newEpisodes = version.episodes.map((ep, idx) =>
-                            idx === epIndex ? { ...ep, servers: newServers } : ep
+                            idx === epIndex ? { ...ep, streamingSources: newStreamingSources } : ep
                           );
 
                           // Tạo mảng versions mới
@@ -661,8 +671,10 @@ export default function FormMovies({
                           episodes: [
                             ...version.episodes,
                             {
-                              episodeNumber: version.episodes.length + 1,
-                              streamingSources: [{ serverId: '', url: '', orderIndex: 1 }],
+                              episodeName: (version.episodes.length + 1).toString(),
+                              streamingSources: [
+                                { serverId: servers[0].id, url: '', orderIndex: 1 },
+                              ],
                             },
                           ],
                         };
@@ -690,8 +702,8 @@ export default function FormMovies({
                     id: '',
                     episodes: [
                       {
-                        episodeNumber: 1,
-                        streamingSources: [{ serverId: '', url: '', orderIndex: 1 }],
+                        episodeName: '1',
+                        streamingSources: [{ serverId: servers[0].id, url: '', orderIndex: 1 }],
                       },
                     ],
                   },

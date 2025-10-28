@@ -11,7 +11,7 @@ export default function ButtonDownloadCsvMovieListTemplate() {
       {
         title: 'Tên phim',
         originalTitle: 'Tên gốc',
-        mediaType: 'Phim lẻ / Phim bộ',
+        mediaType: 'movie / series',
         posterPath: 'link ảnh poster',
         backdropPath: 'link ảnh nền',
         trailerPath: 'link trailer (nếu có)',
@@ -40,7 +40,7 @@ export default function ButtonDownloadCsvMovieListTemplate() {
 
   return (
     <Button onClick={handleDownload} className="font-normal" size="sm" variant="outline">
-      Tải file mẫu CSV
+      Tải mẫu
     </Button>
   );
 }

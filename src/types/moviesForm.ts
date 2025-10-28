@@ -25,7 +25,7 @@ type StreamingSourceFormData = {
 };
 
 type EpisodeFormData = {
-  episodeNumber: number;
+  episodeName: string;
   streamingSources: StreamingSourceFormData[];
 };
 

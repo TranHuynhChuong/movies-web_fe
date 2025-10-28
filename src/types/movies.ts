@@ -6,9 +6,10 @@ type Movie = {
   backdropPath: string | undefined;
   mediaType: 'movie' | 'series';
   status: string;
+  currentEpisode: number;
   versions: Version[] | undefined;
   runtime: number | undefined;
-  numberOfEpisodes: number | undefined;
+  numberOfEpisodes: number;
   releaseYear: number | undefined;
   trailerPath: string | undefined;
   genres: { id: string; name: string }[] | undefined;
@@ -23,12 +24,11 @@ type Movie = {
 type Version = {
   id: string;
   name: string;
-  currentEp: number;
   episodes?: Episode[];
 };
 
 type Episode = {
-  episodeNumber: number;
+  episodeName: string;
   streamingSources: StreamingSource[];
 };
 

@@ -5,7 +5,6 @@ import Papa from 'papaparse';
 import { Button } from './ui/Button';
 import { useToast } from './ui/Toast';
 import { useAppData } from '@/contexts/AppDataContext';
-import { slugify } from '@/utils/slugify';
 import ButtonDownloadCsvEpisodeListTemplate from './ButtonDownloadCsvEpisodeListTemplate copy';
 
 interface CsvEpisodesUploaderProps {
@@ -47,8 +46,8 @@ export default function CsvEpisodesUploader({ onDataParsed }: Readonly<CsvEpisod
 
         for (const row of data) {
           const versionName = row.version || row.versionName || '';
-          const versionNameSlug = slugify(versionName);
-          const matchedVersion = versions.find((v) => slugify(v.name) === versionNameSlug);
+          const versionNameSlug = versionName;
+          const matchedVersion = versions.find((v) => v.name === versionNameSlug);
           const versionId = matchedVersion?.id || row.versionId;
 
           if (!matchedVersion && !versionId) {
@@ -56,11 +55,11 @@ export default function CsvEpisodesUploader({ onDataParsed }: Readonly<CsvEpisod
             continue; // bỏ qua dòng lỗi này
           }
 
-          const episodeNumber = Number(row.episodeNumber);
+          const episodeName = row.episodeName;
 
           const serverName = row.server || row.serverName || '';
-          const serverNameSlug = slugify(serverName);
-          const matchedServer = servers.find((s) => slugify(s.name) === serverNameSlug);
+          const serverNameSlug = serverName;
+          const matchedServer = servers.find((s) => s.name === serverNameSlug);
           const serverId = matchedServer?.id || row.serverId;
 
           if (!matchedServer && !serverId) {
@@ -76,9 +75,9 @@ export default function CsvEpisodesUploader({ onDataParsed }: Readonly<CsvEpisod
 
           const version = versionsMap[versionId];
 
-          let episode = version.episodes.find((ep) => ep.episodeNumber === episodeNumber);
+          let episode = version.episodes.find((ep) => ep.episodeName === episodeName);
           if (!episode) {
-            episode = { episodeNumber, streamingSources: [] };
+            episode = { episodeName, streamingSources: [] };
             version.episodes.push(episode);
           }
 
@@ -122,6 +121,7 @@ export default function CsvEpisodesUploader({ onDataParsed }: Readonly<CsvEpisod
     <div className="flex flex-col items-center justify-center bg-gray-900 p-6 rounded-lg space-y-6 w-full mx-auto border border-gray-800">
       <h3 className="text-lg font-semibold text-white mb-2">Thông tin tập phim</h3>
       <div className="flex flex-wrap gap-2 items-center">
+        <ButtonDownloadCsvEpisodeListTemplate />
         <input
           ref={fileInputRef}
           type="file"
@@ -129,7 +129,6 @@ export default function CsvEpisodesUploader({ onDataParsed }: Readonly<CsvEpisod
           onChange={handleFileChange}
           className="w-fit text-gray-200 file:bg-gray-800 file:border file:border-gray-700 file:text-gray-300 file:py-2 file:px-4 file:rounded hover:file:bg-gray-700"
         />
-        <ButtonDownloadCsvEpisodeListTemplate />
       </div>
 
       {file && (

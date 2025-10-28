@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { BadgeVersions } from './BadgeVersions';
+import { BadgeEpisode } from './BadgeEpisode';
 import Link from 'next/link';
 import { toKebabWithId } from '@/utils/kebabCase';
 import Image from 'next/image';
@@ -57,12 +57,10 @@ const CardPoster: React.FC<{ movie?: Movie; basePath: string }> = ({ movie, base
           priority
         />
         <div className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-black/20 group-hover:opacity-100" />
-        <BadgeVersions
-          data={{
-            numberOfEpisodes: movie.numberOfEpisodes ?? 0,
-            mediaType: movie.mediaType,
-            versions: movie.versions ?? [],
-          }}
+        <BadgeEpisode
+          numberOfEpisodes={movie.numberOfEpisodes}
+          mediaType={movie.mediaType}
+          currentEpisode={movie.currentEpisode}
         />
       </Link>
       <div className="flex flex-col items-center gap-1">
@@ -72,7 +70,7 @@ const CardPoster: React.FC<{ movie?: Movie; basePath: string }> = ({ movie, base
         >
           {movie.title}
         </Link>
-        <Link href={`${link}`} className="text-xs font-normal text-gray">
+        <Link href={`${link}`} className="text-xs font-normal text-gray line-clamp-1">
           {movie.originalTitle}
         </Link>
       </div>
@@ -106,12 +104,10 @@ const CardBackdrop: React.FC<{ movie?: Movie; basePath: string }> = ({ movie, ba
           priority
         />
         <div className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-black/20 group-hover:opacity-100" />
-        <BadgeVersions
-          data={{
-            numberOfEpisodes: movie.numberOfEpisodes ?? 0,
-            mediaType: movie.mediaType,
-            versions: movie.versions ?? [],
-          }}
+        <BadgeEpisode
+          numberOfEpisodes={movie.numberOfEpisodes}
+          mediaType={movie.mediaType}
+          currentEpisode={movie.currentEpisode}
           className="xs:translate-x-0 xs:left-2"
         />
       </Link>
@@ -122,7 +118,7 @@ const CardBackdrop: React.FC<{ movie?: Movie; basePath: string }> = ({ movie, ba
         >
           {movie.title}
         </Link>
-        <Link href={`${link}`} className="text-xs font-normal text-gray">
+        <Link href={`${link}`} className="text-xs font-normal text-gray line-clamp-1">
           {movie.originalTitle}
         </Link>
       </div>
@@ -142,10 +138,10 @@ const CardCompact: React.FC<{ movie?: Movie; basePath: string }> = ({ movie, bas
   const link = basePath + '/' + toKebabWithId(movie.title, movie.id);
   return (
     <div className="flex flex-col gap-1">
-      <Link href={`${link}`} className="text-sm font-medium hover:text-primary-dark">
+      <Link href={`${link}`} className="text-sm font-medium hover:text-primary-dark line-clamp-1">
         {movie.title}
       </Link>
-      <span className="text-xs text-gray">{movie.originalTitle}</span>
+      <span className="text-xs text-gray line-clamp-1">{movie.originalTitle}</span>
     </div>
   );
 };

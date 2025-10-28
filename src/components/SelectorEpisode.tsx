@@ -5,9 +5,9 @@ import { Button } from './ui/Button';
 import { IconPlay } from './icon/IconPlay';
 
 type EpisodeButtonProps = {
-  ep: number;
+  ep: string;
   mediaType: string;
-  onClick: (ep: number) => void;
+  onClick: (ep: string) => void;
   active?: boolean;
 };
 
@@ -34,8 +34,8 @@ const EpisodeButton: React.FC<EpisodeButtonProps> = ({
 type SelectorEpisodeProps = {
   episodes: Episode[] | undefined;
   mediaType: string;
-  onClick: (ep: number) => void;
-  activeEp?: number;
+  onClick: (ep: string) => void;
+  activeEp?: string;
 };
 
 export const SelectorEpisode: React.FC<SelectorEpisodeProps> = ({
@@ -46,14 +46,14 @@ export const SelectorEpisode: React.FC<SelectorEpisodeProps> = ({
 }) => {
   if (!episodes || episodes.length === 0) return null;
   return (
-    <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+    <div className="grid gap-2 grid-cols-2 sm:grid-cols-3  md:grid-cols-4 lg:grid-cols-6">
       {episodes.map((episode, index) => (
         <EpisodeButton
-          key={episode.episodeNumber + '-' + index}
-          ep={episode.episodeNumber}
+          key={episode.episodeName + '-' + index}
+          ep={episode.episodeName}
           mediaType={mediaType}
-          active={episode.episodeNumber === activeEp}
-          onClick={() => onClick(episode.episodeNumber)}
+          active={episode.episodeName === activeEp}
+          onClick={() => onClick(episode.episodeName)}
         />
       ))}
     </div>

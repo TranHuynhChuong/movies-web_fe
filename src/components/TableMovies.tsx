@@ -60,31 +60,18 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                     {movie.status === 'show' ? 'Hiện' : 'Ẩn'}
                   </p>
                   {/* Các version */}
-                  {!movie.versions || movie.versions.length === 0 ? (
-                    <p className="rounded-full w-fit px-3 py-1 text-xs font-semibold bg-gray-200/90 text-gray-700">
-                      Trailer
-                    </p>
-                  ) : (
-                    movie.versions.map((v) => {
-                      const { label, isFull } = getVersionStatus(
-                        movie.numberOfEpisodes ?? 0,
-                        movie.mediaType,
-                        v
-                      );
-                      return (
-                        <p
-                          key={v.name}
-                          className={`rounded-full w-fit px-3 py-1 text-xs font-semibold whitespace-nowrap ${
-                            isFull
-                              ? 'bg-green-200/90 text-green-700'
-                              : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
-                          }`}
-                        >
-                          {label}
-                        </p>
-                      );
-                    })
-                  )}
+                  <p
+                    className={`rounded-full w-fit px-2 py-1 text-xs whitespace-nowrap font-semibold bg-gray-200/90 text-gray-700
+                    ${
+                      movie.currentEpisode === 0
+                        ? 'bg-gray-200/90 text-gray-700'
+                        : movie.currentEpisode >= movie.numberOfEpisodes
+                        ? 'bg-green-500/60 text-white'
+                        : 'bg-orange-500/60 text-white'
+                    }`}
+                  >
+                    {movie.currentEpisode} / {movie.numberOfEpisodes}
+                  </p>
                 </div>
               </td>
 
@@ -105,7 +92,9 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
 
               <td className="px-6 py-4">
                 {movie.countries?.map((c: { id: string; name: string }) => (
-                  <div key={c.id}>{c.name}</div>
+                  <div className="whitespace-nowrap" key={c.id}>
+                    {c.name}
+                  </div>
                 ))}
               </td>
 
@@ -124,7 +113,7 @@ export const TableMovies: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                 <div className="cursor-pointer text-primary hover:underline">
                   <Link
                     href={`/admin/phim/${movie.id}`}
-                    className="text-sm font-normal text-primary hover:underline"
+                    className="text-sm font-normal whitespace-nowrap text-primary hover:underline"
                   >
                     Chỉnh sửa
                   </Link>

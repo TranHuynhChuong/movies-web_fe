@@ -29,7 +29,7 @@ export default function ButtonDownloadCsvEpisodeListTemplate() {
 
   return (
     <Button onClick={handleDownload} className="font-normal" size="sm" variant="outline">
-      Tải file mẫu CSV
+      Tải mẫu
     </Button>
   );
 }
