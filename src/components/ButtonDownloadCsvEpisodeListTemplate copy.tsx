@@ -10,7 +10,7 @@ export default function ButtonDownloadCsvEpisodeListTemplate() {
     const sample = [
       {
         version: versions.map((v) => v.name).join('/'),
-        episodeNumber: 1,
+        episodeName: 1,
         servers: servers.map((s) => s.name).join('/'),
         url: 'Link nhúng phim',
       },
