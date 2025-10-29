@@ -31,7 +31,7 @@ export const ButtonPlayGroup: React.FC<ButtonPlayGroupProps> = ({
           <Button
             size="lg"
             className="flex items-center gap-2 whitespace-nowrap"
-            onClick={() => router.push(getLink('/xem-phim', title, id) + '?ver=1&ep=1')}
+            onClick={() => router.push(getLink('/xem-phim', title, id))}
           >
             <IconPlay width={24} height={24} /> Xem Ngay
           </Button>
