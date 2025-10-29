@@ -18,6 +18,7 @@ function AdminMoviesDetail() {
   const { token } = useAuthToken();
   const { show } = useToast();
   const [isSubmiting, setIsSubmiting] = useState(false);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ['movie_detail', id],
     queryFn: () => getMovieDetail(id),
@@ -109,6 +110,7 @@ function AdminMoviesDetail() {
     </div>
   );
 }
+
 export default function AdminMoviesDetailPage() {
   return (
     <Suspense fallback={null}>

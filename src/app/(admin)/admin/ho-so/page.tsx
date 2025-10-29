@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import AccountForm from '@/components/AccountForm';
-import { updateAccount } from '@/services/auth/patch'; // API bạn tạo
+import { updateAccount } from '@/services/auth/patch';
 import { useAuthToken } from '@/hooks/useAuth';
 import { useToast } from '@/components/ui/Toast';
 import Loader from '@/components/ui/loader';

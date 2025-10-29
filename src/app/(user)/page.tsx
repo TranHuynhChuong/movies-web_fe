@@ -13,7 +13,6 @@ import { Suspense } from 'react';
 
 export default function Home() {
   const router = useRouter();
-  const limit = 12;
 
   // Phim lẻ
   const { data: moviesData, isLoading: isMoviesLoading } = useQuery({
