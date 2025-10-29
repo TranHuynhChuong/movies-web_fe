@@ -97,7 +97,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
             />
           </div>
 
-          <p className="hidden text-sm text-white !line-clamp-3 lg:flex">{movie.overview}</p>
+          <p className="hidden text-sm text-white line-clamp-3 lg:flex">{movie.overview}</p>
 
           <div className="items-center hidden w-full gap-4 h-fit md:flex">
             <Button
