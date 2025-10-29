@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MoviesWeb Frontend (Tùy Tiện)
 
-## Getting Started
+Frontend của hệ thống quản lý phim **MoviesWeb** được xây dựng trên **Next.js v15** với các công nghệ và thư viện hỗ trợ tối ưu cho trải nghiệm người dùng và khả năng quản lý dữ liệu. Tương thích giao diện trên các thiết bị từ điện thoại, tablet đến laptop, desktop. Hệ thống bao gồm các chức năng dành cho **người dùng** và **admin**, với khả năng CRUD dữ liệu phim, thể loại, quốc gia, phiên bản, và máy chủ, hỗ trợ tìm kiếm, phân trang và upload hàng loạt bằng CSV.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Công nghệ chính
+
+- **Framework:** [Next.js 15](https://nextjs.org/docs)
+- **Xác thực:** [NextAuth.js](https://next-auth.js.org/)
+- **CSS:** [TailwindCSS](https://tailwindcss.com/)
+- **Carousel:** [Swiper](https://swiperjs.com/)
+- **CSV parsing:** [PapaParse](https://www.papaparse.com/)
+- **Data fetching & caching:** [React Query](https://tanstack.com/query/v4)
+- **Mock server:** Express (JavaScript) phục vụ dữ liệu giả lập cho test UI
+
+---
+
+## Chức năng
+
+### Dành cho người dùng
+
+- Tìm kiếm phim theo:
+  - Thể loại
+  - Loại phim
+  - Quốc gia
+  - Tên phim
+- Xem thông tin phim
+- Xem phim dạng ( với định dạng **iframe nhúng streaming**)
+
+### Dành cho admin
+
+- CRUD:
+  - Phim
+  - Thể loại
+  - Quốc gia
+  - Phiên bản
+  - Máy chủ
+- Hỗ trợ upload hàng loạt phim bằng file CSV
+  _Ảnh sử dụng là các link từ các nguồn được khai báo trong `next.config.js`_
+  _Thông tin streaming phim là các đường dẫn nhúng từ các nguồn cho phép nhúng video_
+
+---
+
+## Cấu hình môi trường
+
+File `.env` mẫu:
+
+```env
+# Mock server
+# NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
+
+# Your Backend API
+# NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api/v1
+
+NEXTAUTH_SECRET=your secret key
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Cài đặt và chạy dự án
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Cài đặt dependencies
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+    npm install
+    # hoặc
+    yarn install
+```
 
-## Learn More
+### 2. Chạy mock server (dữ liệu giả lập)
 
-To learn more about Next.js, take a look at the following resources:
+```env
+    npm run dev:mock
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+_Mock server chạy trên cổng 4000, hỗ trợ test giao diện mà không cần backend thực._
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Chạy frontend
 
-## Deploy on Vercel
+```env
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+_Mở trình duyệt tại http://localhost:3000_
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Lưu ý
+
+- Khi mock server chạy, các request API sẽ lấy dữ liệu giả lập, không ảnh hưởng đến backend thực.
+- Các nguồn ảnh phải được khai báo trong `next.config.js` để Next.js load hợp lệ.
+- Middleware `withAuth` bảo vệ các route cần xác thực (admin hoặc user).
+- Nếu `API backend endpoints` có sự khác biệt với các endpoint được định nghĩa trong `libs/api.ts` và các `services` tương ứng, cần chỉnh sửa tại:
+  - `libs/api.ts`
+  - Các file trong `services` tương ứng
+- Nếu dữ liệu từ API khác với các `type` đã định nghĩa, có thể viết **hàm mapper** để map dữ liệu về đúng type khi gọi api, đảm bảo frontend hoạt động chính xác.
+- Đảm bảo các cổng 4000 và 3000 không bị chiếm dụng khi chạy hoặc điều chỉnh các cổng phù hợp
+
+## Trần Huỳnh Chương
