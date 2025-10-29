@@ -27,7 +27,7 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
 
   if (isLoading || movies.length === 0) {
     return (
-      <div className="relative flex justify-center w-full pb-28 h-[560px] bg-bg-04 animate-pulse">
+      <div className="relative flex justify-center w-full pb-28 h-[320] md:h-[480px] lg:h-[560px] bg-bg-04 animate-pulse">
         <div className="absolute inset-0 bg-gray-800/60" />
         <div className="absolute bottom-10 left-10 flex flex-col gap-4 w-2/3">
           <div className="h-10 w-3/4 bg-gray-700 rounded-lg" />
@@ -36,11 +36,6 @@ export const ListSliderMovies: React.FC<ListSliderMoviesProps> = ({ movies, isLo
             <div className="h-10 w-32 bg-gray-700 rounded-full" />
             <div className="h-10 w-32 bg-gray-700 rounded-full" />
           </div>
-        </div>
-        <div className="absolute bottom-10 right-10 flex gap-2">
-          {Array.from({ length: 5 }).map((_, idx) => (
-            <div key={idx} className="w-10 h-10 bg-gray-700 rounded-full border border-gray-600" />
-          ))}
         </div>
       </div>
     );

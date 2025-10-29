@@ -19,15 +19,31 @@ export const ListCarouselMovie: React.FC<ListCarouselMovieProps> = ({
   isLoading,
   basePath,
 }) => {
-  const [isMounted, setIsMounted] = useState(false);
+  const [itemCount, setItemCount] = useState(2); // default (mobile)
 
   useEffect(() => {
-    // chỉ set true khi client render xong
-    setIsMounted(true);
-  }, []);
+    const checkMedia = () => {
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        // lg
+        setItemCount(variant === 'poster' ? 7 : 5);
+      } else if (window.matchMedia('(min-width: 768px)').matches) {
+        // md
+        setItemCount(variant === 'poster' ? 5 : 3);
+      } else {
+        // sm
+        setItemCount(variant === 'poster' ? 3 : 2);
+      }
+    };
 
-  if (isLoading || !isMounted) {
-    const itemCount = variant === 'poster' ? 7 : 5;
+    // chạy lần đầu
+    checkMedia();
+
+    // lắng nghe thay đổi khi resize
+    window.addEventListener('resize', checkMedia);
+    return () => window.removeEventListener('resize', checkMedia);
+  }, [variant]);
+
+  if (isLoading || movies.length === 0) {
     return (
       <div className={`flex gap-4 overflow-hidden ${className ?? ''}`}>
         {Array.from({ length: itemCount }).map((_, idx) => (
